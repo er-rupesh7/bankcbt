@@ -151,6 +151,22 @@ export const DualPaneQuestionArea: React.FC = () => {
                   </table>
                 </div>
               )}
+
+              {/* Group Diagram SVG (e.g. Seating layout, Input-Output Box) */}
+              {questionGroup.diagramSpec?.svgCode && (
+                <div className="mt-4 p-3 bg-white border border-gray-200 rounded-lg shadow-2xs">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2 flex items-center justify-between">
+                    <span>Arrangement / Visual Logic Spec</span>
+                    <span className="text-[10px] bg-blue-50 text-[#0e3b64] font-bold px-2 py-0.5 rounded border border-blue-200">
+                      {questionGroup.diagramSpec.diagramType}
+                    </span>
+                  </div>
+                  <div
+                    className="w-full flex justify-center overflow-x-auto"
+                    dangerouslySetInnerHTML={{ __html: questionGroup.diagramSpec.svgCode }}
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -172,6 +188,22 @@ export const DualPaneQuestionArea: React.FC = () => {
                 Ideal: ~{currentQuestion.avgIdealTimeSeconds}s
               </span>
             </div>
+
+            {/* Standalone Question Diagram SVG (e.g. Syllogism Venn, Direction Path, Family Tree) */}
+            {currentQuestion.diagramSpec?.svgCode && (
+              <div className="mb-5 p-3 bg-white border border-gray-200 rounded-lg shadow-2xs">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-gray-500 mb-2 flex items-center justify-between">
+                  <span>Visual Representation</span>
+                  <span className="text-[10px] bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded border border-emerald-200">
+                    {currentQuestion.diagramSpec.diagramType}
+                  </span>
+                </div>
+                <div
+                  className="w-full flex justify-center overflow-x-auto"
+                  dangerouslySetInnerHTML={{ __html: currentQuestion.diagramSpec.svgCode }}
+                />
+              </div>
+            )}
 
             {/* Question Text */}
             <div className={`font-medium text-gray-900 mb-6 leading-relaxed whitespace-pre-line ${fontClasses}`}>

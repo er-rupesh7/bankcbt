@@ -201,6 +201,7 @@ export interface QuestionAnalysis {
   quadrant: TimeTrapQuadrant;
   conventionalSolution: string;
   shortcutTrick?: string;
+  diagramSpec?: DiagramSpec;
 }
 
 export interface ExamSubmissionResult {

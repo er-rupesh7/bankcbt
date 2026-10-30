@@ -1,0 +1,24 @@
+{
+  "name": "TCS iON Banking CBT Exam Engine",
+  "short_name": "BankExam CBT",
+  "description": "Authentic TCS iON CBT Mock Test Simulator for SBI PO, SBI Clerk, IBPS PO, and IBPS RRB",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0B132B",
+  "theme_color": "#0E3B64",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "16x16 32x32 48x48 64x64",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

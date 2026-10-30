@@ -594,6 +594,7 @@ export const useExamStore = create<ExamStoreState>()(
               quadrant,
               conventionalSolution: q.conventionalSolutionEn,
               shortcutTrick: q.shortcutTrickEn,
+              diagramSpec: q.diagramSpec,
             };
           })
         );

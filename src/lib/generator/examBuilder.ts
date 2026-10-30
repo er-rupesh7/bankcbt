@@ -9,7 +9,17 @@ import {
   generateInequalityQuestion,
   generateBankingAwarenessQuestion,
   generateComputerKnowledgeQuestion,
+  generateDynamicApproximationQuestion,
+  generateWrongNumberSeriesQuestion,
+  generateDirectionSenseQuestion,
+  generateBloodRelationQuestion,
+  generateQuantityComparisonQuestion,
+  generateDataSufficiencyQuestion,
+  generateMultiStatementBankingQuestion,
+  generateEnglishErrorSpottingQuestion,
+  generateRRBMainsHindiQuestion,
 } from './bankQuestionBank';
+import { generateSeatingDiagram } from '@/lib/graphics/svgDiagrams';
 
 export function buildOfficialBankingExam(
   examKey: ExamCategoryKey = 'SBI_PO_PRELIMS',
@@ -31,7 +41,7 @@ export function buildOfficialBankingExam(
     const negativeMarks = secBlueprint.negativeMarksPerQuestion;
 
     if (secBlueprint.sectionType === 'REASONING_ABILITY') {
-      // 1. Add Puzzle Question Group 1: Circular Seating In/Out
+      // 1. Add Reverse-Constructed Puzzle Question Group 1: Circular Seating In/Out
       const group1Id = `group_puzzle_circ_${secIdx}`;
       const group1Questions: Question[] = [];
       const puz1Names = ['P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W'];
@@ -84,6 +94,18 @@ export function buildOfficialBankingExam(
         secQOrder++;
       }
 
+      // Generate exact technical SVG seating diagram
+      const seatingDiagram = generateSeatingDiagram([
+        { letter: 'Q', facing: 'IN', variable: 'Seat 1' },
+        { letter: 'U', facing: 'OUT', variable: 'Seat 2' },
+        { letter: 'S', facing: 'OUT', variable: 'Seat 3' },
+        { letter: 'P', facing: 'IN', variable: 'Seat 4' },
+        { letter: 'T', facing: 'OUT', variable: 'Seat 5' },
+        { letter: 'R', facing: 'OUT', variable: 'Seat 6' },
+        { letter: 'W', facing: 'IN', variable: 'Seat 7' },
+        { letter: 'V', facing: 'OUT', variable: 'Seat 8' },
+      ], 'Master Solved Circular Arrangement Grid');
+
       questionGroups.push({
         id: group1Id,
         sectionId: secId,
@@ -109,6 +131,7 @@ export function buildOfficialBankingExam(
 6. V, W के ठीक बायें बैठा है, जो केंद्र की ओर उन्मुख है।
 7. न तो V और न ही W, P का निकटतम पड़ोसी है।
 8. केंद्र से बाहर की ओर देखने वाले व्यक्तियों की संख्या केंद्र की ओर देखने वालों से अधिक है।`,
+        diagramSpec: seatingDiagram,
         questions: group1Questions,
       });
 
@@ -176,13 +199,20 @@ export function buildOfficialBankingExam(
         });
       }
 
-      // 3. Fill remaining with Syllogisms & Inequalities
+      // 3. Fill remaining with Direction Sense, Blood Relations, Syllogisms & Inequalities
+      let reasCycle = 0;
       while (secQOrder <= targetQCount) {
-        if (secQOrder % 2 === 0) {
-          questions.push(generateSyllogismQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, secQOrder % 3 === 0 ? 2 : 1));
+        const mod = reasCycle % 4;
+        if (mod === 0) {
+          questions.push(generateDirectionSenseQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+        } else if (mod === 1) {
+          questions.push(generateBloodRelationQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+        } else if (mod === 2) {
+          questions.push(generateSyllogismQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, secQOrder % 2 === 0 ? 2 : 1));
         } else {
           questions.push(generateInequalityQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
         }
+        reasCycle++;
         globalQNum++;
         secQOrder++;
       }
@@ -277,28 +307,61 @@ export function buildOfficialBankingExam(
         questions: di1Questions,
       });
 
-      // 2. Add 5 Quadratic Equations
-      for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
-        questions.push(generateDynamicQuadraticQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 47));
-        globalQNum++;
-        secQOrder++;
+      // 2. Strict Topic Distribution: Clerk vs PO vs Mains
+      if (config.stage === 'MAINS') {
+        // MAINS: Quantity Comparison + Data Sufficiency + Advanced Quadratics
+        for (let i = 0; i < 4 && secQOrder <= targetQCount; i++) {
+          questions.push(generateQuantityComparisonQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+          globalQNum++;
+          secQOrder++;
+        }
+        for (let i = 0; i < 4 && secQOrder <= targetQCount; i++) {
+          questions.push(generateDataSufficiencyQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+          globalQNum++;
+          secQOrder++;
+        }
+        for (let i = 0; i < 4 && secQOrder <= targetQCount; i++) {
+          questions.push(generateDynamicQuadraticQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 47));
+          globalQNum++;
+          secQOrder++;
+        }
+      } else if (config.post === 'PO') {
+        // PO PRELIMS: Approximation + Wrong Number Series + Quadratic Equations
+        for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
+          questions.push(generateDynamicApproximationQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 53));
+          globalQNum++;
+          secQOrder++;
+        }
+        for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
+          questions.push(generateWrongNumberSeriesQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+          globalQNum++;
+          secQOrder++;
+        }
+        for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
+          questions.push(generateDynamicQuadraticQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 47));
+          globalQNum++;
+          secQOrder++;
+        }
+      } else {
+        // CLERK PRELIMS: Simplification (BODMAS) + Missing Number Series + Quadratic Equations
+        for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
+          questions.push(generateDynamicSimplificationQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 97));
+          globalQNum++;
+          secQOrder++;
+        }
+        for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
+          questions.push(generateDynamicNumberSeriesQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 83));
+          globalQNum++;
+          secQOrder++;
+        }
+        for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
+          questions.push(generateDynamicQuadraticQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 47));
+          globalQNum++;
+          secQOrder++;
+        }
       }
 
-      // 3. Add 5 Number Series
-      for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
-        questions.push(generateDynamicNumberSeriesQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 83));
-        globalQNum++;
-        secQOrder++;
-      }
-
-      // 4. Add 5 Speed Math / Simplifications
-      for (let i = 0; i < 5 && secQOrder <= targetQCount; i++) {
-        questions.push(generateDynamicSimplificationQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, seed + i * 97));
-        globalQNum++;
-        secQOrder++;
-      }
-
-      // 5. Fill remaining with Arithmetic Word Problems
+      // 3. Fill remaining with Arithmetic Word Problems
       const arithTypes = ['PROFIT_LOSS', 'TIME_WORK', 'BOATS_STREAMS', 'PARTNERSHIP'] as const;
       let aIdx = 0;
       while (secQOrder <= targetQCount) {
@@ -309,7 +372,7 @@ export function buildOfficialBankingExam(
         secQOrder++;
       }
     } else if (secBlueprint.sectionType === 'ENGLISH_LANGUAGE') {
-      // English Section: Reading Comprehension + Word Swaps + Error Spotting
+      // English Section: Reading Comprehension + Error Spotting with Grammatical Rules
       const rcGroupId = `group_rc_eng_${secIdx}`;
       const rcQuestions: Question[] = [];
 
@@ -366,48 +429,48 @@ However, commercial banks express apprehensions regarding deposit disintermediat
         questions: rcQuestions,
       });
 
-      // Fill remaining English with Word Swaps & Error Spotting
+      // Fill remaining English with Error Spotting (with Rule Citations) and Word Swaps
       while (secQOrder <= targetQCount) {
-        const qId = `q_eng_${globalQNum}`;
-        const isWordSwap = secQOrder % 2 === 0;
+        if (secQOrder % 2 === 0) {
+          questions.push(generateEnglishErrorSpottingQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+        } else {
+          const qId = `q_eng_${globalQNum}`;
+          questions.push({
+            id: qId,
+            sectionId: secId,
+            questionNumber: globalQNum,
+            orderInSection: secQOrder,
+            questionTextEn: `In the following sentence, four words have been highlighted in bold. Choose the option with the correct word swap:
 
-        questions.push({
-          id: qId,
-          sectionId: secId,
-          questionNumber: globalQNum,
-          orderInSection: secQOrder,
-          questionTextEn: isWordSwap
-            ? `In the following sentence, four words have been highlighted in bold. Choose the option with the correct word swap:
-
-The central bank decided to (A) **curb** retail lending rates to (B) **augment** inflation while keeping liquidity (C) **adequate** for small (D) **enterprises**.`
-            : `Read the sentence to find whether there is any grammatical error in it. The error, if any, will be in one part of the sentence:
-
-(A) Neither the finance minister / (B) nor the deputy governors / (C) were present at the emergency monetary meeting / (D) convened on last Tuesday. / (E) No error`,
-          marks,
-          negativeMarks,
-          topic: isWordSwap ? 'Word Swap' : 'Error Detection',
-          subTopic: isWordSwap ? 'Contextual Vocabulary' : 'Subject-Verb Agreement',
-          difficulty: 'EASY',
-          avgIdealTimeSeconds: 25,
-          conventionalSolutionEn: isWordSwap 
-            ? 'Swapping (A) curb and (B) augment restores meaningful economic policy context: central banks augment lending or curb inflation.'
-            : 'Rule of Proximity: In "neither... nor", the verb agrees with the closer subject. "Deputy governors" is plural, so "were" is correct, but "on last Tuesday" is redundant ("on" should be omitted before last Tuesday). Part (D) has the error.',
-          shortcutTrickEn: 'Look for standard banking collocations (curb inflation, augment growth, maintain liquidity).',
-          options: [
-            { id: `opt_${qId}_A`, questionId: qId, identifier: 'A', optionTextEn: isWordSwap ? 'A-B' : 'Part (A)', isCorrect: isWordSwap },
-            { id: `opt_${qId}_B`, questionId: qId, identifier: 'B', optionTextEn: isWordSwap ? 'B-C' : 'Part (B)', isCorrect: false },
-            { id: `opt_${qId}_C`, questionId: qId, identifier: 'C', optionTextEn: isWordSwap ? 'A-D' : 'Part (C)', isCorrect: false },
-            { id: `opt_${qId}_D`, questionId: qId, identifier: 'D', optionTextEn: isWordSwap ? 'C-D' : 'Part (D)', isCorrect: !isWordSwap },
-            { id: `opt_${qId}_E`, questionId: qId, identifier: 'E', optionTextEn: isWordSwap ? 'No swap required' : 'No error (E)', isCorrect: false },
-          ],
-        });
+The central bank decided to (A) **curb** retail lending rates to (B) **augment** inflation while keeping liquidity (C) **adequate** for small (D) **enterprises**.`,
+            marks,
+            negativeMarks,
+            topic: 'Word Swap',
+            subTopic: 'Contextual Financial Vocabulary',
+            difficulty: 'EASY',
+            avgIdealTimeSeconds: 25,
+            conventionalSolutionEn: 'Swapping (A) curb and (B) augment restores meaningful economic policy context: central banks augment lending or curb inflation.',
+            shortcutTrickEn: 'Collocation shortcut: Central banks "curb inflation" and "augment growth/credit".',
+            options: [
+              { id: `opt_${qId}_A`, questionId: qId, identifier: 'A', optionTextEn: 'A-B', isCorrect: true },
+              { id: `opt_${qId}_B`, questionId: qId, identifier: 'B', optionTextEn: 'B-C', isCorrect: false },
+              { id: `opt_${qId}_C`, questionId: qId, identifier: 'C', optionTextEn: 'A-D', isCorrect: false },
+              { id: `opt_${qId}_D`, questionId: qId, identifier: 'D', optionTextEn: 'C-D', isCorrect: false },
+              { id: `opt_${qId}_E`, questionId: qId, identifier: 'E', optionTextEn: 'No swap required', isCorrect: false },
+            ],
+          });
+        }
         globalQNum++;
         secQOrder++;
       }
     } else if (secBlueprint.sectionType === 'GENERAL_FINANCIAL_AWARENESS') {
       let gaIdx = 0;
       while (secQOrder <= targetQCount) {
-        questions.push(generateBankingAwarenessQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, gaIdx));
+        if (secQOrder % 3 === 0) {
+          questions.push(generateMultiStatementBankingQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+        } else {
+          questions.push(generateBankingAwarenessQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, gaIdx));
+        }
         gaIdx++;
         globalQNum++;
         secQOrder++;
@@ -415,7 +478,11 @@ The central bank decided to (A) **curb** retail lending rates to (B) **augment**
     } else if (secBlueprint.sectionType === 'COMPUTER_KNOWLEDGE') {
       let compIdx = 0;
       while (secQOrder <= targetQCount) {
-        questions.push(generateComputerKnowledgeQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, compIdx));
+        if (config.key.includes('RRB') && secQOrder % 5 === 0) {
+          questions.push(generateRRBMainsHindiQuestion(globalQNum, secQOrder, secId, marks, negativeMarks));
+        } else {
+          questions.push(generateComputerKnowledgeQuestion(globalQNum, secQOrder, secId, marks, negativeMarks, compIdx));
+        }
         compIdx++;
         globalQNum++;
         secQOrder++;

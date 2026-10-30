@@ -339,7 +339,25 @@ export const AnalyticsDashboard: React.FC = () => {
               </div>
 
               {/* Solution Content */}
-              <div className="bg-white p-4 rounded-lg border border-gray-200 text-xs sm:text-sm leading-relaxed whitespace-pre-line text-gray-800">
+              <div className="bg-white p-4 rounded-lg border border-gray-200 text-xs sm:text-sm leading-relaxed whitespace-pre-line text-gray-800 space-y-4">
+                {/* Visual Solution Diagram if available */}
+                {selectedQuestion.diagramSpec?.svgCode && (
+                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                        Visual Solution Diagram ({selectedQuestion.diagramSpec.diagramType})
+                      </span>
+                      <span className="text-[10px] bg-blue-100 text-[#0e3b64] font-bold px-2 py-0.5 rounded">
+                        TCS iON Standard
+                      </span>
+                    </div>
+                    <div
+                      className="w-full flex justify-center overflow-x-auto bg-white rounded p-2 border border-slate-100"
+                      dangerouslySetInnerHTML={{ __html: selectedQuestion.diagramSpec.svgCode }}
+                    />
+                  </div>
+                )}
+
                 {solutionMode === 'shortcut' ? (
                   selectedQuestion.shortcutTrick ? (
                     <div>

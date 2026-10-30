@@ -1,4 +1,11 @@
 import { Question, Option, QuestionGroup, QuestionDifficulty, SectionType } from '@/types/exam';
+import {
+  generateSeatingDiagram,
+  generateSyllogismVennDiagram,
+  generateDirectionPathDiagram,
+  generateFamilyTreeDiagram,
+  generateInputOutputBoxesDiagram,
+} from '@/lib/graphics/svgDiagrams';
 
 // Random integer helper [min, max]
 function randInt(min: number, max: number, rng = Math.random): number {
@@ -449,6 +456,13 @@ export function generateSyllogismQuestion(
   variant: 1 | 2 | 3 = 1
 ): Question {
   if (variant === 1) {
+    const diagram = generateSyllogismVennDiagram({
+      title: 'Only a few Laptops are Computers (Venn Representation)',
+      setA: 'Laptops',
+      setB: 'Computers',
+      relationType: 'ONLY_A_FEW',
+    });
+
     return {
       id: `q_syl_${qNum}`,
       sectionId: secId,
@@ -480,6 +494,7 @@ II. सभी Tablets कभी भी Laptops नहीं हो सकते�
 2. All Tablets can easily be accommodated inside Laptop without violating any rule. Hence Conclusion II ("All Tablets can never be Laptops") is FALSE.
 Therefore, only Conclusion I follows.`,
       shortcutTrickEn: '"Only a few A is B" rule: Statement inherently contains negative conclusion "Some A are not B". Look for this direct conclusion first!',
+      diagramSpec: diagram,
       options: [
         { id: `opt_syl_${qNum}_A`, questionId: `q_syl_${qNum}`, identifier: 'A', optionTextEn: 'Only conclusion I follows', optionTextHi: 'केवल निष्कर्ष I अनुसरण करता है', isCorrect: true },
         { id: `opt_syl_${qNum}_B`, questionId: `q_syl_${qNum}`, identifier: 'B', optionTextEn: 'Only conclusion II follows', optionTextHi: 'केवल निष्कर्ष II अनुसरण करता है', isCorrect: false },
@@ -489,6 +504,13 @@ Therefore, only Conclusion I follows.`,
       ],
     };
   } else {
+    const diagram = generateSyllogismVennDiagram({
+      title: 'Funds, Assets & Liabilities (Venn Representation)',
+      setA: 'Funds',
+      setB: 'Assets',
+      relationType: 'ALL',
+    });
+
     return {
       id: `q_syl_${qNum}`,
       sectionId: secId,
@@ -520,6 +542,7 @@ II. कोई Asset, Debt नहीं है।`,
 2. Assets and Debts overlap partially through Liabilities. Definite negative statement "No Asset is Debt" is FALSE.
 Therefore, only Conclusion I follows.`,
       shortcutTrickEn: 'Possibility Rule: When no negative relation is defined between two categories, possibility between them is always valid.',
+      diagramSpec: diagram,
       options: [
         { id: `opt_syl2_${qNum}_A`, questionId: `q_syl_${qNum}`, identifier: 'A', optionTextEn: 'Only conclusion I follows', optionTextHi: 'केवल निष्कर्ष I अनुसरण करता है', isCorrect: true },
         { id: `opt_syl2_${qNum}_B`, questionId: `q_syl_${qNum}`, identifier: 'B', optionTextEn: 'Only conclusion II follows', optionTextHi: 'केवल निष्कर्ष II अनुसरण करता है', isCorrect: false },
@@ -714,6 +737,531 @@ export function generateComputerKnowledgeQuestion(
       optionTextEn: opt,
       optionTextHi: opt,
       isCorrect: i === correctIdx,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 8. PO PRELIMS APPROXIMATION GENERATOR
+// ---------------------------------------------------------------------------
+
+export function generateDynamicApproximationQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25,
+  seed: number = 20251030
+): Question {
+  const rng = createRng(seed + qNum * 53);
+
+  // Exact numbers: 24.98% of 799.89 + sqrt(575.92) - (14.02 * 4.99)
+  // Round to: 25% of 800 + sqrt(576) - (14 * 5)
+  // = 200 + 24 - 70 = 154
+  const correctVal = 154;
+  // Realistic calculation traps:
+  // Trap 1: 174 (Added 70 instead of subtracting)
+  // Trap 2: 138 (Miscomputed sqrt(576) as 22 or 25% of 800 as 180)
+  // Trap 3: 165 (Miscomputed 14*5 as 60)
+  // Trap 4: 148 (Off-by-6 arithmetic slip)
+  const trapChoices = [154, 174, 138, 165, 148].sort((a, b) => a - b);
+  const correctIdx = trapChoices.indexOf(correctVal);
+
+  return {
+    id: `q_approx_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `What approximate value should come in place of the question mark (?) in the following equation? (You are not expected to calculate the exact value.)\n\n$24.98\\% \\text{ of } 799.89 + \\sqrt{575.92} - (14.02 \\times 4.99) = ?$`,
+    questionTextHi: `निम्नलिखित समीकरण में प्रश्न चिह्न (?) के स्थान पर क्या सन्निकट (लगभग) मान आना चाहिए? (आपसे सटीक मान की गणना करने की अपेक्षा नहीं की जाती है।)\n\n$24.98\\% \\text{ का } 799.89 + \\sqrt{575.92} - (14.02 \\times 4.99) = ?$`,
+    marks,
+    negativeMarks,
+    topic: 'Approximation & Calculation',
+    subTopic: 'PO Prelims Speed Approximation',
+    difficulty: 'MODERATE',
+    avgIdealTimeSeconds: 25,
+    conventionalSolutionEn: `Step 1: Round off the terms to nearest integers:
+- 24.98% ≈ 25% = 1/4
+- 799.89 ≈ 800
+- √575.92 ≈ √576 = 24
+- 14.02 ≈ 14
+- 4.99 ≈ 5
+
+Step 2: Substitute and compute using BODMAS:
+= (1/4 × 800) + 24 - (14 × 5)
+= 200 + 24 - 70
+= 224 - 70 = 154.`,
+    shortcutTrickEn: `Approximation Rule: In PO exams, always round decimals (.98, .02) to the nearest integer immediately. Beware of the common trap of adding 70 instead of subtracting it (producing distractor 174)!`,
+    options: trapChoices.map((choice, i) => ({
+      id: `opt_approx_${qNum}_${i}`,
+      questionId: `q_approx_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: choice.toString(),
+      optionTextHi: choice.toString(),
+      isCorrect: i === correctIdx,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 9. WRONG NUMBER SERIES GENERATOR
+// ---------------------------------------------------------------------------
+
+export function generateWrongNumberSeriesQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  // Pattern: *2 + 1, *2 + 2, *2 + 3, *2 + 4, *2 + 5
+  // Correct sequence: 14 -> 29 -> 60 -> 123 -> 250 -> 505
+  // Wrong number inserted: 248 instead of 250!
+  const terms = ['14', '29', '60', '123', '248', '505'];
+  const wrongTerm = '248';
+  const optionsList = ['29', '60', '123', '248', '505'];
+  const correctIdx = optionsList.indexOf(wrongTerm);
+
+  return {
+    id: `q_wrong_ser_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `In the following number series, one number is wrong. Find out the incorrect / wrong number:\n\n$14, \\quad 29, \\quad 60, \\quad 123, \\quad 248, \\quad 505$`,
+    questionTextHi: `निम्नलिखित संख्या श्रृंखला में एक संख्या गलत है। गलत संख्या ज्ञात कीजिए:\n\n$14, \\quad 29, \\quad 60, \\quad 123, \\quad 248, \\quad 505$`,
+    marks,
+    negativeMarks,
+    topic: 'Wrong Number Series',
+    subTopic: 'Multiplication + Increasing Constant Pattern',
+    difficulty: 'MODERATE',
+    avgIdealTimeSeconds: 35,
+    conventionalSolutionEn: `Analyzing the pattern of consecutive terms:
+- 14 × 2 + 1 = 29
+- 29 × 2 + 2 = 60
+- 60 × 2 + 3 = 123
+- 123 × 2 + 4 = 250 (Given: 248 ❌)
+- 250 × 2 + 5 = 505
+
+Therefore, 248 is wrong and must be replaced by 250.`,
+    shortcutTrickEn: 'Pattern: Term_{n+1} = (Term_n × 2) + n. Check the units digit: (3 × 2) + 4 = 0, so the 4th term must end in 0. 248 ends in 8, directly exposing it as the wrong number.',
+    options: optionsList.map((opt, i) => ({
+      id: `opt_wser_${qNum}_${i}`,
+      questionId: `q_wrong_ser_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt,
+      optionTextHi: opt,
+      isCorrect: i === correctIdx,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 10. DIRECTION SENSE WITH SVG DIAGRAM
+// ---------------------------------------------------------------------------
+
+export function generateDirectionSenseQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  const diagram = generateDirectionPathDiagram({
+    title: 'Candidate Walk Path from Point A to Point C',
+    points: [
+      { id: 'A', x: 220, y: 280, label: 'Point A (Start)' },
+      { id: 'B', x: 220, y: 140, label: 'Point B' },
+      { id: 'C', x: 380, y: 140, label: 'Point C (End)' },
+    ],
+    connections: [
+      { from: 'A', to: 'B', distance: '12m North' },
+      { from: 'B', to: 'C', distance: '16m East' },
+    ],
+    shortestDistance: { from: 'A', to: 'C', distance: '20m (Hypotenuse)' },
+  });
+
+  const optionsList = [
+    { text: '20m, North-East', isCorrect: true },
+    { text: '28m, North-East', isCorrect: false }, // Trap: 12 + 16 direct sum
+    { text: '20m, South-East', isCorrect: false },
+    { text: '24m, North', isCorrect: false },
+    { text: '16m, East', isCorrect: false },
+  ];
+
+  return {
+    id: `q_dir_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `A candidate starts walking from Point A and travels 12m towards the North to reach Point B. From Point B, he takes a 90° right turn and walks 16m towards the East to reach Point C.\n\nWhat is the shortest distance between Point A and Point C, and in which direction is Point C with respect to Point A?`,
+    questionTextHi: `एक उम्मीदवार बिंदु A से चलना शुरू करता है और बिंदु B तक पहुंचने के लिए उत्तर की ओर 12 मीटर जाता है। बिंदु B से, वह 90° दाएं मुड़ता है और बिंदु C तक पहुंचने के लिए पूर्व की ओर 16 मीटर चलता है।\n\nबिंदु A और बिंदु C के बीच की न्यूनतम दूरी क्या है, और बिंदु A के संदर्भ में बिंदु C किस दिशा में है?`,
+    marks,
+    negativeMarks,
+    topic: 'Direction & Distance Sense',
+    subTopic: 'Pythagorean Triplet & Cardinal Directions',
+    difficulty: 'EASY',
+    avgIdealTimeSeconds: 25,
+    conventionalSolutionEn: `By applying Pythagoras Theorem in right-angled triangle ABC:
+$AC^2 = AB^2 + BC^2$
+$AC^2 = 12^2 + 16^2 = 144 + 256 = 400$
+$AC = \\sqrt{400} = 20\\text{m}$.
+
+Direction: Starting from origin A, Point C lies to the North and East. Hence, Point C is in the North-East direction with respect to Point A.`,
+    shortcutTrickEn: 'Pythagorean Triplet Shortcut: Recognize the standard 3:4:5 right triangle scaled by 4 (3×4=12, 4×4=16, 5×4=20). The hypotenuse is instantly 20m without squaring large numbers.',
+    diagramSpec: diagram,
+    options: optionsList.map((opt, i) => ({
+      id: `opt_dir_${qNum}_${i}`,
+      questionId: `q_dir_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt.text,
+      optionTextHi: opt.text.replace('North-East', 'उत्तर-पूर्व').replace('South-East', 'दक्षिण-पूर्व').replace('North', 'उत्तर').replace('East', 'पूर्व'),
+      isCorrect: opt.isCorrect,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 11. BLOOD RELATION WITH FAMILY TREE SVG
+// ---------------------------------------------------------------------------
+
+export function generateBloodRelationQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  const diagram = generateFamilyTreeDiagram({
+    title: '3-Generation Family Tree Diagram',
+    members: [
+      { id: 'A', name: 'A', gender: 'M', gen: 1, x: 230 },
+      { id: 'B', name: 'B', gender: 'F', gen: 1, x: 370 },
+      { id: 'C', name: 'C', gender: 'M', gen: 2, x: 230 },
+      { id: 'E', name: 'E', gender: 'F', gen: 2, x: 370 },
+      { id: 'D', name: 'D', gender: 'F', gen: 2, x: 490 },
+      { id: 'F', name: 'F', gender: 'F', gen: 3, x: 230 },
+      { id: 'G', name: 'G', gender: 'M', gen: 3, x: 370 },
+    ],
+    couples: [
+      { p1: 'A', p2: 'B' },
+      { p1: 'C', p2: 'E' },
+    ],
+    siblings: [
+      { from: 'C', to: 'D' },
+      { from: 'F', to: 'G' },
+    ],
+    parentChild: [
+      { parentId: 'A', childId: 'C' },
+      { parentId: 'C', childId: 'F' },
+      { parentId: 'C', childId: 'G' },
+    ],
+  });
+
+  const optionsList = [
+    { text: 'Grandson', isCorrect: true },
+    { text: 'Son', isCorrect: false },
+    { text: 'Brother', isCorrect: false },
+    { text: 'Father', isCorrect: false },
+    { text: 'Nephew', isCorrect: false },
+  ];
+
+  return {
+    id: `q_br_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `Read the following information carefully:\n- In a family of seven members, A is married to B.\n- C is the only son of A.\n- D is the sister of C.\n- C is married to E.\n- F is the daughter of C and E.\n- G is the brother of F.\n\nHow is G related to A?`,
+    questionTextHi: `निम्नलिखित जानकारी का ध्यानपूर्वक अध्ययन करें:\n- सात सदस्यों के एक परिवार में, A का विवाह B से हुआ है।\n- C, A का इकलौता पुत्र है।\n- D, C की बहन है।\n- C का विवाह E से हुआ है।\n- F, C और E की पुत्री है।\n- G, F का भाई है।\n\nG का A से क्या संबंध है?`,
+    marks,
+    negativeMarks,
+    topic: 'Blood Relations',
+    subTopic: '3-Generation Family Tree',
+    difficulty: 'MODERATE',
+    avgIdealTimeSeconds: 30,
+    conventionalSolutionEn: `Step 1: Gen 1: A [Male] = B [Female] (Married couple).
+Step 2: Gen 2: C is the son of A. C is married to E. D is C's sister.
+Step 3: Gen 3: F is the daughter of C & E. G is the brother of F (hence G is male).
+Conclusion: G is the son of C, and C is the son of A. Therefore, G is the Grandson (पोता) of A.`,
+    shortcutTrickEn: 'Tier Diagram: Draw 3 distinct horizontal lines for Generations I, II, and III. Place A at Gen I, C at Gen II, and G at Gen III. G is male (+), directly giving Grandson.',
+    diagramSpec: diagram,
+    options: optionsList.map((opt, i) => ({
+      id: `opt_br_${qNum}_${i}`,
+      questionId: `q_br_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt.text,
+      optionTextHi: opt.text === 'Grandson' ? 'पोता (Grandson)' : opt.text === 'Son' ? 'पुत्र' : opt.text === 'Brother' ? 'भाई' : opt.text === 'Father' ? 'पिता' : 'भतीजा/भांजा',
+      isCorrect: opt.isCorrect,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 12. QUANTITY I & QUANTITY II COMPARISON (Mains & PO Prelims)
+// ---------------------------------------------------------------------------
+
+export function generateQuantityComparisonQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  const optionsList = [
+    { text: 'Quantity I > Quantity II', isCorrect: false },
+    { text: 'Quantity I < Quantity II', isCorrect: true },
+    { text: 'Quantity I ≥ Quantity II', isCorrect: false },
+    { text: 'Quantity I ≤ Quantity II', isCorrect: false },
+    { text: 'Quantity I = Quantity II or relationship cannot be established', isCorrect: false },
+  ];
+
+  return {
+    id: `q_qty_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `In the question below, two quantities labeled Quantity I and Quantity II are given. You have to find the value of both quantities and establish the mathematical relationship between them:\n\nQuantity I: A car travels a distance of 240 km at a uniform speed of 60 km/h. Find the time taken by the car.\n\nQuantity II: A train travels a distance of 350 km at a uniform speed of 70 km/h. Find the time taken by the train.`,
+    questionTextHi: `नीचे दिए गए प्रश्न में मात्रा I और मात्रा II के रूप में दो मात्राएँ दी गई हैं। दोनों का मान ज्ञात करें और उनके बीच संबंध स्थापित करें:\n\nमात्रा I: एक कार 60 किमी/घंटा की समान गति से 240 किमी की दूरी तय करती है। कार द्वारा लिया गया समय ज्ञात कीजिए।\n\nमात्रा II: एक ट्रेन 70 किमी/घंटा की समान गति से 350 किमी की दूरी तय करती है। ट्रेन द्वारा लिया गया समय ज्ञात कीजिए।`,
+    marks,
+    negativeMarks,
+    topic: 'Quantity I vs Quantity II',
+    subTopic: 'Time, Speed & Distance Comparison',
+    difficulty: 'MODERATE',
+    avgIdealTimeSeconds: 30,
+    conventionalSolutionEn: `Calculation for Quantity I:
+Time = Distance / Speed = 240 / 60 = 4 hours.
+
+Calculation for Quantity II:
+Time = Distance / Speed = 350 / 70 = 5 hours.
+
+Comparison: 4 hours < 5 hours.
+Therefore, Quantity I < Quantity II.`,
+    shortcutTrickEn: 'Direct ratio check: Q1 = 24/6 = 4, Q2 = 35/7 = 5. Since 4 < 5, Q1 < Q2 directly.',
+    options: optionsList.map((opt, i) => ({
+      id: `opt_qty_${qNum}_${i}`,
+      questionId: `q_qty_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt.text,
+      optionTextHi: opt.text === 'Quantity I = Quantity II or relationship cannot be established' ? 'मात्रा I = मात्रा II अथवा संबंध स्थापित नहीं किया जा सकता' : opt.text.replace('Quantity', 'मात्रा'),
+      isCorrect: opt.isCorrect,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 13. DATA SUFFICIENCY (2 Statements)
+// ---------------------------------------------------------------------------
+
+export function generateDataSufficiencyQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  const optionsList = [
+    { text: 'Statement I alone is sufficient to answer the question, but Statement II alone is not sufficient.', isCorrect: false },
+    { text: 'Statement II alone is sufficient to answer the question, but Statement I alone is not sufficient.', isCorrect: false },
+    { text: 'Either Statement I alone or Statement II alone is sufficient to answer the question.', isCorrect: false },
+    { text: 'Neither Statement I nor Statement II is sufficient to answer the question.', isCorrect: false },
+    { text: 'Both Statements I and II together are necessary to answer the question.', isCorrect: true },
+  ];
+
+  return {
+    id: `q_ds_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `The question below is followed by two statements numbered I and II. You have to decide whether the data provided in the statements are sufficient to answer the question:\n\nWhat is the two-digit number?\n\nStatement I: The sum of the two digits of the number is 9.\nStatement II: The difference between the number and the number obtained by interchanging its digits is 27.`,
+    questionTextHi: `नीचे दिए गए प्रश्न के बाद दो कथन I और II दिए गए हैं। आपको यह निर्णय लेना है कि कथनों में दिया गया डेटा प्रश्न का उत्तर देने के लिए पर्याप्त है या नहीं:\n\nदो अंकों की संख्या क्या है?\n\nकथन I: संख्या के दोनों अंकों का योग 9 है।\nकथन II: संख्या और उसके अंकों को आपस में बदलने पर प्राप्त संख्या के बीच का अंतर 27 है।`,
+    marks,
+    negativeMarks,
+    topic: 'Data Sufficiency',
+    subTopic: 'Number System & 2-Statement Sufficiency',
+    difficulty: 'MODERATE',
+    avgIdealTimeSeconds: 35,
+    conventionalSolutionEn: `Let the two-digit number be 10x + y, where x is tens digit and y is units digit.
+
+From Statement I:
+x + y = 9
+Possible numbers: 18, 27, 36, 45, 54, 63, 72, 81, 90.
+Hence, Statement I alone is NOT sufficient.
+
+From Statement II:
+(10x + y) - (10y + x) = 27
+=> 9(x - y) = 27
+=> x - y = 3
+Possible numbers: 30, 41, 52, 63, 74, 85, 96.
+Hence, Statement II alone is NOT sufficient.
+
+Combining Statements I and II:
+x + y = 9
+x - y = 3
+Adding both: 2x = 12 => x = 6.
+Substituting in I: 6 + y = 9 => y = 3.
+The number is unique: 63.
+Therefore, BOTH Statements I and II together are necessary to answer the question.`,
+    shortcutTrickEn: 'Data Sufficiency Rule: You do not need to calculate the final number completely! As soon as you establish that two independent linear equations (x+y=9 and x-y=3) exist for two variables, unique solvability is guaranteed.',
+    options: optionsList.map((opt, i) => ({
+      id: `opt_ds_${qNum}_${i}`,
+      questionId: `q_ds_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt.text,
+      optionTextHi: opt.text.replace('Statement', 'कथन').replace('alone is sufficient', 'अकेले पर्याप्त है').replace('Both Statements I and II together are necessary', 'दोनों कथन I और II मिलकर उत्तर देने के लिए आवश्यक हैं'),
+      isCorrect: opt.isCorrect,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 14. MULTI-STATEMENT BANKING & REVISION CAPSULE
+// ---------------------------------------------------------------------------
+
+export function generateMultiStatementBankingQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  const optionsList = [
+    { text: 'Only I and II are correct', isCorrect: true },
+    { text: 'Only II and III are correct', isCorrect: false },
+    { text: 'Only I and III are correct', isCorrect: false },
+    { text: 'All I, II and III are correct', isCorrect: false },
+    { text: 'None of the above', isCorrect: false },
+  ];
+
+  return {
+    id: `q_multi_ga_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `Consider the following statements regarding the Reserve Bank of India's Monetary Policy Committee (MPC):\n\nI. The MPC comprises six members: three from the RBI and three external members appointed by the Central Government.\nII. The Governor of the RBI acts as the ex-officio Chairperson of the MPC and possesses a casting vote in the event of a tie.\nIII. The MPC is statutory mandated under the RBI Act, 1934 to hold its policy meeting at least twice in every financial year.\n\nWhich of the above statements is/are correct?`,
+    questionTextHi: `भारतीय रिज़र्व बैंक की मौद्रिक नीति समिति (MPC) के संबंध में निम्नलिखित कथनों पर विचार कीजिए:\n\nI. MPC में छह सदस्य होते हैं: तीन RBI से और तीन केंद्र सरकार द्वारा नियुक्त बाहरी सदस्य।\nII. RBI के गवर्नर MPC के पदेन अध्यक्ष के रूप में कार्य करते हैं और मत बराबरी की स्थिति में उनके पास निर्णायक मत (Casting Vote) होता है।\nIII. RBI अधिनियम, 1934 के तहत MPC को प्रत्येक वित्तीय वर्ष में कम से कम दो बार अपनी नीतिगत बैठक आयोजित करना वैधानिक रूप से अनिवार्य है।\n\nउपर्युक्त कथनों में से कौन-सा/से सही है/हैं?`,
+    marks,
+    negativeMarks,
+    topic: 'Banking & Financial Awareness',
+    subTopic: 'RBI Monetary Policy Framework',
+    difficulty: 'HARD',
+    avgIdealTimeSeconds: 30,
+    conventionalSolutionEn: `Statement I is CORRECT: Under Section 45ZB of the amended RBI Act, 1934, the MPC comprises 6 members (3 from RBI including Governor, Deputy Governor, and one nominated official; and 3 external experts appointed by the Central Government for a 4-year tenure).
+Statement II is CORRECT: The RBI Governor is the ex-officio Chairperson and exercises a casting vote in case of equal division of votes.
+Statement III is INCORRECT: Under Section 45ZI of the RBI Act, the MPC is mandated to meet at least FOUR times in a year (not twice).
+
+Therefore, only Statements I and II are correct.
+
+══════════════════════════════════════════════════
+★ COMPLETE REVISION CAPSULE: RBI MONETARY POLICY ★
+══════════════════════════════════════════════════
+• Enacted under: RBI Act, 1934 (amended by Finance Act 2016)
+• Inflation Target: 4% with a tolerance band of +/- 2% (2% to 6%)
+• Quorum for MPC meeting: 4 members
+• Decision rule: Majority vote, Governor has casting vote
+• Frequency: Minimum 4 meetings per financial year (bi-monthly pattern)
+• Monetary Policy Instruments: Repo Rate, Reverse Repo, Standing Deposit Facility (SDF), Marginal Standing Facility (MSF), CRR, SLR.`,
+    shortcutTrickEn: 'Fact recall: RBI MPC meetings take place Bi-Monthly (every 2 months = 6 times a year), with the legal statutory floor set at 4 times/year.',
+    options: optionsList.map((opt, i) => ({
+      id: `opt_mga_${qNum}_${i}`,
+      questionId: `q_multi_ga_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt.text,
+      optionTextHi: opt.text.replace('Only I and II are correct', 'केवल I और II सही हैं').replace('Only II and III are correct', 'केवल II और III सही हैं').replace('All I, II and III are correct', 'सभी I, II और III सही हैं').replace('None of the above', 'इनमें से कोई नहीं'),
+      isCorrect: opt.isCorrect,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 15. ENGLISH ERROR SPOTTING WITH GRAMMAR RULES
+// ---------------------------------------------------------------------------
+
+export function generateEnglishErrorSpottingQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  const optionsList = [
+    { text: '(A) The chief executive officer', isCorrect: false },
+    { text: '(B) along with his senior directors', isCorrect: false },
+    { text: '(C) have attended the annual banking conclave', isCorrect: true },
+    { text: '(D) held at Mumbai yesterday', isCorrect: false },
+    { text: '(E) No Error', isCorrect: false },
+  ];
+
+  return {
+    id: `q_eng_err_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `Read the sentence below to find out whether there is any grammatical error in it. The error, if any, will be in one part of the sentence. If there is no error, mark 'No Error' (E) as your answer:\n\nThe chief executive officer (A) / along with his senior directors (B) / have attended the annual banking conclave (C) / held at Mumbai yesterday. (D) / No Error (E)`,
+    questionTextHi: `निम्नलिखित वाक्य को ध्यान से पढ़ें और पहचानें कि किस भाग में व्याकरण संबंधी त्रुटि है:\n\nThe chief executive officer (A) / along with his senior directors (B) / have attended the annual banking conclave (C) / held at Mumbai yesterday. (D) / No Error (E)`,
+    marks,
+    negativeMarks,
+    topic: 'English Language',
+    subTopic: 'Subject-Verb Agreement Rule',
+    difficulty: 'MODERATE',
+    avgIdealTimeSeconds: 20,
+    conventionalSolutionEn: `Error is in Part (C): Replace 'have attended' with 'has attended'.
+
+GRAMMATICAL RULE CITATION:
+When two subjects are connected using phrases such as 'along with', 'as well as', 'together with', 'with', 'in addition to', 'accompanied by', or 'and not', the verb MUST agree in number and person with the FIRST SUBJECT.
+
+Here, the first subject is 'The chief executive officer' which is SINGULAR. Therefore, the verb must be singular ('has attended', not 'have attended').`,
+    shortcutTrickEn: 'Golden Grammar Rule: Ignore parenthetical phrases enclosed between "along with / as well as" when locating the real grammatical subject.',
+    options: optionsList.map((opt, i) => ({
+      id: `opt_eng_err_${qNum}_${i}`,
+      questionId: `q_eng_err_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt.text,
+      optionTextHi: opt.text,
+      isCorrect: opt.isCorrect,
+    })),
+  };
+}
+
+// ---------------------------------------------------------------------------
+// 16. RRB MAINS HINDI LANGUAGE QUESTION
+// ---------------------------------------------------------------------------
+
+export function generateRRBMainsHindiQuestion(
+  qNum: number,
+  orderInSec: number,
+  secId: string,
+  marks: number = 1.0,
+  negativeMarks: number = 0.25
+): Question {
+  const optionsList = [
+    { text: 'अत्यधिक भयभीत या घबरा जाना', isCorrect: true },
+    { text: 'बहुत अधिक क्रोधित होना', isCorrect: false },
+    { text: 'बीमार पड़ जाना', isCorrect: false },
+    { text: 'अत्यधिक प्रसन्न होना', isCorrect: false },
+    { text: 'कड़ी मेहनत करना', isCorrect: false },
+  ];
+
+  return {
+    id: `q_rrb_hi_${qNum}`,
+    sectionId: secId,
+    questionNumber: qNum,
+    orderInSection: orderInSec,
+    questionTextEn: `[Hindi Language Section for RRB Mains]\n\nनिम्नलिखित वाक्य में रेखांकित मुहावरे का सही अर्थ विकल्प में से चुनिए:\n\n"बैंक में वित्तीय अनियमिताओं की जांच शुरू होते ही मुख्य खजांची के **हाथ-पांव फूल गए**।"`,
+    questionTextHi: `निम्नलिखित वाक्य में रेखांकित मुहावरे का सही अर्थ चुनिए:\n\n"बैंक में वित्तीय अनियमिताओं की जांच शुरू होते ही मुख्य खजांची के **हाथ-पांव फूल गए**।"`,
+    marks,
+    negativeMarks,
+    topic: 'Hindi Language (RRB Mains)',
+    subTopic: 'मुहावरे एवं लोकोक्तियाँ',
+    difficulty: 'EASY',
+    avgIdealTimeSeconds: 15,
+    conventionalSolutionEn: `मुहावरे का अर्थ: 'हाथ-पांव फूलना' का अर्थ होता है अचानक किसी संकट, डर या अप्रत्याशित समस्या को सामने देखकर अत्यधिक भयभीत अथवा घबरा जाना। अतः विकल्प (A) पूर्णतः सही है।`,
+    shortcutTrickEn: 'संदर्भगत अर्थ: जांच शुरू होने पर दोषी व्यक्ति घबरा जाता है, जिससे विकल्प (A) तत्काल चिन्हित होता है।',
+    options: optionsList.map((opt, i) => ({
+      id: `opt_rrb_hi_${qNum}_${i}`,
+      questionId: `q_rrb_hi_${qNum}`,
+      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
+      optionTextEn: opt.text,
+      optionTextHi: opt.text,
+      isCorrect: opt.isCorrect,
     })),
   };
 }
