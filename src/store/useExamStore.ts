@@ -608,7 +608,7 @@ export const useExamStore = create<ExamStoreState>()(
         
         // Percentile estimation based on normalized bank exam bell curve
         const scorePercentage = (totalScore / exam.totalMarks) * 100;
-        let percentilePredictor = Math.min(99.9, Math.max(1.0, 50 + (scorePercentage - 55) * 1.8));
+        const percentilePredictor = Math.min(99.9, Math.max(1.0, 50 + (scorePercentage - 55) * 1.8));
 
         const submissionResult: ExamSubmissionResult = {
           attemptId: `att_${Date.now()}`,

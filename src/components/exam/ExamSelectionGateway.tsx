@@ -28,12 +28,7 @@ export const ExamSelectionGateway: React.FC = () => {
   const [isDrillMode, setIsDrillMode] = useState<boolean>(false);
   const [showInstructions, setShowInstructions] = useState<boolean>(false);
   const [hasAgreedToDeclaration, setHasAgreedToDeclaration] = useState<boolean>(false);
-  const [seed, setSeed] = useState<number>(20251030);
-
-  // Client-side seed initialization to avoid SSR/prerender mismatch
-  React.useEffect(() => {
-    setSeed(Date.now());
-  }, []);
+  const [seed, setSeed] = useState<number>(() => (typeof window !== 'undefined' ? Date.now() : 20251030));
 
   const selectedTemplate: ExamTemplateConfig = OFFICIAL_EXAM_CATALOG[selectedCategoryKey];
 

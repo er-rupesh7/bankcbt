@@ -175,7 +175,7 @@ export function verifyIBPSSectionOutput(data: IBPSStandardSectionOutput): Sectio
     // Option IDs A, B, C, D, E
     const optIds = q.options.map((o) => o.id);
     const expected = ['A', 'B', 'C', 'D', 'E'];
-    if (!expected.every((id) => optIds.includes(id as any))) {
+    if (!expected.every((id) => (optIds as string[]).includes(id))) {
       errors.push(`Question #${idx + 1} options must be labeled exactly A, B, C, D, E.`);
     }
 

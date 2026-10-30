@@ -366,7 +366,7 @@ export function buildOfficialBankingExam(
       let aIdx = 0;
       while (secQOrder <= targetQCount) {
         const tType = arithTypes[aIdx % arithTypes.length];
-        questions.push(generateArithmeticWordProblem(globalQNum, secQOrder, secId, tType as any, marks, negativeMarks, seed + aIdx * 67));
+        questions.push(generateArithmeticWordProblem(globalQNum, secQOrder, secId, tType, marks, negativeMarks, seed + aIdx * 67));
         aIdx++;
         globalQNum++;
         secQOrder++;
