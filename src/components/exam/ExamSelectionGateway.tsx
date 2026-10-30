@@ -140,6 +140,14 @@ export const ExamSelectionGateway: React.FC = () => {
                     Rapid Speed Drill
                   </button>
                 </div>
+
+                {/* Direct Continue Button in Top Bar */}
+                <button
+                  onClick={() => setShowInstructions(true)}
+                  className="flex items-center space-x-1.5 px-4 py-2 rounded-lg text-xs font-black text-white bg-emerald-700 hover:bg-emerald-800 shadow-md transition-all active:scale-95 cursor-pointer ring-2 ring-emerald-400"
+                >
+                  <span>Continue to Test ➔</span>
+                </button>
               </div>
             </div>
 
@@ -218,6 +226,18 @@ export const ExamSelectionGateway: React.FC = () => {
                         </span>
                         <span className="text-red-600 font-mono font-medium">-0.25 Negative</span>
                       </div>
+
+                      {isSelected && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowInstructions(true);
+                          }}
+                          className="mt-3 w-full py-2 bg-[#0e3b64] hover:bg-[#07243e] text-white text-xs font-bold rounded-lg shadow-xs flex items-center justify-center space-x-1.5 transition-all cursor-pointer ring-1 ring-blue-300"
+                        >
+                          <span>Selected — Click to Proceed ➔</span>
+                        </button>
+                      )}
                     </div>
                   </div>
                 );
@@ -258,6 +278,26 @@ export const ExamSelectionGateway: React.FC = () => {
                 <span>Proceed to Exam Instructions</span>
                 <ChevronRight className="w-4 h-4" />
               </button>
+            </div>
+
+            {/* Sticky Persistent Bottom Action Bar */}
+            <div className="sticky bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t-2 border-[#0e3b64] shadow-2xl p-4 px-6 -mx-4 sm:-mx-6 lg:-mx-8">
+              <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center space-x-3 text-left">
+                  <span className="w-3.5 h-3.5 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
+                  <div>
+                    <div className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Active Selection:</div>
+                    <div className="text-sm sm:text-base font-black text-gray-900">{selectedTemplate.title} ({isDrillMode ? '25 Qs Drill' : `${selectedTemplate.totalQuestions} Qs`} • {Math.round(selectedTemplate.totalDurationSeconds / 60)} Mins)</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowInstructions(true)}
+                  className="w-full sm:w-auto flex items-center justify-center space-x-2 px-8 py-3 rounded-xl font-black text-white bg-[#0e3b64] hover:bg-[#07243e] shadow-lg transition-all active:scale-95 text-sm sm:text-base cursor-pointer ring-2 ring-blue-400"
+                >
+                  <span>Proceed to Exam Instructions</span>
+                  <ChevronRight className="w-5 h-5 text-[#ff9900]" />
+                </button>
+              </div>
             </div>
           </div>
         ) : (
