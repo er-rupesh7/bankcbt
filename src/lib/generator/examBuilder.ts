@@ -123,7 +123,8 @@ export function buildOfficialBankingExam(
             secId,
             marks,
             negativeMarks,
-            qToGenerate
+            qToGenerate,
+            seed + mockNumber * 19
           );
           questionGroups.push(rcGroup);
           for (const q of rcGroup.questions) {
@@ -138,7 +139,8 @@ export function buildOfficialBankingExam(
             secId,
             marks,
             negativeMarks,
-            qToGenerate
+            qToGenerate,
+            seed + mockNumber * 23
           );
           questionGroups.push(clozeGroup);
           for (const q of clozeGroup.questions) {
@@ -152,7 +154,8 @@ export function buildOfficialBankingExam(
             secQOrder,
             secId,
             marks,
-            negativeMarks
+            negativeMarks,
+            seed + mockNumber * 29
           );
           questionGroups.push(pjGroup);
           for (const q of pjGroup.questions) {
@@ -295,7 +298,7 @@ export function buildOfficialBankingExam(
                 secId,
                 marks,
                 negativeMarks,
-                (i % 6) + 1
+                (mockNumber * 3 + i) % 10 + 1
               )
             );
           } else if (batch.topic.includes('Word Swap')) {
@@ -460,7 +463,7 @@ export function buildOfficialBankingExam(
                 secId,
                 marks,
                 negativeMarks,
-                (i % 6) + 1
+                (mockNumber * 3 + i) % 10 + 1
               )
             );
           } else {

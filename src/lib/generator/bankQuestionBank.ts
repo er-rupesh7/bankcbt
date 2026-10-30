@@ -2254,63 +2254,415 @@ export function generateReadingComprehensionGroup(
   secId: string,
   marks: number = 1.0,
   negativeMarks: number = 0.25,
-  qCount: number = 8
+  qCount: number = 8,
+  seedOrMock: number = 1
 ): QuestionGroup {
   const groupId = `group_rc_${startQNum}`;
-  const passageEn = `The financial architecture of global emerging economies has undergone profound structural disruption over the past decade, driven predominantly by the accelerated digitization of retail financial services and the central banking sector's strategic pivot towards Central Bank Digital Currencies (CBDCs). In India, the Reserve Bank of India's (RBI) calibrated phased pilot for the digital Rupee (e₹) across both wholesale and retail verticals exemplifies this transition.\n\nHistorically, physical currency settlement incurred significant frictional overheads, encompassing recurring minting expenditures, security logistics, and vulnerability to counterfeit currency networks. The introduction of retail CBDC aims to augment transaction settlement velocity, reduce cross-border payment frictions, and furnish an immutable sovereign alternative to non-sovereign cryptographic assets.\n\nHowever, monetary economists caution that wholesale migration towards digital sovereign currency poses liquidity challenges for commercial banks. In periods of macroeconomic volatility, the frictionless ability of retail depositors to convert commercial bank liabilities into sovereign central bank liabilities could precipitate rapid disintermediation, necessitating rigorous reserve management and calibrated holding caps.`;
 
-  const rcQuestions = [
+  const rcLibrary = [
     {
-      q: 'According to the passage, what is a primary motivation for the RBI introducing the digital Rupee (e₹)?',
-      ans: 'To augment transaction velocity and reduce physical currency logistical overheads',
-      sol: 'Paragraph 2 highlights reducing frictional overheads and augmenting transaction settlement velocity as core objectives.',
+      theme: 'Global Semiconductor Supply Chain & Geopolitics of Rare Earth Minerals',
+      subTopic: 'Global Semiconductor Supply Chain',
+      passageEn: `The global semiconductor supply chain has emerged as the defining geoeconomic battleground of the twenty-first century, underpinned by an acute geographic concentration of advanced fabrication facilities and rare earth refining capacity. Advanced microprocessors—crucial for automotive manufacturing, telecommunications infrastructure, and high-performance artificial intelligence accelerators—rely heavily on specialized lithography equipment, photolithographic chemicals, and ultra-purified minerals. The concentration of advanced foundry capacity below five nanometers within a narrow perimeter in East Asia exposes multinational enterprises to severe supply shock vulnerabilities.\n\nSimultaneously, sovereign powers have initiated aggressive industrial policies, deploying tens of billions of dollars in state subsidies through domestic legislation to onshore chip fabrication. However, semiconductor manufacturing is extraordinarily capital-intensive, with a single leading-edge fab requiring upwards of twenty billion dollars in capital expenditure, alongside uninterrupted access to hundreds of millions of gallons of ultra-pure water and gigawatt-scale clean energy grids. Industrial strategists emphasize that while capital subsidies can kickstart domestic construction, overcoming talent bottlenecks and cultivating localized ecosystem suppliers requires decades of persistent institutional commitment.\n\nFurthermore, the upstream vulnerabilities in critical mineral processing remain formidable. Although rare earth elements are geologically abundant globally, the complex multi-stage separation and hydrometallurgical refining processes remain concentrated in a handful of jurisdictions with high tolerance for environmental remediation costs. Any unilateral export restriction or geopolitical friction in these chokepoints reverberates through global inflation indices and industrial output forecasts.`,
+      questions: [
+        {
+          q: 'What is the primary vulnerability of the global semiconductor supply chain highlighted in the passage?',
+          ans: 'Acute geographic concentration of advanced fabrication facilities and rare earth processing',
+          distractors: [
+            'Total depletion of global silicon and mineral reserves',
+            'Unwillingness of multinational corporations to invest in digital technologies',
+            'Excessive supply of advanced microprocessors across global automotive markets',
+            'Complete absence of government subsidies and industrial policies',
+          ],
+          sol: 'Paragraph 1 points out the acute geographic concentration of advanced fabrication facilities and rare earth refining.',
+        },
+        {
+          q: 'According to the author, what makes onshoring semiconductor fabrication particularly challenging despite substantial subsidies?',
+          ans: 'Immense capital expenditure requirements, specialized infrastructure needs, and acute talent shortages',
+          distractors: [
+            'A total lack of global demand for high-performance computing chips',
+            'Strict international treaties that forbid domestic microprocessor manufacturing',
+            'Inability to locate ultra-purified minerals anywhere in commercial markets',
+            'Reluctance of financial institutions to underwrite industrial loans',
+          ],
+          sol: 'Paragraph 2 highlights $20B+ fab costs, uninterrupted access to clean water/energy, talent bottlenecks, and supplier ecosystems.',
+        },
+        {
+          q: 'Which of the following statements is TRUE regarding rare earth elements based on the passage?',
+          ans: 'They are geologically abundant globally but their refining and separation remain heavily concentrated',
+          distractors: [
+            'They are exclusively found in a single geographic province in North America',
+            'They require zero chemical processing or environmental remediation before industrial use',
+            'They have been rendered obsolete by synthetic polymers in leading-edge fabrication',
+            'Their export is completely unrestricted across all sovereign trade corridors',
+          ],
+          sol: 'Paragraph 3 explicitly clarifies that rare earth elements are geologically abundant, but refining is concentrated.',
+        },
+        {
+          q: 'What role do ultra-pure water and gigawatt-scale energy grids play in semiconductor manufacturing?',
+          ans: 'They represent indispensable physical infrastructure prerequisites for operating leading-edge fabrication facilities',
+          distractors: [
+            'They are minor optional components utilized only in older legacy foundries',
+            'They are exclusively utilized for packaging and final container shipment logistics',
+            'They are substitutes that eliminate the requirement for capital subsidies',
+            'They are regulatory hurdles imposed solely to discourage foreign investments',
+          ],
+          sol: 'Paragraph 2 lists ultra-pure water and gigawatt-scale clean energy grids as core infrastructural requirements.',
+        },
+        {
+          q: 'Choose the word most SIMILAR in meaning to "VULNERABILITIES" as used in the passage.',
+          ans: 'Susceptibilities',
+          distractors: ['Strengths', 'Immunities', 'Redundancies', 'Endowments'],
+          sol: 'In this context, "vulnerabilities" denotes weaknesses or susceptibilities to supply shocks.',
+        },
+        {
+          q: 'Choose the word most OPPOSITE in meaning to "FORMIDABLE" as used in the passage.',
+          ans: 'Trivial',
+          distractors: ['Intimidating', 'Onerous', 'Monumental', 'Rigorous'],
+          sol: 'Formidable means daunting or powerful; its antonym is trivial or minor.',
+        },
+        {
+          q: 'Which of the following can be inferred regarding state capital subsidies for chip manufacturing?',
+          ans: 'Subsidies alone are insufficient to overcome systemic talent shortages and supply ecosystem deficits',
+          distractors: [
+            'Subsidies instantly guarantee domestic self-sufficiency within twelve months',
+            'Subsidies are uniformly rejected by private semiconductor manufacturing conglomerates',
+            'Subsidies completely eliminate the need for specialized lithography tools',
+            'Subsidies reduce the capital cost of building a leading fab to under one million dollars',
+          ],
+          sol: 'The author notes that while subsidies kickstart construction, talent bottlenecks and supplier ecosystems require decades of commitment.',
+        },
+        {
+          q: 'What would be the most suitable title for the passage?',
+          ans: 'The Geopolitics of Silicon: Supply Chain Concentration and Industrial Resilience',
+          distractors: [
+            'The Decline of Global Microprocessor Demand in Consumer Electronics',
+            'Environmental Protocols for Oceanic Dredging and Deep-Sea Mining',
+            'A Comprehensive History of Steam Turbine Engineering',
+            'Retail Digital Banking and Algorithmic Trading Systems',
+          ],
+          sol: 'The passage analyzes the geoeconomic concentration, industrial policy subsidies, and upstream mineral chokepoints of semiconductors.',
+        },
+        {
+          q: 'The tone of the author throughout the passage is best characterized as:',
+          ans: 'Analytical and Pragmatic',
+          distractors: ['Alarmist and Cynical', 'Laudatory and Romantic', 'Satirical and Dismissive', 'Apathetic and Detached'],
+          sol: 'The author objectively balances strategic incentives against capital, infrastructure, and geopolitical hurdles.',
+        },
+        {
+          q: 'How do upstream mineral processing disruptions directly affect global economies?',
+          ans: 'By triggering inflationary shocks and destabilizing industrial output projections',
+          distractors: [
+            'By causing immediate total collapse of international maritime insurance treaties',
+            'By eliminating the need for central banking interest rate calibration',
+            'By forcing consumer electronics manufacturers to switch entirely to copper wiring',
+            'By eradicating sovereign debt obligations across emerging markets',
+          ],
+          sol: 'Paragraph 3 notes that chokepoint frictions reverberate through global inflation indices and industrial output forecasts.',
+        },
+      ],
     },
     {
-      q: 'What potential systemic risk do monetary economists identify regarding widespread retail CBDC adoption?',
-      ans: 'Risk of rapid bank disintermediation and retail commercial deposit flight during volatility',
-      sol: 'Paragraph 3 explicitly warns that rapid conversion into sovereign liabilities could trigger bank disintermediation.',
+      theme: 'Green Hydrogen Economy, Carbon Credit Markets & Sovereign Green Bonds',
+      subTopic: 'Green Hydrogen & Carbon Credit Economics',
+      passageEn: `The international transition towards decarbonization has positioned green hydrogen—produced via the electrolysis of water utilizing renewable energy—as a pivotal catalyst for abating emissions in hard-to-electrify heavy industries such as metallurgy, maritime shipping, and chemical manufacturing. Unlike conventional grey hydrogen derived from natural gas steam methane reforming, green hydrogen yields zero greenhouse emissions at point of production. Consequently, sovereign governments and multilateral development institutions have accelerated the issuance of sovereign green bonds to finance the colossal capital investments necessitated by electrolyzer deployment and hydrogen transport corridors.\n\nNonetheless, the economic viability of green hydrogen is currently encumbered by significant cost disparities compared to fossil fuel alternatives. Levelized costs of green hydrogen production remain tethered to the capital costs of polymer electrolyte membrane (PEM) electrolyzers and the availability of round-the-clock low-cost renewable power. Without robust voluntary and compliance carbon credit markets pricing carbon emissions at punitive levels, industrial consumers lack commercial incentives to substitute traditional hydrocarbons with green molecules.\n\nMoreover, the integration of green hydrogen requires substantial infrastructure repurposing. Existing natural gas pipeline networks suffer from hydrogen embrittlement when transporting high concentrations of hydrogen, necessitating specialized metallurgy or alternative chemical carriers such as green ammonia. Financial institutions underwriting green hydrogen assets must therefore conduct comprehensive lifecycle assessments, calibrating counterparty off-take risks against emerging cross-border carbon border adjustment mechanisms.`,
+      questions: [
+        {
+          q: 'Why is green hydrogen considered crucial for global decarbonization according to the passage?',
+          ans: 'It enables emissions abatement in hard-to-electrify heavy industrial sectors like metallurgy and shipping',
+          distractors: [
+            'It completely replaces the need for solar and wind energy generation facilities',
+            'It can be extracted directly from petroleum deposits at negligible production cost',
+            'It eliminates all sovereign debt obligations of developing nations',
+            'It operates without requiring any water or electrical inputs during synthesis',
+          ],
+          sol: 'Paragraph 1 identifies green hydrogen as a catalyst for hard-to-electrify sectors like metallurgy and shipping.',
+        },
+        {
+          q: 'What primary impediment hinders the rapid commercial adoption of green hydrogen?',
+          ans: 'Substantial cost disparities compared to fossil fuels and high capital costs of electrolyzers',
+          distractors: [
+            'A total international ban on the production and storage of compressed hydrogen',
+            'Inability of chemical plants to utilize hydrogen in any industrial reactions',
+            'Excessive global supply that has caused market prices to collapse entirely',
+            'Refusal of sovereign governments to issue green bonds or climate debt',
+          ],
+          sol: 'Paragraph 2 highlights cost disparities versus fossil fuels and high capital costs of electrolyzers.',
+        },
+        {
+          q: 'What infrastructure challenge is associated with transporting hydrogen through existing natural gas grids?',
+          ans: 'Hydrogen embrittlement that damages conventional pipeline metallurgy',
+          distractors: [
+            'Immediate chemical evaporation that destroys the ozone layer within pipelines',
+            'Excessive weight of hydrogen gas that causes underground pipelines to collapse',
+            'Complete incompatibility with any form of commercial compressor stations',
+            'Regulatory statutes that classify natural gas pipelines exclusively as public roadways',
+          ],
+          sol: 'Paragraph 3 notes hydrogen embrittlement when transporting high concentrations in existing networks.',
+        },
+        {
+          q: 'How do carbon credit markets influence the adoption of green hydrogen?',
+          ans: 'By imposing punitive costs on carbon emissions, thereby creating economic incentives for fuel substitution',
+          distractors: [
+            'By subsidizing fossil fuel exploration across offshore oceanic basins',
+            'By prohibiting commercial banks from underwriting renewable energy projects',
+            'By guaranteeing fixed annual equity returns to private hedge fund investors',
+            'By eliminating all customs tariffs on imported crude petroleum products',
+          ],
+          sol: 'Paragraph 2 states that pricing carbon emissions at punitive levels provides commercial incentives for green substitution.',
+        },
+        {
+          q: 'Choose the word most SIMILAR in meaning to "ENCUMBERED" as used in the passage.',
+          ans: 'Hampered',
+          distractors: ['Facilitated', 'Exonerated', 'Accelerated', 'Validated'],
+          sol: 'Encumbered means burdened, restricted, or hampered in progress.',
+        },
+        {
+          q: 'Choose the word most OPPOSITE in meaning to "COLOSSAL" as used in the passage.',
+          ans: 'Negligible',
+          distractors: ['Monumental', 'Prodigious', 'Formidable', 'Gargantuan'],
+          sol: 'Colossal means extremely large; its antonym is negligible or tiny.',
+        },
+        {
+          q: 'Which alternative chemical carrier is mentioned for transporting green hydrogen over long distances?',
+          ans: 'Green ammonia',
+          distractors: ['Liquid nitrogen', 'Compressed methane', 'Synthetic diesel', 'Crude kerosene'],
+          sol: 'Paragraph 3 explicitly mentions alternative chemical carriers such as green ammonia.',
+        },
+        {
+          q: 'What is the central purpose of issuing sovereign green bonds according to the passage?',
+          ans: 'To fund the massive capital investments required for electrolyzers and transport corridors',
+          distractors: [
+            'To finance speculative cryptocurrency trading desks in sovereign wealth funds',
+            'To provide short-term consumer credit for retail discretionary purchases',
+            'To dismantle existing municipal electrical utility distribution networks',
+            'To refinance historical fiscal deficits without environmental milestones',
+          ],
+          sol: 'Paragraph 1 indicates sovereign green bonds finance colossal capital investments in electrolyzers and corridors.',
+        },
+        {
+          q: "The author's stance regarding the future of green hydrogen can best be described as:",
+          ans: 'Cautiously optimistic yet mindful of infrastructural and economic hurdles',
+          distractors: ['Entirely skeptical and dismissing green hydrogen as a temporary fad', 'Unconditionally euphoric and unconcerned with financial costs', 'Completely indifferent to environmental sustainability metrics', 'Hostile towards renewable energy investments in heavy industry'],
+          sol: 'The author recognizes green hydrogen’s transformative potential while analyzing cost disparities and embrittlement risks.',
+        },
+        {
+          q: 'What must financial institutions evaluate when underwriting green hydrogen assets?',
+          ans: 'Lifecycle emissions, off-take counterparty stability, and carbon border adjustment mechanisms',
+          distractors: [
+            'Short-term currency arbitrage opportunities in unregulated foreign exchanges',
+            'Historical quarterly profits from conventional coal mining operations',
+            'Consumer retail credit card default ratios in domestic metro branches',
+            'Corporate expenditure on television marketing campaigns',
+          ],
+          sol: 'Paragraph 3 states lenders must conduct comprehensive lifecycle assessments and calibrate counterparty risks.',
+        },
+      ],
     },
     {
-      q: 'Which of the following is TRUE regarding physical currency settlement according to the passage?',
-      ans: 'It entailed high frictional costs, security logistics, and vulnerability to counterfeit networks',
-      sol: 'Directly stated in Paragraph 2.',
+      theme: 'Behavioral Economics: Nudge Theory in Public Policy & Consumer Debt',
+      subTopic: 'Behavioral Nudges & Consumer Finance',
+      passageEn: `In contemporary public finance and consumer welfare architecture, the integration of behavioral economics—specifically nudge theory developed by behavioral scientists—has fundamentally transformed regulatory compliance and household financial resilience. Traditional neoclassical economic dogma posited that economic agents are hyper-rational optimizers who consistently evaluate probabilistic outcomes to maximize expected utility. In stark contrast, empirical behavioral finance reveals that retail consumers systematically succumb to cognitive biases, including hyperbolic discounting, choice overload, and status quo bias.\n\nTo counter these behavioral pitfalls, regulatory authorities and financial institutions have increasingly deployed default architecture—or 'choice architecture'—to guide individuals toward welfare-enhancing outcomes without restricting freedom of choice. Automatic enrollment in employee pension schemes, standardized disclosures with color-coded risk indicators, and automated savings escalators have dramatically augmented household retirement savings. By restructuring default choices, policymakers harness human inertia for long-term capital accumulation rather than systemic undersaving.\n\nHowever, ethical critics caution against the insidious weaponization of behavioral insights, termed 'sludge' or deceptive dark patterns. When leveraged by predatory consumer lending apps or high-frequency digital platforms, behavioral friction is deliberately engineered to obscure exorbitant effective annual interest rates and incentivize compulsive borrowing. As household debt metrics escalate across emerging economies, central banks must establish robust supervisory boundaries to ensure choice architecture promotes genuine financial health rather than predatory customer exploitation.`,
+      questions: [
+        {
+          q: 'How does behavioral economics differ from neoclassical economic dogma according to the passage?',
+          ans: 'It recognizes that retail consumers are susceptible to cognitive biases rather than being purely rational utility optimizers',
+          distractors: [
+            'It assumes all consumers possess complete predictive omniscience regarding inflation',
+            'It claims that market prices have zero correlation with supply and demand dynamics',
+            'It asserts that government regulations should completely eliminate private property rights',
+            'It argues that financial institutions should avoid automated savings tools',
+          ],
+          sol: 'Paragraph 1 contrasts neoclassical hyper-rational utility maximization with empirical cognitive biases.',
+        },
+        {
+          q: 'What is cited as a prominent example of positive choice architecture in household finance?',
+          ans: 'Automatic enrollment in retirement pensions and automated savings escalation',
+          distractors: [
+            'Mandatory liquidation of all retail household fixed deposits',
+            'Unregulated payday lending with concealed balloon repayment terms',
+            'Banning retail consumers from holding personal savings accounts',
+            'Eliminating all standardized disclosures on credit card applications',
+          ],
+          sol: 'Paragraph 2 highlights automatic enrollment in pensions and automated savings escalators as beneficial defaults.',
+        },
+        {
+          q: 'What term is used to describe the predatory manipulation of behavioral friction to exploit consumers?',
+          ans: 'Sludge or deceptive dark patterns',
+          distractors: ['Hyperbolic discounting', 'Choice architecture', 'Status quo optimization', 'Expected utility theorem'],
+          sol: 'Paragraph 3 defines insidious behavioral friction designed to exploit consumers as "sludge" or "dark patterns".',
+        },
+        {
+          q: 'Why is human inertia significant in modern behavioral financial design?',
+          ans: 'It can be channeled through default options to augment long-term savings and capital accumulation',
+          distractors: [
+            'It prevents retail borrowers from ever utilizing digital payment platforms',
+            'It guarantees that commercial banks experience zero loan defaults during recessions',
+            'It eliminates the need for regulatory supervision across consumer lending markets',
+            'It forces central banks to constantly reduce benchmark repo rates',
+          ],
+          sol: 'Paragraph 2 notes that restructuring default options harnesses human inertia for capital accumulation.',
+        },
+        {
+          q: 'Choose the word most SIMILAR in meaning to "AUGMENTED" as used in the passage.',
+          ans: 'Enhanced',
+          distractors: ['Depleted', 'Restricted', 'Deteriorated', 'Relinquished'],
+          sol: 'Augment means to make greater, increase, or enhance.',
+        },
+        {
+          q: 'Choose the word most OPPOSITE in meaning to "INSIDIOUS" as used in the passage.',
+          ans: 'Straightforward',
+          distractors: ['Treacherous', 'Pernicious', 'Deceitful', 'Subversive'],
+          sol: 'Insidious means stealthily harmful or deceitful; its antonym is straightforward or benign.',
+        },
+        {
+          q: 'According to the author, what danger do predatory consumer lending applications present?',
+          ans: 'They deliberately engineer cognitive friction to disguise exorbitant interest rates and induce compulsive debt',
+          distractors: [
+            'They refuse to disburse credit to eligible low-income retail consumers',
+            'They strictly enforce excessive collateral requirements before processing loans',
+            'They mandate six months of financial literacy coursework for every borrower',
+            'They channel all corporate profits directly into sovereign development funds',
+          ],
+          sol: 'Paragraph 3 explains how predatory apps engineer friction to obscure exorbitant rates and incentivize compulsive borrowing.',
+        },
+        {
+          q: 'What would be the most comprehensive title for this passage?',
+          ans: 'Behavioral Choice Architecture: Nudge Theory, Consumer Welfare, and Regulatory Vigilance',
+          distractors: [
+            'The Mathematics of Sovereign Foreign Exchange Reserves',
+            'Neoclassical General Equilibrium Models in Agricultural Trade',
+            'Automated Teller Machines: Hardware Lifecycle Management',
+            'Commercial Real Estate Development in Tier-2 Indian Municipalities',
+          ],
+          sol: 'The passage evaluates nudge theory, choice architecture, retirement savings, and regulatory safeguards against predatory sludge.',
+        },
+        {
+          q: 'The tone of the passage can best be described as:',
+          ans: 'Discursive and Evaluative',
+          distractors: ['Aggressive and Condemnatory', 'Nostalgic and Sentimental', 'Ambivalent and Superficial', 'Fanciful and Poetic'],
+          sol: 'The text analytically explores both the beneficial applications and ethical risks of behavioral economics.',
+        },
+        {
+          q: 'What action does the author recommend for central banking authorities regarding choice architecture?',
+          ans: 'Establishing strict supervisory guidelines to protect consumers from predatory digital exploitation',
+          distractors: [
+            'Dismantling all consumer credit bureaus across the national banking system',
+            'Prohibiting commercial banks from using electronic email notifications',
+            'Forcing all retail consumers to invest exclusively in sovereign debt instruments',
+            'Eliminating all interest rate caps and truth-in-lending disclosure rules',
+          ],
+          sol: 'Paragraph 3 concludes that central banks must establish robust supervisory boundaries against predatory exploitation.',
+        },
+      ],
     },
     {
-      q: 'What does the author suggest commercial banks must maintain to mitigate CBDC liquidity pressures?',
-      ans: 'Rigorous reserve management and calibrated holding caps',
-      sol: 'Mentioned in the final sentence of Paragraph 3.',
-    },
-    {
-      q: 'Choose the word most SIMILAR in meaning to "AUGMENT" as used in the passage.',
-      ans: 'Enhance',
-      sol: 'Augment means to make greater, increase, or enhance.',
-    },
-    {
-      q: 'Choose the word most OPPOSITE in meaning to "IMMUTABLE" as used in the passage.',
-      ans: 'Variable',
-      sol: 'Immutable means unchangeable or permanent; its opposite is variable or alterable.',
-    },
-    {
-      q: 'Which of the following can be inferred regarding non-sovereign cryptocurrencies?',
-      ans: 'CBDC offers an immutable sovereign alternative to counter them',
-      sol: 'Paragraph 2 notes furnishing a sovereign alternative to non-sovereign cryptographic assets.',
-    },
-    {
-      q: 'What would be the most suitable title for the passage?',
-      ans: 'Sovereign Digital Currency: Strategic Impetus and Banking Liquidity Dynamics',
-      sol: 'The passage evaluates the strategic drivers of CBDC and its impact on banking liquidity.',
-    },
-    {
-      q: 'The tone of the author throughout the passage is best described as:',
-      ans: 'Analytical and Objective',
-      sol: 'The author impartially examines both advantages and systemic risks of CBDC.',
-    },
-    {
-      q: 'Which sector is cited as driving the structural disruption in emerging financial systems?',
-      ans: 'Digitization of retail financial services and central banking pivots',
-      sol: 'Found in the opening sentence of Paragraph 1.',
+      theme: 'Microfinance Evolution, Self-Help Groups (SHGs) & Rural Agritech in India',
+      subTopic: 'Rural Microfinance & Agritech',
+      passageEn: `India's rural credit landscape has witnessed a structural evolution over the past three decades, shifting from informal moneylending networks to institutional microfinance institutions (MFIs) and self-help group-bank linkage programs (SHG-BLP). Initially catalyzed by non-governmental organizations and prioritized by the National Bank for Agriculture and Rural Development (NABARD), SHGs demonstrated that social collateral—grounded in peer monitoring and collective group liability—could effectively substitute for traditional physical collateral in underbanked agrarian communities.\n\nIn recent years, the convergence of rural microfinance with digital agritech platforms has unlocked unprecedented productivity gains for smallholder farmers. By integrating remote sensing satellite analytics, automated weather-index insurance, and direct Unified Payments Interface (UPI) credit disbursals, agritech-enabled MFIs can assess crop yield risks and disburse working capital loans at the onset of sowing seasons with minimal operating frictions. This technological synergy has curtailed credit turnaround times from weeks to minutes, directly expanding agricultural credit penetration.\n\nNevertheless, structural impediments persist in ensuring sustainable rural debt servicing. Agrarian incomes remain acutely vulnerable to climate variability, unpredictable monsoonal patterns, and post-harvest market price volatility. Furthermore, aggressive multi-lending by competitive private MFIs has occasionally led to localized over-indebtedness among vulnerable rural households. Regulators must therefore harmonize credit bureau reporting norms and reinforce income-assessment guidelines to safeguard borrowers from coercive recovery practices while preserving rural institutional liquidity.`,
+      questions: [
+        {
+          q: 'What historically enabled Self-Help Groups to access formal institutional credit without physical collateral?',
+          ans: 'Social collateral rooted in collective group liability and peer monitoring',
+          distractors: [
+            'Direct sovereign loan waivers guaranteed by the central treasury',
+            'Pledging commercial real estate assets in metropolitan urban centers',
+            'Mandatory purchase of high-yield corporate bond portfolios',
+            'Complete elimination of interest rate charges on all agrarian loans',
+          ],
+          sol: 'Paragraph 1 explains that social collateral grounded in peer monitoring and collective group liability substituted for physical collateral.',
+        },
+        {
+          q: 'How has the integration of agritech enhanced rural microfinance operations?',
+          ans: 'By utilizing satellite data and automated index metrics to expedite risk assessment and disburse credit in minutes',
+          distractors: [
+            'By replacing human agricultural laborers with automated robotic harvesters',
+            'By requiring farmers to physically visit commercial bank headquarters for paper verifications',
+            'By abolishing all weather insurance contracts across regional rural banks',
+            'By eliminating the need for working capital credit during crop sowing cycles',
+          ],
+          sol: 'Paragraph 2 highlights satellite analytics, automated weather-index insurance, and UPI disbursals that cut turnaround times.',
+        },
+        {
+          q: 'What major external risk continues to threaten rural loan repayment according to the passage?',
+          ans: 'Climate shocks, monsoon volatility, and post-harvest crop price fluctuations',
+          distractors: [
+            'Fluctuations in the NASDAQ technology equity index in international markets',
+            'Over-reliance on physical currency minting at municipal currency presses',
+            'A chronic shortage of commercial bank branches in urban financial hubs',
+            'Decreased global consumer demand for high-end electric vehicles',
+          ],
+          sol: 'Paragraph 3 notes agrarian incomes remain vulnerable to climate variability, monsoon unpredictability, and price volatility.',
+        },
+        {
+          q: 'What negative outcome is associated with aggressive competition among private microfinance lenders?',
+          ans: 'Multi-lending leading to localized household over-indebtedness',
+          distractors: [
+            'Complete absence of institutional credit for medium and large agricultural estates',
+            'A permanent reduction in agricultural crop yields across southern river valleys',
+            'Immediate bankruptcy of all public sector commercial banking institutions',
+            'Total cessation of digital mobile payments across rural agrarian districts',
+          ],
+          sol: 'Paragraph 3 explicitly warns that aggressive multi-lending has led to localized over-indebtedness.',
+        },
+        {
+          q: 'Choose the word most SIMILAR in meaning to "CATALYZED" as used in the passage.',
+          ans: 'Spurred',
+          distractors: ['Impeded', 'Extinguished', 'Deterred', 'Paralyzed'],
+          sol: 'Catalyzed means sparked, accelerated, or spurred into action.',
+        },
+        {
+          q: 'Choose the word most OPPOSITE in meaning to "COERCIVE" as used in the passage.',
+          ans: 'Voluntary',
+          distractors: ['Intimidating', 'Authoritarian', 'Aggressive', 'Compulsory'],
+          sol: 'Coercive implies the use of force or pressure; its antonym is voluntary or consensual.',
+        },
+        {
+          q: 'What supervisory measure does the author propose to curb over-indebtedness in rural credit?',
+          ans: 'Enforcing synchronized credit bureau reporting and stringent income-assessment norms',
+          distractors: [
+            'Completely shutting down all microfinance operations across rural India',
+            'Allowing private lenders to seize ancestral farmland without judicial proceedings',
+            'Eliminating all digital transaction tracking on Unified Payments Interface networks',
+            'Mandating that all agrarian credit be disbursed solely in physical gold coins',
+          ],
+          sol: 'Paragraph 3 recommends harmonizing credit bureau reporting norms and reinforcing income-assessment guidelines.',
+        },
+        {
+          q: 'What would be the most suitable title for this editorial passage?',
+          ans: 'Rural Agrifinance: The Intersection of Social Collateral, Agritech, and Prudent Regulation',
+          distractors: [
+            'Global Offshore Liquidity Traps in Commercial Real Estate',
+            'The Architecture of Quantum Cryptographic Security Protocols',
+            'A Comparative Study of High-Speed Rail Freight Logistics',
+            'Stock Market Volatility in Latin American Emerging Exchanges',
+          ],
+          sol: 'The passage examines SHGs, social collateral, digital agritech integration, and regulatory safeguards in Indian rural finance.',
+        },
+        {
+          q: "The author's perspective on the role of digital agritech in rural banking is:",
+          ans: 'Commendatory of its efficiency gains while vigilant about climate and over-leverage risks',
+          distractors: [
+            'Thoroughly dismissive of digital technology as an impediment to rural progress',
+            'Uncritically celebratory without addressing borrower indebtedness issues',
+            'Entirely detached and showing zero interest in developmental policy',
+            'Advocating for an immediate return to informal unregulated village moneylending',
+          ],
+          sol: 'The author praises agritech for cutting turnaround times while soberly noting climate shocks and multi-lending dangers.',
+        },
+        {
+          q: 'Which premier development institution is cited as historically spearheading the SHG-bank linkage program?',
+          ans: 'NABARD',
+          distractors: ['International Monetary Fund (IMF)', 'Federal Reserve Board', 'Securities and Exchange Board of India (SEBI)', 'Bank for International Settlements (BIS)'],
+          sol: 'Paragraph 1 explicitly names the National Bank for Agriculture and Rural Development (NABARD).',
+        },
+      ],
     },
   ];
+
+  const chosenThemeIdx = Math.abs(seedOrMock) % rcLibrary.length;
+  const chosenPassageData = rcLibrary[chosenThemeIdx];
+  const rcQuestions = chosenPassageData.questions;
 
   const optionLetters = ['A', 'B', 'C', 'D', 'E'] as const;
   const questions: Question[] = [];
@@ -2318,13 +2670,7 @@ export function generateReadingComprehensionGroup(
   for (let i = 0; i < qCount; i++) {
     const item = rcQuestions[i % rcQuestions.length];
     const qId = `q_rc_${startQNum + i}`;
-    const distractors = [
-      'To completely eliminate commercial banks from the credit cycle',
-      'To promote speculative cryptocurrency trading among retail investors',
-      'To dismantle conventional monetary policy interest rate corridors',
-      'None of the above',
-    ];
-    const choices = [item.ans, ...distractors].sort();
+    const choices = [item.ans, ...item.distractors].sort();
     const correctIdx = choices.indexOf(item.ans);
 
     questions.push({
@@ -2338,11 +2684,11 @@ export function generateReadingComprehensionGroup(
       marks,
       negativeMarks,
       topic: 'Reading Comprehension',
-      subTopic: 'Economy & Central Banking (CBDC)',
+      subTopic: chosenPassageData.subTopic,
       difficulty: 'MODERATE',
       avgIdealTimeSeconds: 40,
       conventionalSolutionEn: item.sol,
-      shortcutTrickEn: 'Locate keywords in the passage; eliminate choices containing extreme words like "completely", "dismantle".',
+      shortcutTrickEn: 'Passage citation: Pinpoint key terms in the text and eliminate distractors containing extreme or contradictory statements.',
       options: choices.map((c, oIdx) => ({
         id: `opt_rc_${startQNum + i}_${oIdx}`,
         questionId: qId,
@@ -2358,8 +2704,8 @@ export function generateReadingComprehensionGroup(
     id: groupId,
     sectionId: secId,
     groupType: 'RC_PASSAGE',
-    title: `Directions (Q. ${startOrderInSec} - ${startOrderInSec + qCount - 1}): Read the passage carefully and answer the questions.`,
-    passageEn,
+    title: `Directions (Q. ${startOrderInSec} - ${startOrderInSec + qCount - 1}): Read the passage on "${chosenPassageData.theme}" carefully and answer the questions.`,
+    passageEn: chosenPassageData.passageEn,
     questions,
   };
 }
@@ -2372,52 +2718,91 @@ export function generateEnglishErrorSpottingQuestion(
   negativeMarks: number = 0.25,
   variant: number = 1
 ): Question {
+  // 10 Comprehensive Golden Banking Grammar Traps
   const errorBank = [
     {
+      ruleName: 'Subject-Verb Agreement with Prepositional Interveners',
       sent: `The chief executive officer (A) / along with his senior directors (B) / have attended the annual banking conclave (C) / held at Mumbai yesterday. (D) / No Error (E)`,
       errPart: 'C',
-      rule: `Error in (C): Replace 'have attended' with 'has attended'. When subjects are connected by 'along with', the verb agrees with the first subject ('The chief executive officer').`,
+      rule: `Error in (C): Replace 'have attended' with 'has attended'. When subjects are connected by 'along with', 'as well as', or 'together with', the verb agrees strictly with the first subject ('The chief executive officer').`,
       options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
       corr: 2,
     },
     {
+      ruleName: 'Subject-Verb Inversion after Negative Adverbs',
       sent: `Hardly had the branch manager (A) / entered the bank premises (B) / than the alarm bell (C) / began ringing loudly. (D) / No Error (E)`,
       errPart: 'C',
-      rule: `Error in (C): Replace 'than' with 'when'. Correlative conjunction pair for 'Hardly / Scarcely' is always 'when', not 'than'.`,
+      rule: `Error in (C): Replace 'than' with 'when'. Correlative conjunction pair for 'Hardly / Scarcely' is always 'when', whereas 'No sooner' takes 'than'.`,
       options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
       corr: 2,
     },
     {
+      ruleName: 'Proximity Rule with Correlative Conjunctions',
       sent: `Neither the loan officer (A) / nor the branch accountants (B) / was present in the meeting (C) / to verify the audit reports. (D) / No Error (E)`,
       errPart: 'C',
-      rule: `Error in (C): Replace 'was present' with 'were present'. When two subjects are connected by 'Neither... nor', the verb agrees with the closer subject ('the branch accountants', which is plural).`,
+      rule: `Error in (C): Replace 'was present' with 'were present'. When subjects are joined by 'Neither... nor' or 'Either... or', the verb agrees with the closer subject ('the branch accountants', which is plural).`,
       options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
       corr: 2,
     },
     {
-      sent: `One of the most significant (A) / factor contributing to the rise (B) / in non-performing assets (C) / is inadequate credit appraisal. (D) / No Error (E)`,
+      ruleName: 'Uncountable Noun treated as Plural',
+      sent: `The IT department ordered (A) / several new equipments and machineries (B) / to upgrade the core banking server (C) / before the quarterly audit. (D) / No Error (E)`,
       errPart: 'B',
-      rule: `Error in (B): Replace 'factor' with 'factors'. The phrase 'One of the' is always followed by a PLURAL NOUN and a singular verb.`,
+      rule: `Error in (B): Replace 'equipments and machineries' with 'equipment and machinery'. Words like 'equipment', 'machinery', 'furniture', 'information', and 'luggage' are uncountable nouns and do not take plural '-s' endings.`,
       options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
       corr: 1,
     },
     {
+      ruleName: 'Gerund vs Infinitive Trigger with Prepositions',
       sent: `The regulatory framework prohibits (A) / commercial financial institutions (B) / from to disburse loans (C) / without verifying valid collateral. (D) / No Error (E)`,
       errPart: 'C',
-      rule: `Error in (C): Replace 'from to disburse' with 'from disbursing'. Verbs like 'prohibit / prevent' take preposition 'from' followed by Gerund (-ing form).`,
+      rule: `Error in (C): Replace 'from to disburse' with 'from disbursing'. Verbs like 'prohibit', 'prevent', and 'abstain' take the preposition 'from' followed by a Gerund (-ing form).`,
       options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
       corr: 2,
     },
     {
-      sent: `Had the treasury department (A) / anticipated the sudden interest rate surge, (B) / they would avert the heavy mark-to-market losses. (C) / in government bond holdings. (D) / No Error (E)`,
+      ruleName: 'Conditional Clauses (Had + V3 with would have + V3)',
+      sent: `Had the treasury department (A) / anticipated the sudden interest rate surge, (B) / they would avert the heavy mark-to-market losses (C) / in government bond holdings. (D) / No Error (E)`,
       errPart: 'C',
-      rule: `Error in (C): Replace 'would avert' with 'would have averted'. Past conditional 'Had + V3' requires 'would have + V3' in the main clause.`,
+      rule: `Error in (C): Replace 'would avert' with 'would have averted'. In third/past hypothetical conditionals ('Had + V3'), the resulting clause must use 'would have + V3'.`,
+      options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
+      corr: 2,
+    },
+    {
+      ruleName: 'Subjunctive Mood with Mandative Verbs',
+      sent: `The external oversight committee recommended that (A) / the chief risk officer resigns immediately (B) / following the discovery of fraudulent transactions (C) / in the derivatives portfolio. (D) / No Error (E)`,
+      errPart: 'B',
+      rule: `Error in (B): Replace 'resigns' with 'resign'. Verbs of demand, recommendation, or insistence (recommend that, insist that, require that) trigger the subjunctive mood, which requires the base form of the verb without '-s'.`,
+      options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
+      corr: 1,
+    },
+    {
+      ruleName: 'Parallelism in Correlative Conjunctions',
+      sent: `The newly appointed board (A) / not only aims to curtail operating costs (B) / but also improving customer satisfaction (C) / across all metropolitan branches. (D) / No Error (E)`,
+      errPart: 'C',
+      rule: `Error in (C): Replace 'improving' with 'to improve'. Correlative conjunctions like 'not only... but also' require parallel grammatical structures ('not only to curtail... but also to improve').`,
+      options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
+      corr: 2,
+    },
+    {
+      ruleName: 'Dangling / Misplaced Participial Modifier',
+      sent: `Having scrutinized the quarterly balance sheet, (A) / several accounting irregularities were noticed (B) / by the forensic investigation team (C) / during the statutory review. (D) / No Error (E)`,
+      errPart: 'B',
+      rule: `Error in (B): Dangling modifier. The participial phrase 'Having scrutinized...' modifies the person who scrutinized (the team), not the 'irregularities'. Rewrite as: 'Having scrutinized..., the forensic team noticed several accounting irregularities'.`,
+      options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
+      corr: 1,
+    },
+    {
+      ruleName: "Comparison Trap with 'That of / Those of'",
+      sent: `The gross non-performing asset ratio (A) / of regional rural banks is (B) / significantly higher than (C) / private scheduled commercial banks. (D) / No Error (E)`,
+      errPart: 'C',
+      rule: `Error in (C): Replace 'higher than' with 'higher than that of'. The sentence compares the NPA ratio of rural banks with the banks themselves rather than their ratio. 'That of' is required for a logical comparison.`,
       options: ['(A)', '(B)', '(C)', '(D)', '(E) No Error'],
       corr: 2,
     },
   ];
 
-  const item = errorBank[(variant - 1) % errorBank.length];
+  const item = errorBank[Math.abs(variant - 1) % errorBank.length];
 
   return {
     id: `q_eng_err_${qNum}`,
@@ -2428,11 +2813,11 @@ export function generateEnglishErrorSpottingQuestion(
     marks,
     negativeMarks,
     topic: 'English Language',
-    subTopic: 'Grammar Rules & Error Spotting',
+    subTopic: item.ruleName,
     difficulty: 'MODERATE',
     avgIdealTimeSeconds: 20,
     conventionalSolutionEn: item.rule,
-    shortcutTrickEn: 'Direct rule application: Memorize the 10 Golden Banking Grammar Rules (along with, hardly...when, neither...nor).',
+    shortcutTrickEn: 'Golden Rule Application: Memorize high-frequency traps (subjunctive mood, inversion, that of comparisons, parallel structure).',
     options: item.options.map((opt, i) => ({
       id: `opt_ee_${qNum}_${i}`,
       questionId: `q_eng_err_${qNum}`,
@@ -2450,18 +2835,61 @@ export function generateClozeTestGroup(
   secId: string,
   marks: number = 1.0,
   negativeMarks: number = 0.25,
-  qCount: number = 5
+  qCount: number = 5,
+  seedOrMock: number = 1
 ): QuestionGroup {
   const groupId = `group_cloze_${startQNum}`;
-  const passageEn = `In the following passage, there are blanks numbered (1) to (${qCount}). Fill in the blanks with the most appropriate option from the choices provided:\n\nFinancial inclusion has evolved from a philanthropic objective into an economic __(1)__ for sustainable development. When low-income households gain access to formal banking channels, their capacity to __(2)__ against unforeseen financial emergencies improves substantially. Moreover, digital payment infrastructure has significantly __(3)__ leakages in direct government subsidy transfers. However, digital illiteracy remains a persistent __(4)__ that must be addressed through comprehensive awareness drives. Financial institutions must therefore __(5)__ innovative customer-centric solutions to achieve universal inclusion.`;
 
-  const blanks = [
-    { num: 1, ans: 'imperative', options: ['imperative', 'negligence', 'obstacle', 'coincidence', 'liability'] },
-    { num: 2, ans: 'insulate', options: ['insulate', 'deteriorate', 'surrender', 'depreciate', 'aggravate'] },
-    { num: 3, ans: 'curtailed', options: ['curtailed', 'augmented', 'neglected', 'expanded', 'amplified'] },
-    { num: 4, ans: 'impediment', options: ['impediment', 'catalyst', 'advantage', 'incentive', 'milestone'] },
-    { num: 5, ans: 'deploy', options: ['deploy', 'abandon', 'demolish', 'withhold', 'forfeit'] },
+  const clozePassages = [
+    {
+      theme: 'Green Hydrogen Economy & Sustainable Energy Transition',
+      passage: `The accelerated transition towards carbon neutrality has established green hydrogen as an indispensable __(1)__ for decarbonizing energy-intensive manufacturing. When industrial producers substitute fossil fuels with green molecules, their greenhouse footprint __(2)__ dramatically. However, the capital intensity of electrolyzers presents a severe commercial __(3)__ that prevents immediate widespread scaling. Without calibrated government production subsidies, private investors remain __(4)__ to commit long-term equity. Policymakers must therefore __(5)__ targeted financial frameworks to catalyze private capital flows.`,
+      blanks: [
+        { num: 1, ans: 'catalyst', options: ['catalyst', 'deterrent', 'impediment', 'hazard', 'liability'] },
+        { num: 2, ans: 'diminishes', options: ['diminishes', 'amplifies', 'escalates', 'proliferates', 'aggravates'] },
+        { num: 3, ans: 'bottleneck', options: ['bottleneck', 'incentive', 'advantage', 'breakthrough', 'milestone'] },
+        { num: 4, ans: 'reluctant', options: ['reluctant', 'eager', 'zealous', 'fervent', 'enthusiastic'] },
+        { num: 5, ans: 'formulate', options: ['formulate', 'abolish', 'discard', 'relinquish', 'forfeit'] },
+      ],
+    },
+    {
+      theme: 'Oceanic Trade Chokepoints & Maritime Inflation',
+      passage: `Global commercial supply chains remain acutely susceptible to disruptions across strategic maritime __(1)__. When geopolitical friction forces merchant vessels to bypass traditional transit lanes, oceanic freight tariffs __(2)__ almost instantaneously. Such prolonged logistical detours induce severe supply delays, which directly __(3)__ headline consumer inflation across import-dependent nations. To __(4)__ these inflationary shocks, shipping consortia and sovereign logistics bodies must __(5)__ alternative intermodal transit corridors.`,
+      blanks: [
+        { num: 1, ans: 'chokepoints', options: ['chokepoints', 'sanctuaries', 'reservoirs', 'destinations', 'enclaves'] },
+        { num: 2, ans: 'surge', options: ['surge', 'plummet', 'stabilize', 'dwindle', 'depreciate'] },
+        { num: 3, ans: 'exacerbate', options: ['exacerbate', 'mitigate', 'alleviate', 'quench', 'ameliorate'] },
+        { num: 4, ans: 'cushion', options: ['cushion', 'ignite', 'hasten', 'provoke', 'intensify'] },
+        { num: 5, ans: 'operationalize', options: ['operationalize', 'dismantle', 'repudiate', 'abandon', 'obstruct'] },
+      ],
+    },
+    {
+      theme: 'Rural Agritech & Self-Help Group Microfinance',
+      passage: `The integration of agritech with grassroots microfinance has delivered significant efficiency gains for smallholder agrarian __(1)__. By leveraging satellite imaging and digitized crop-yield assessments, rural lenders can __(2)__ credit risks with high precision. This technological interface has dramatically __(3)__ transaction turnaround times, allowing farmers to procure seeds and fertilizers before seasonal sowing __(4)__. Financial institutions must continue to develop intuitive localized applications to __(5)__ rural digital literacy and foster lasting financial inclusion.`,
+      blanks: [
+        { num: 1, ans: 'enterprises', options: ['enterprises', 'liabilities', 'calamities', 'monopolies', 'subsidies'] },
+        { num: 2, ans: 'gauge', options: ['gauge', 'overlook', 'disregard', 'misjudge', 'neglect'] },
+        { num: 3, ans: 'compressed', options: ['compressed', 'prolonged', 'impeded', 'escalated', 'obstructed'] },
+        { num: 4, ans: 'deadlines', options: ['deadlines', 'hesitations', 'reticence', 'interruptions', 'concessions'] },
+        { num: 5, ans: 'bolster', options: ['bolster', 'undermine', 'sabotage', 'demolish', 'forfeit'] },
+      ],
+    },
+    {
+      theme: 'Artificial Intelligence Governance & Ethical Frameworks',
+      passage: `The rapid proliferation of generative artificial intelligence has prompted global regulators to draft comprehensive supervisory __(1)__. While algorithm-driven automation offers immense labor productivity enhancements, unchecked deployment carries the risk of amplifying systemic __(2)__. Furthermore, the unauthorized scraping of proprietary intellectual property presents complex legal challenges that existing copyright statutes fail to __(3)__. Regulatory authorities must establish transparent auditing standards to __(4)__ individual privacy rights while ensuring that innovation is not __(5)__ by cumbersome bureaucratic inertia.`,
+      blanks: [
+        { num: 1, ans: 'frameworks', options: ['frameworks', 'loopholes', 'anomalies', 'complacencies', 'stumbling-blocks'] },
+        { num: 2, ans: 'biases', options: ['biases', 'virtues', 'neutralities', 'equities', 'certainties'] },
+        { num: 3, ans: 'resolve', options: ['resolve', 'exacerbate', 'neglect', 'complicate', 'deteriorate'] },
+        { num: 4, ans: 'safeguard', options: ['safeguard', 'compromise', 'jeopardize', 'surrender', 'relinquish'] },
+        { num: 5, ans: 'stifled', options: ['stifled', 'bolstered', 'promoted', 'energized', 'fostered'] },
+      ],
+    },
   ];
+
+  const chosenIdx = Math.abs(seedOrMock) % clozePassages.length;
+  const chosenPassage = clozePassages[chosenIdx];
+  const blanks = chosenPassage.blanks;
 
   const optionLetters = ['A', 'B', 'C', 'D', 'E'] as const;
   const questions: Question[] = [];
@@ -2502,8 +2930,8 @@ export function generateClozeTestGroup(
     id: groupId,
     sectionId: secId,
     groupType: 'CLOZE_TEST',
-    title: `Directions (Q. ${startOrderInSec} - ${startOrderInSec + qCount - 1}): Cloze Test on Financial Inclusion.`,
-    passageEn,
+    title: `Directions (Q. ${startOrderInSec} - ${startOrderInSec + qCount - 1}): Cloze Test on "${chosenPassage.theme}".`,
+    passageEn: chosenPassage.passage,
     questions,
   };
 }
@@ -2513,13 +2941,38 @@ export function generateParaJumbleGroup(
   startOrderInSec: number,
   secId: string,
   marks: number = 1.0,
-  negativeMarks: number = 0.25
+  negativeMarks: number = 0.25,
+  seedOrMock: number = 1
 ): QuestionGroup {
   const groupId = `group_pj_${startQNum}`;
-  const passageEn = `Rearrange the following five sentences (A), (B), (C), (D), and (E) in the proper sequence to form a meaningful paragraph, then answer the questions given below:\n\n(A) Consequently, central banks across advanced economies responded by orchestrating coordinated interest rate hikes.\n(B) These inflationary pressures were primarily stoked by geopolitical supply bottlenecks and post-pandemic demand surges.\n(C) Over the past three years, global financial markets have navigated an unprecedented era of macroeconomic volatility.\n(D) At the heart of this disruption lay a sudden and stubborn resurgence in headline consumer price inflation.\n(E) While these aggressive monetary tightening measures helped tame prices, they simultaneously intensified recessionary anxieties worldwide.`;
 
-  // Correct sequence: C -> D -> B -> A -> E
-  const seq = ['C', 'D', 'B', 'A', 'E'];
+  const pjLibrary = [
+    {
+      theme: 'Macroeconomic Volatility & Interest Rate Cycles',
+      passageEn: `Rearrange the following five sentences (A), (B), (C), (D), and (E) in the proper sequence to form a meaningful paragraph, then answer the questions given below:\n\n(A) Consequently, central banks across advanced economies responded by orchestrating coordinated interest rate hikes.\n(B) These inflationary pressures were primarily stoked by geopolitical supply bottlenecks and post-pandemic demand surges.\n(C) Over the past three years, global financial markets have navigated an unprecedented era of macroeconomic volatility.\n(D) At the heart of this disruption lay a sudden and stubborn resurgence in headline consumer price inflation.\n(E) While these aggressive monetary tightening measures helped tame prices, they simultaneously intensified recessionary anxieties worldwide.`,
+      seq: ['C', 'D', 'B', 'A', 'E'],
+      deduction: `Logical narrative sequence:\n1. (C) Introduces the broad context of macroeconomic volatility.\n2. (D) Identifies the central cause (sudden resurgence in consumer price inflation).\n3. (B) Explains the underlying drivers of this inflation (These inflationary pressures...).\n4. (A) States the central bank policy response (Consequently, central banks responded...).\n5. (E) Evaluates the dual outcome of these measures (While these aggressive measures helped tame prices...).\n\nCorrect sequence: C - D - B - A - E.`,
+      links: 'Mandatory pairs: C -> D (volatility caused by inflation). D -> B ("These inflationary pressures" refers directly to inflation in D). A -> E ("these aggressive monetary tightening measures" refers to the rate hikes in A).',
+    },
+    {
+      theme: 'Semiconductor Fabrication & Strategic Industrial Policy',
+      passageEn: `Rearrange the following five sentences (A), (B), (C), (D), and (E) in the proper sequence to form a meaningful paragraph, then answer the questions given below:\n\n(A) To counter these vulnerabilities, several sovereign governments enacted historic legislation allocating billions in direct fab subsidies.\n(B) Advanced microprocessors have become the fundamental nervous system of contemporary digital and automotive economies.\n(C) Yet, building leading-edge fabrication facilities requires immense capital outlays and complex cleanroom water infrastructure.\n(D) However, the extreme geographic concentration of advanced foundries in East Asia leaves multinational supply chains critically exposed.\n(E) Consequently, industrial strategists caution that true semiconductor autonomy will require decades of sustained ecosystem building rather than overnight success.`,
+      seq: ['B', 'D', 'A', 'C', 'E'],
+      deduction: `Logical narrative sequence:\n1. (B) Introduces the indispensable role of advanced microprocessors.\n2. (D) Contrasts this with the severe vulnerability of geographic concentration in East Asia.\n3. (A) States the sovereign policy response (allocating billions in direct fab subsidies).\n4. (C) Introduces the massive infrastructural and capital hurdles of onshoring fabs.\n5. (E) Concludes with the expert consensus that autonomy requires decades of ecosystem building.\n\nCorrect sequence: B - D - A - C - E.`,
+      links: 'Mandatory pairs: B -> D (contrast between importance and supply vulnerability). D -> A ("To counter these vulnerabilities"). C -> E (capital hurdles imply autonomy will take decades).',
+    },
+    {
+      theme: 'Renewable Energy Integration & Grid Decarbonization',
+      passageEn: `Rearrange the following five sentences (A), (B), (C), (D), and (E) in the proper sequence to form a meaningful paragraph, then answer the questions given below:\n\n(A) The rapid addition of solar and wind generation has driven down the levelized cost of clean electricity to historic lows.\n(B) Sovereign green bonds have increasingly provided the capital required to build these modern smart-grid interconnections.\n(C) The global energy sector is undertaking a rapid and necessary transition towards complete decarbonization.\n(D) With this expanded transmission capability, utilities can smoothly wheel intermittent clean power across vast regional distances without blackouts.\n(E) However, the intermittent nature of renewable energy poses severe grid stability challenges unless paired with flexible transmission grids and energy storage.`,
+      seq: ['C', 'A', 'E', 'B', 'D'],
+      deduction: `Logical narrative sequence:\n1. (C) Establishes the overarching theme: the transition towards decarbonization.\n2. (A) Details the specific progress in solar and wind costs.\n3. (E) Highlights the intermittent nature and grid stability challenges.\n4. (B) Explains how sovereign green bonds finance smart-grid interconnections to resolve this.\n5. (D) Concludes with the resulting capability of wheeling intermittent power without blackouts.\n\nCorrect sequence: C - A - E - B - D.`,
+      links: 'Mandatory pairs: C -> A (global transition introduced, then solar/wind specifics). A -> E (contrast with intermittency). B -> D ("With this expanded transmission capability" refers to the smart-grid interconnections in B).',
+    },
+  ];
+
+  const chosenIdx = Math.abs(seedOrMock) % pjLibrary.length;
+  const chosenPj = pjLibrary[chosenIdx];
+  const seq = chosenPj.seq;
   const ordinals = ['FIRST', 'SECOND', 'THIRD', 'FOURTH', 'FIFTH'];
 
   const questions: Question[] = [];
@@ -2542,8 +2995,8 @@ export function generateParaJumbleGroup(
       subTopic: 'Para Jumbles Coherent Ordering',
       difficulty: 'MODERATE',
       avgIdealTimeSeconds: 30,
-      conventionalSolutionEn: `The logical narrative sequence is:\n1. (C) Introduces the broad context of macroeconomic volatility.\n2. (D) Identifies the central cause (resurgence in consumer price inflation).\n3. (B) Explains the underlying drivers of this inflation.\n4. (A) States the central bank response (Consequently, rate hikes).\n5. (E) Discusses the dual outcome of these measures.\n\nCorrect sequence: C - D - B - A - E. The ${ordinals[i]} sentence is (${targetSentence}).`,
-      shortcutTrickEn: 'Mandatory pair identification: D (inflation) pairs with B (inflationary pressures stoked by...). A (Consequently, rate hikes) pairs with E (While these measures...).',
+      conventionalSolutionEn: `${chosenPj.deduction}\n\nThe ${ordinals[i]} sentence is (${targetSentence}).`,
+      shortcutTrickEn: chosenPj.links,
       options: ['A', 'B', 'C', 'D', 'E'].map((opt, oIdx) => ({
         id: `opt_pj_${startQNum + i}_${oIdx}`,
         questionId: qId,
@@ -2559,8 +3012,8 @@ export function generateParaJumbleGroup(
     id: groupId,
     sectionId: secId,
     groupType: 'PARA_JUMBLE',
-    title: `Directions (Q. ${startOrderInSec} - ${startOrderInSec + 4}): Rearrange the sentences into a coherent paragraph.`,
-    passageEn,
+    title: `Directions (Q. ${startOrderInSec} - ${startOrderInSec + 4}): Rearrange the sentences on "${chosenPj.theme}" into a coherent paragraph.`,
+    passageEn: chosenPj.passageEn,
     questions,
   };
 }
