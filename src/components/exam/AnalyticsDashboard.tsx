@@ -10,13 +10,12 @@ import {
   Clock,
   CheckCircle2,
   XCircle,
-  HelpCircle,
   BookOpen,
-  ArrowRight,
   TrendingUp,
   RotateCcw,
 } from 'lucide-react';
 import { SectionalScoreResult, QuestionAnalysis } from '@/types/exam';
+import { MathText } from '@/components/common/MathText';
 
 export const AnalyticsDashboard: React.FC = () => {
   const { submissionResult, resetExamState, exam, initializeExam, returnToGateway } = useExamStore();
@@ -364,7 +363,11 @@ export const AnalyticsDashboard: React.FC = () => {
                       <div className="font-bold text-amber-800 text-xs uppercase tracking-wider mb-2">
                         Exam Speed Shortcut:
                       </div>
-                      <p className="text-gray-800 font-sans">{selectedQuestion.shortcutTrick}</p>
+                      <MathText
+                        as="div"
+                        className="text-gray-800 font-sans leading-relaxed whitespace-pre-line"
+                        text={selectedQuestion.shortcutTrick}
+                      />
                     </div>
                   ) : (
                     <div className="text-gray-500 italic">No specific shortcut trick recorded for this question. See conventional solution below.</div>
@@ -374,7 +377,11 @@ export const AnalyticsDashboard: React.FC = () => {
                     <div className="font-bold text-blue-900 text-xs uppercase tracking-wider mb-2">
                       Conventional Step-by-Step Method:
                     </div>
-                    <p className="text-gray-800 font-sans">{selectedQuestion.conventionalSolution}</p>
+                    <MathText
+                      as="div"
+                      className="text-gray-800 font-sans leading-relaxed whitespace-pre-line"
+                      text={selectedQuestion.conventionalSolution}
+                    />
                   </div>
                 )}
               </div>

@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { useExamStore } from '@/store/useExamStore';
-import { Question, Option, QuestionGroup } from '@/types/exam';
-import { ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { Option, QuestionGroup } from '@/types/exam';
+import { MathText } from '@/components/common/MathText';
 
 export const DualPaneQuestionArea: React.FC = () => {
   const {
@@ -118,11 +118,11 @@ export const DualPaneQuestionArea: React.FC = () => {
               )}
 
               {/* Passage / Clues */}
-              <div className={`prose max-w-none text-gray-800 leading-relaxed font-sans ${fontClasses} whitespace-pre-line`}>
-                {language === 'hi' && questionGroup.passageHi
-                  ? questionGroup.passageHi
-                  : questionGroup.passageEn}
-              </div>
+              <MathText
+                as="div"
+                className={`prose max-w-none text-gray-800 leading-relaxed font-sans ${fontClasses} whitespace-pre-line`}
+                text={language === 'hi' && questionGroup.passageHi ? questionGroup.passageHi : questionGroup.passageEn}
+              />
 
               {/* Structured DI Table Render (If present) */}
               {questionGroup.chartConfig && questionGroup.chartConfig.type === 'table' && (
@@ -174,11 +174,11 @@ export const DualPaneQuestionArea: React.FC = () => {
             </div>
 
             {/* Question Text */}
-            <div className={`font-medium text-gray-900 mb-6 leading-relaxed whitespace-pre-line ${fontClasses}`}>
-              {language === 'hi' && currentQuestion.questionTextHi
-                ? currentQuestion.questionTextHi
-                : currentQuestion.questionTextEn}
-            </div>
+            <MathText
+              as="div"
+              className={`font-medium text-gray-900 mb-6 leading-relaxed whitespace-pre-line ${fontClasses}`}
+              text={language === 'hi' && currentQuestion.questionTextHi ? currentQuestion.questionTextHi : currentQuestion.questionTextEn}
+            />
 
             {/* 5 Radio Options (Standard Banking A, B, C, D, E) */}
             <div className="space-y-3 select-none">
@@ -210,11 +210,11 @@ export const DualPaneQuestionArea: React.FC = () => {
                       <span className="font-bold text-[#0e3b64] text-xs sm:text-sm font-mono">
                         ({option.identifier})
                       </span>
-                      <span className={`text-gray-800 ${fontClasses}`}>
-                        {language === 'hi' && option.optionTextHi
-                          ? option.optionTextHi
-                          : option.optionTextEn}
-                      </span>
+                      <MathText
+                        as="span"
+                        className={`text-gray-800 ${fontClasses}`}
+                        text={language === 'hi' && option.optionTextHi ? option.optionTextHi : option.optionTextEn}
+                      />
                     </div>
                   </label>
                 );

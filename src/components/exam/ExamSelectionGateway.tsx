@@ -29,6 +29,7 @@ export const ExamSelectionGateway: React.FC = () => {
   const [showInstructions, setShowInstructions] = useState<boolean>(false);
   const [hasAgreedToDeclaration, setHasAgreedToDeclaration] = useState<boolean>(false);
   const [seed, setSeed] = useState<number>(() => (typeof window !== 'undefined' ? Date.now() : 20251030));
+  const [mockNumber, setMockNumber] = useState<number>(1);
 
   const selectedTemplate: ExamTemplateConfig = OFFICIAL_EXAM_CATALOG[selectedCategoryKey];
 
@@ -40,7 +41,7 @@ export const ExamSelectionGateway: React.FC = () => {
 
   const handleStartExam = () => {
     const freshSeed = seed || Date.now();
-    const examData = buildOfficialBankingExam(selectedCategoryKey, freshSeed, isDrillMode);
+    const examData = buildOfficialBankingExam(selectedCategoryKey, freshSeed, isDrillMode, mockNumber);
     initializeExam(examData);
   };
 
@@ -108,13 +109,29 @@ export const ExamSelectionGateway: React.FC = () => {
 
               {/* Dynamic Shuffle & Practice Mode Controls */}
               <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-1.5 bg-blue-50 px-2.5 py-1.5 rounded-lg border border-blue-200 text-xs font-bold text-[#0e3b64]">
+                  <span className="text-gray-500 uppercase text-[10px]">Mock:</span>
+                  <select
+                    value={mockNumber}
+                    onChange={(e) => setMockNumber(Number(e.target.value))}
+                    className="bg-transparent font-black text-[#0e3b64] cursor-pointer outline-none text-xs"
+                    title="Select official mock test paper number (rotates topics to cover 100% syllabus)"
+                  >
+                    {Array.from({ length: 20 }, (_, idx) => idx + 1).map((num) => (
+                      <option key={num} value={num}>
+                        Mock Test #{num}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <button
                   onClick={handleShufflePaper}
                   title="Randomize questions, number series, roots and puzzle arrangements"
                   className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-[#0e3b64] bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors cursor-pointer"
                 >
                   <Shuffle className="w-3.5 h-3.5 text-blue-700" />
-                  <span>🎲 Shuffle / Fresh Paper (Seed #{seed.toString().slice(-4)})</span>
+                  <span>🎲 Shuffle (Seed #{seed.toString().slice(-4)})</span>
                 </button>
 
                 <div className="flex items-center space-x-1.5 bg-gray-100 p-1 rounded-lg border border-gray-200 text-xs">
