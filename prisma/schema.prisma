@@ -1,0 +1,335 @@
+// Prisma Schema for Indian Banking Exam Mock Test Engine & PYQ Repository
+// Specializing in SBI PO/Clerk, IBPS PO/Clerk, and IBPS RRB PO/Clerk
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ---------------------------------------------------------
+// ENUMS
+// ---------------------------------------------------------
+
+enum ExamBody {
+  SBI
+  IBPS
+  RRB
+  RBI
+}
+
+enum ExamPost {
+  PO            // Probationary Officer / Scale-I
+  CLERK         // Junior Associate / Office Assistant
+  SO            // Specialist Officer
+  GRADE_B       // RBI Grade B
+}
+
+enum ExamStage {
+  PRELIMS
+  MAINS
+}
+
+enum TimingType {
+  SECTIONAL_LOCKED  // Strict 20 mins/section (SBI/IBPS PO/Clerk) - No tab switching
+  COMPOSITE         // 45 mins total (IBPS RRB Prelims) - Free section switching
+}
+
+enum SectionType {
+  REASONING_ABILITY
+  QUANTITATIVE_APTITUDE
+  ENGLISH_LANGUAGE
+  GENERAL_FINANCIAL_AWARENESS
+  COMPUTER_KNOWLEDGE
+}
+
+enum GroupType {
+  SEATING_ARRANGEMENT_CIRCULAR
+  SEATING_ARRANGEMENT_LINEAR
+  SEATING_ARRANGEMENT_PARALLEL_ROW
+  PUZZLE_FLOOR_FLAT
+  PUZZLE_BOX_BASED
+  PUZZLE_MONTH_DAY_YEAR
+  PUZZLE_UNCERTAIN_PERSONS
+  DI_TABULAR
+  DI_BAR_CHART
+  DI_LINE_GRAPH
+  DI_PIE_CHART
+  DI_CASELET_ARITHMETIC
+  DI_RADAR_CHART
+  READING_COMPREHENSION
+  CLOZE_TEST
+  INPUT_OUTPUT_MACHINE
+  STANDALONE_NONE
+}
+
+enum QuestionDifficulty {
+  EASY
+  MODERATE
+  HARD
+}
+
+enum PaletteState {
+  NOT_VISITED                       // State 1: Gray
+  NOT_ANSWERED                      // State 2: Red
+  ANSWERED                          // State 3: Green
+  MARKED_FOR_REVIEW                 // State 4: Purple
+  ANSWERED_AND_MARKED_FOR_REVIEW    // State 5: Purple with Green Badge (EVALUATED in IBPS)
+}
+
+enum AttemptStatus {
+  IN_PROGRESS
+  PAUSED
+  SUBMITTED
+  AUTO_EXPIRED
+}
+
+enum VerificationStatus {
+  VERIFIED_PROGRAMMATIC  // Passed solver uniqueness/math check
+  VERIFIED_MANUAL        // Vetted by human faculty
+  AI_GENERATED_PENDING
+  FAILED_VALIDATION
+}
+
+enum TimeTrapQuadrant {
+  FAST_CORRECT             // Strength: High speed, accurate
+  SLOW_CORRECT             // Needs shortcut/speed improvement
+  FAST_WRONG               // Careless mistake / Guessing penalty
+  SLOW_WRONG_OR_SKIPPED    // FATAL TIME TRAP (>90s spent & wrong or skipped)
+}
+
+// ---------------------------------------------------------
+// EXAMS & SECTIONS
+// ---------------------------------------------------------
+
+model Exam {
+  id                    String        @id @default(uuid())
+  slug                  String        @unique
+  title                 String        // e.g. "SBI PO Prelims 2025 Full Mock #01"
+  examBody              ExamBody      @default(SBI)
+  post                  ExamPost      @default(PO)
+  stage                 ExamStage     @default(PRELIMS)
+  year                  Int           @default(2025)
+  shift                 String?       // "Shift 1", "Memory Based 2024"
+  isPreviousYearPaper   Boolean       @default(false)
+  
+  timingType            TimingType    @default(SECTIONAL_LOCKED)
+  totalDurationSeconds  Int           @default(3600) // 60 mins (3600s) or 45 mins (2700s)
+  totalMarks            Float         @default(100.0)
+  totalQuestions        Int           @default(100)
+  negativeMarkRatio     Float         @default(0.25) // 1/4th penalty
+  
+  isPublished           Boolean       @default(false)
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  sections              Section[]
+  testAttempts          UserTestAttempt[]
+
+  @@index([examBody, post, stage, year])
+}
+
+model Section {
+  id                    String        @id @default(uuid())
+  examId                String
+  exam                  Exam          @relation(fields: [examId], references: [id], onDelete: Cascade)
+  
+  sectionType           SectionType
+  displayName           String        // "Quantitative Aptitude", "Reasoning Ability"
+  orderIndex            Int           // 0, 1, 2 (Execution order)
+  
+  durationSeconds       Int           // e.g., 1200 (20 mins strict in Prelims). In Composite, matches exam.
+  questionCount         Int           // e.g., 35 in Quant/Reasoning, 30 in English
+  maxMarks              Float         @default(35.0)
+  sectionalCutoff       Float?        // e.g., 9.5 for UR (Unreserved)
+  
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  questionGroups        QuestionGroup[]
+  questions             Question[]
+  attemptLogs           QuestionAttemptLog[]
+
+  @@unique([examId, orderIndex])
+  @@index([examId, sectionType])
+}
+
+// ---------------------------------------------------------
+// QUESTION GROUPS (Parent Artifacts for Puzzles, DI, RC)
+// ---------------------------------------------------------
+
+model QuestionGroup {
+  id                    String        @id @default(uuid())
+  sectionId             String
+  section               Section       @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  
+  groupType             GroupType     @default(STANDALONE_NONE)
+  title                 String?       // "Study the following bar graph carefully..."
+  
+  // Dual-Pane Left Content (Bilingual)
+  passageEn             String        @db.Text
+  passageHi             String?       @db.Text
+  
+  // Structured JSON data for Data Interpretation rendering (Recharts / SVG)
+  chartConfig           Json?         // { type: 'bar'|'pie'|'table', categories: [...], series: [...] }
+  
+  // Logical Puzzle Clues & Constraints representation (for verification solver)
+  logicConstraints      Json?         // { entities: 8, rows: 2, conditionList: [...] }
+  
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  questions             Question[]
+
+  @@index([sectionId, groupType])
+}
+
+// ---------------------------------------------------------
+// QUESTIONS & BILINGUAL OPTIONS
+// ---------------------------------------------------------
+
+model Question {
+  id                    String              @id @default(uuid())
+  sectionId             String
+  section               Section             @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  
+  questionGroupId       String?
+  questionGroup         QuestionGroup?      @relation(fields: [questionGroupId], references: [id], onDelete: SetNull)
+  
+  questionNumber        Int                 // 1 to 100 within the Exam
+  orderInSection        Int                 // 1 to 35 within the Section
+  
+  // Content (Bilingual Markdown + KaTeX LaTeX math support)
+  questionTextEn        String              @db.Text
+  questionTextHi        String?             @db.Text
+  
+  // Scoring configuration
+  marks                 Float               @default(1.0)
+  negativeMarks         Float               @default(0.25)
+  
+  // Granular Topic Hierarchy
+  topic                 String              // "Syllogism", "Missing Number Series", "Circular Seating"
+  subTopic              String?             // "Only a few conditions", "Alternate Series"
+  difficulty            QuestionDifficulty  @default(MODERATE)
+  avgIdealTimeSeconds   Int                 @default(45) // Benchmark ideal solving time
+  
+  // Dual Solutions (Bilingual)
+  conventionalSolutionEn String             @db.Text
+  conventionalSolutionHi String?            @db.Text
+  shortcutTrickEn        String?            @db.Text // Ratio, Alligation, Vedic math trick
+  shortcutTrickHi        String?            @db.Text
+  
+  // Quality & Verification Loop
+  verificationStatus    VerificationStatus  @default(VERIFIED_PROGRAMMATIC)
+  verificationLog       Json?               // Details of solver test output or mathematical validation
+  
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  options               Option[]
+  attemptLogs           QuestionAttemptLog[]
+
+  @@index([sectionId, orderInSection])
+  @@index([topic, difficulty])
+}
+
+model Option {
+  id                    String        @id @default(uuid())
+  questionId            String
+  question              Question      @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  identifier            String        // "A", "B", "C", "D", "E" (5 options standard in Banking)
+  optionTextEn          String        @db.Text
+  optionTextHi          String?       @db.Text
+  
+  isCorrect             Boolean       @default(false)
+  distractorType        String?       // "sign_inversion", "missed_interest_addition", "opposite_direction"
+  
+  createdAt             DateTime      @default(now())
+
+  attemptLogs           QuestionAttemptLog[]
+
+  @@unique([questionId, identifier])
+  @@index([questionId, isCorrect])
+}
+
+// ---------------------------------------------------------
+// USER ATTEMPTS & REAL-TIME STATE TELEMETRY
+// ---------------------------------------------------------
+
+model UserTestAttempt {
+  id                    String              @id @default(uuid())
+  userId                String              // External auth user ID
+  examId                String
+  exam                  Exam                @relation(fields: [examId], references: [id], onDelete: Cascade)
+  
+  status                AttemptStatus       @default(IN_PROGRESS)
+  
+  // Timing & Section Locks
+  startedAt             DateTime            @default(now())
+  submittedAt           DateTime?
+  lastHeartbeatAt       DateTime            @default(now())
+  
+  currentSectionId      String
+  currentQuestionId     String
+  timeRemainingSeconds  Int                 // Synced from client to server every 15s
+  
+  // Evaluated Scores (Populated upon submission)
+  totalScore            Float?
+  totalCorrect          Int?
+  totalIncorrect        Int?
+  totalUnattempted      Int?
+  accuracyPercentage    Float?
+  percentileRank        Float?
+  
+  // Aggregate Sectional Score Breakdowns
+  sectionalScoreBreakdown Json?             // [{ sectionId, score, correct, incorrect, unattempted }]
+  timeTrapAnalysisSummary Json?             // Counts of FAST_CORRECT, SLOW_CORRECT, FAST_WRONG, SLOW_WRONG_OR_SKIPPED
+  
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+
+  attemptLogs           QuestionAttemptLog[]
+
+  @@index([userId, examId, status])
+}
+
+model QuestionAttemptLog {
+  id                    String            @id @default(uuid())
+  attemptId             String
+  attempt               UserTestAttempt   @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  
+  sectionId             String
+  section               Section           @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  
+  questionId            String
+  question              Question          @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  
+  // Selected option (null if unattempted or cleared)
+  selectedOptionId      String?
+  selectedOption        Option?           @relation(fields: [selectedOptionId], references: [id], onDelete: SetNull)
+  
+  // Exact 5-State Palette Status
+  paletteState          PaletteState      @default(NOT_VISITED)
+  
+  // Time Telemetry & Granular Navigation Auditing
+  timeSpentSeconds      Int               @default(0)   // Total accumulated seconds
+  visitCount            Int               @default(0)   // Number of times user navigated to this question
+  visitTimeline         Json?             // Array of [{ enteredAt, exitedAt, duration, action }]
+  
+  // Post-Exam Evaluation
+  isEvaluated           Boolean           @default(false) // true if ANSWERED or ANSWERED_AND_MARKED_FOR_REVIEW
+  isCorrect             Boolean?
+  scoreEarned           Float?            // +1.0, -0.25, or 0.0
+  timeQuadrant          TimeTrapQuadrant? // Diagnosed speed-accuracy quadrant
+  
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId, paletteState])
+  @@index([attemptId, timeQuadrant])
+}
