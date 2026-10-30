@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useExamStore } from '@/store/useExamStore';
 import { OFFICIAL_EXAM_CATALOG, ExamCategoryKey, ExamTemplateConfig } from '@/types/examCatalog';
 import { buildOfficialBankingExam } from '@/lib/generator/examBuilder';
@@ -18,6 +19,8 @@ import {
   UserCheck,
   ChevronRight,
   Layers,
+  BookOpen,
+  Sparkles,
 } from 'lucide-react';
 
 export const ExamSelectionGateway: React.FC = () => {
@@ -72,8 +75,15 @@ export const ExamSelectionGateway: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-4 text-xs font-medium text-blue-100">
-            <span className="flex items-center">
+          <div className="flex items-center space-x-3 text-xs font-medium text-blue-100">
+            <Link
+              href="/practice"
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#ff9900] hover:bg-amber-400 text-[#0e3b64] font-black text-xs shadow-xs transition-all transform hover:-translate-y-0.5"
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>📚 Topic Practice</span>
+            </Link>
+            <span className="hidden md:flex items-center">
               <UserCheck className="w-4 h-4 mr-1 text-emerald-400" />
               Candidate: Karna • Node: C042 • Roll: 2408199201
             </span>
@@ -86,6 +96,37 @@ export const ExamSelectionGateway: React.FC = () => {
         {!showInstructions ? (
           /* STEP 1: EXAM SELECTION SCREEN */
           <div className="space-y-6">
+            {/* Topic-Wise Concept & Practice Feature Banner */}
+            <div className="bg-gradient-to-r from-blue-900 via-[#0e3b64] to-indigo-950 text-white p-5 rounded-2xl shadow-md border border-blue-700/50 flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#ff9900] to-amber-500 flex items-center justify-center text-2xl shadow-md shrink-0">
+                  ⚡
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs bg-[#ff9900]/20 border border-[#ff9900]/50 text-[#ffb74d] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      New Module
+                    </span>
+                    <span className="text-xs text-blue-200">Bilingual English + Hindi</span>
+                  </div>
+                  <h2 className="text-base sm:text-lg font-black text-white mt-1">
+                    Topic-Wise Concept Mastery &amp; 20-Second Shortcuts
+                  </h2>
+                  <p className="text-xs text-blue-200 mt-0.5">
+                    Master 34+ banking topics with LaTeX formulas, TCS iON examiner traps, Level 1–3 drills, and Learn Mode.
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/practice"
+                className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#ff9900] hover:bg-amber-400 text-[#0e3b64] font-black text-xs sm:text-sm rounded-xl shadow-md transition-all transform hover:scale-105 shrink-0"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Open Syllabus Hub</span>
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+
             {/* Filter Tabs */}
             <div className="bg-white p-4 rounded-xl shadow-xs border border-gray-200 flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center space-x-2">

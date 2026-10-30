@@ -333,3 +333,75 @@ model QuestionAttemptLog {
   @@index([attemptId, paletteState])
   @@index([attemptId, timeQuadrant])
 }
+
+// ---------------------------------------------------------
+// TOPIC-WISE CONCEPT & PRACTICE ENGINE MODELS
+// ---------------------------------------------------------
+
+model SyllabusTopic {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  category        String   // QUANT, REASONING, LANGUAGE, GA_COMPUTER
+  clusterName     String
+  titleEn         String
+  titleHi         String
+  examRelevance   String[] // ["SBI_PO", "SBI_CLERK", "IBPS_PO", "IBPS_CLERK", "RRB_PO", "RRB_CLERK"]
+  weightagePrelims String  // e.g., "3-5 Marks"
+  weightageMains   String  // e.g., "5-10 Marks"
+  conceptGuide    ConceptGuide?
+  questions       TopicPracticeQuestion[]
+  userProgress    UserTopicProgress[]
+  createdAt       DateTime @default(now())
+}
+
+model ConceptGuide {
+  id                    String        @id @default(cuid())
+  topicId               String        @unique
+  topic                 SyllabusTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  coreTheoryEn          String        @db.Text
+  coreTheoryHi          String        @db.Text
+  formulasAndRulesJson  Json          // Array of { title, latexFormula, explanationEn, explanationHi, example }
+  shortcutTricksJson    Json          // Array of { trickName, conventionalTime, shortcutTime, stepsEn, stepsHi }
+  commonTrapsJson       Json          // Array of { trapTitle, mistakeStudentsMake, howToAvoid }
+  solvedExamplesJson    Json          // 3 Step-by-step Solved Examples (Easy, Moderate, Mains)
+  conceptSvgDiagram     String?       @db.Text // Optional inline SVG illustrating the core concept
+  updatedAt             DateTime      @updatedAt
+}
+
+model TopicPracticeQuestion {
+  id                  String        @id @default(cuid())
+  topicId             String
+  topic               SyllabusTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  difficulty          String        // "LEVEL_1_CLERK_PRE" | "LEVEL_2_PO_PRE" | "LEVEL_3_MAINS"
+  examTag             String        // e.g., "SBI PO Prelims Style", "IBPS PO Mains PYQ Pattern"
+  commonContextEn     String?       @db.Text
+  commonContextHi     String?       @db.Text
+  questionEn          String        @db.Text
+  questionHi          String        @db.Text
+  optionsJson         Json          // 5 Options: [{ id: "A", textEn: "...", textHi: "..." }, ...]
+  correctOption       String        // "A" | "B" | "C" | "D" | "E"
+  conceptTag          String        // Specific sub-rule tested (e.g., "Successive Discount vs Markup")
+  conventionalSolEn   String        @db.Text
+  conventionalSolHi   String        @db.Text
+  examShortcutEn      String        @db.Text
+  examShortcutHi      String        @db.Text
+  solutionSvgDiagram  String?       @db.Text
+  idealTimeSeconds    Int           @default(45)
+  createdAt           DateTime      @default(now())
+}
+
+model UserTopicProgress {
+  id                String        @id @default(cuid())
+  userId            String
+  topicId           String
+  topic             SyllabusTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  conceptCompleted  Boolean       @default(false)
+  questionsAttempted Int          @default(0)
+  questionsCorrect  Int           @default(0)
+  avgTimeSeconds    Float         @default(0)
+  masteryScore      Float         @default(0) // 0 to 100 calculated from accuracy + difficulty + speed
+  updatedAt         DateTime      @updatedAt
+
+  @@unique([userId, topicId])
+}
+
