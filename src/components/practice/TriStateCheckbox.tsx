@@ -41,10 +41,10 @@ export const TriStateCheckbox: React.FC<TriStateCheckboxProps> = ({
       onClick={handleClick}
       className={`relative inline-flex items-center justify-center rounded border transition-all shrink-0 cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 ${sizeClasses} ${
         state === 'CHECKED'
-          ? 'bg-indigo-600 border-indigo-600 text-white shadow-xs'
+          ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
           : state === 'INDETERMINATE'
-          ? 'bg-indigo-500 border-indigo-500 text-white shadow-xs'
-          : 'bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 hover:border-indigo-400'
+          ? 'bg-blue-500 border-blue-500 text-white shadow-xs'
+          : 'bg-slate-900 border-slate-700 hover:border-blue-400'
       } ${className}`}
     >
       {state === 'CHECKED' && <Check className="w-3 h-3 stroke-[3]" />}

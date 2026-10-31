@@ -52,6 +52,11 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
     }
   }, [tabParam]);
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [isConceptDrawerOpen, setIsConceptDrawerOpen] = useState(false);
 
   const conceptGuide = getConceptGuide(topicSlug);
@@ -63,7 +68,24 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
     setSelectedDifficulty,
   } = useTopicPracticeStore();
 
-  const mastery = getTopicMastery(topicSlug);
+  const mastery = mounted
+    ? getTopicMastery(topicSlug)
+    : {
+        topicSlug,
+        conceptCompleted: false,
+        questionsAttempted: 0,
+        questionsCorrect: 0,
+        level1Attempted: 0,
+        level1Correct: 0,
+        level2Attempted: 0,
+        level2Correct: 0,
+        level3Attempted: 0,
+        level3Correct: 0,
+        avgTimeSeconds: 0,
+        masteryScore: 0,
+        bookmarkedQuestionIds: [],
+        wrongQuestionIds: [],
+      };
 
   const handleStartPractice = () => {
     setActiveTab('PRACTICE');
