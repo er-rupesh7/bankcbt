@@ -32,26 +32,30 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   };
 }
 
-export default async function TopicWorkspacePage(props: PageProps) {
-  const { topicSlug } = await props.params;
-
+async function TopicWorkspaceContent({ params }: { params: Promise<{ topicSlug: string }> }) {
+  const { topicSlug } = await params;
   const topic = getTopicBySlug(topicSlug);
+
   if (!topic) {
     notFound();
   }
 
+  return <TopicWorkspaceClient topicSlug={topicSlug} />;
+}
+
+export default function TopicWorkspacePage(props: PageProps) {
   return (
     <Suspense
       fallback={
         <div className="min-h-screen bg-[#0e3b64] flex items-center justify-center text-white">
           <div className="text-center space-y-3">
             <div className="w-12 h-12 border-4 border-[#ff9900] border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-sm font-bold text-blue-200">Loading {topic.titleEn} Workspace...</p>
+            <p className="text-sm font-bold text-blue-200">Loading Topic Workspace...</p>
           </div>
         </div>
       }
     >
-      <TopicWorkspaceClient topicSlug={topicSlug} />
+      <TopicWorkspaceContent params={props.params} />
     </Suspense>
   );
 }
