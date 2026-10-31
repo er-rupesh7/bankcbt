@@ -114,7 +114,7 @@ export default function PracticeHubPage() {
   }, [getTopicMastery, topicMasteryMap]);
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9] text-gray-900 font-sans flex flex-col justify-between">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 font-sans flex flex-col justify-between transition-colors">
       {/* 1. Header */}
       <PracticeHeader showBackToHub={false} />
 
@@ -175,14 +175,14 @@ export default function PracticeHubPage() {
         </div>
 
         {/* View Mode Toggle: Interactive Tree Tracker vs Cards Grid */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-800 p-2 rounded-xl border border-gray-200 dark:border-slate-700 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-gray-900 p-2 rounded-xl border border-slate-200 dark:border-gray-800 shadow-xs">
           <div className="flex items-center space-x-2 w-full sm:w-auto">
             <button
               onClick={() => setViewMode('TREE')}
               className={`flex-1 sm:flex-none flex items-center justify-center space-x-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 viewMode === 'TREE'
                   ? 'bg-indigo-600 text-white shadow-md'
-                  : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-gray-800'
               }`}
             >
               <Network className="w-4 h-4" />

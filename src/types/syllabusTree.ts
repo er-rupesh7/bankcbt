@@ -21,6 +21,7 @@ export interface SyllabusTopicNode {
   name: string;
   stageTag?: 'PRELIMS' | 'MAINS' | 'BOTH';
   badgeTag?: 'Prelims Core' | 'Mains Advanced' | 'High Frequency' | 'Speed Drill';
+  weightageTag?: string;
   subtopics: SyllabusSubtopic[];
   speed_arsenal: string[];
   speed_arsenal_tooltips?: Record<string, string>;

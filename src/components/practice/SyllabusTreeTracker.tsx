@@ -11,8 +11,6 @@ import {
 import { OFFICIAL_SYLLABUS_TREE } from '@/data/syllabusTreeData';
 import {
   SyllabusSubjectNode,
-  SyllabusClusterNode,
-  SyllabusTopicNode,
   TreeFilterType,
 } from '@/types/syllabusTree';
 import { TriStateCheckbox } from './TriStateCheckbox';
@@ -24,15 +22,12 @@ import {
   Search,
   X,
   Zap,
-  BookOpen,
-  Filter,
-  CheckCircle2,
-  Layers,
   Sparkles,
   RotateCcw,
   Maximize2,
   Minimize2,
   ExternalLink,
+  HelpCircle,
 } from 'lucide-react';
 
 export const SyllabusTreeTracker: React.FC = () => {
@@ -147,30 +142,28 @@ export const SyllabusTreeTracker: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* 1. Global Metrics & Circular Progress Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-5 sm:p-6 shadow-xl border border-indigo-800/40 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-
+      {/* 1. Global Metrics & Circular Progress Banner (Surface Level 1: Elevated Clean FinTech Card) */}
+      <div className="bg-white dark:bg-gray-900 text-slate-900 dark:text-slate-100 rounded-2xl p-5 sm:p-6 shadow-sm border border-slate-200 dark:border-gray-800 relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
           {/* Left Title & Status */}
           <div className="space-y-2 text-center md:text-left">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/40 text-indigo-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200 dark:border-indigo-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
               <span>Official Banking Exam Curriculum</span>
-              <span className="text-white/40">•</span>
+              <span className="text-slate-300 dark:text-slate-600">•</span>
               <span>SBI • IBPS • RRB PO &amp; Clerk</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              Interactive Syllabus &amp; Speed Arsenal Tree
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Interactive Syllabus Tree &amp; Speed Arsenal
             </h2>
-            <p className="text-xs sm:text-sm text-indigo-200/80 max-w-xl">
-              Track your mastery across official banking syllabus chapters. Check off granular
-              concepts and memorized speed shortcuts to monitor live exam readiness.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed">
+              Track granular chapter mastery across SBI, IBPS, and RRB. Check off individual concepts and
+              fast-solving shortcuts to monitor your live exam readiness.
             </p>
           </div>
 
           {/* Right Circular Gauge & Global Numbers */}
-          <div className="flex items-center space-x-5 bg-white/5 border border-white/10 rounded-2xl px-5 py-3.5 backdrop-blur-xs">
+          <div className="flex items-center space-x-5 bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-2xl px-5 py-3.5 shadow-2xs">
             {/* SVG Circular Ring */}
             <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
               <svg className="w-16 h-16 -rotate-90 transform" viewBox="0 0 64 64">
@@ -180,7 +173,7 @@ export const SyllabusTreeTracker: React.FC = () => {
                   r={radius}
                   stroke="currentColor"
                   strokeWidth="5"
-                  className="text-white/10"
+                  className="text-slate-200 dark:text-slate-700"
                   fill="transparent"
                 />
                 <circle
@@ -189,7 +182,7 @@ export const SyllabusTreeTracker: React.FC = () => {
                   r={radius}
                   stroke="currentColor"
                   strokeWidth="5"
-                  className="text-amber-400 transition-all duration-700 ease-out"
+                  className="text-indigo-600 dark:text-indigo-400 transition-all duration-700 ease-out"
                   fill="transparent"
                   strokeDasharray={circumference}
                   strokeDashoffset={strokeDashoffset}
@@ -197,21 +190,23 @@ export const SyllabusTreeTracker: React.FC = () => {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-sm font-black text-white">{globalProgress.percentage}%</span>
+                <span className="text-sm font-black text-slate-900 dark:text-white">
+                  {globalProgress.percentage}%
+                </span>
               </div>
             </div>
 
             <div className="text-left space-y-0.5">
-              <span className="text-[11px] font-bold text-amber-300 uppercase tracking-wider block">
+              <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
                 Total Syllabus Mastered
               </span>
-              <div className="text-base font-extrabold text-white">
+              <div className="text-base font-extrabold text-slate-900 dark:text-white">
                 {globalProgress.completed}{' '}
-                <span className="text-xs font-normal text-indigo-200">
-                  / {globalProgress.total} Concepts Checked
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  / {globalProgress.total} Concepts
                 </span>
               </div>
-              <span className="text-[10px] text-indigo-300/70 block">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 block font-medium">
                 Auto-saved in local browser cache
               </span>
             </div>
@@ -219,9 +214,10 @@ export const SyllabusTreeTracker: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Subject Selector Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
-        <div className="flex items-center space-x-2 overflow-x-auto py-1 w-full sm:w-auto">
+      {/* 2. Modern Segmented Control Bar (Subject Navigation) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-gray-800 pb-3">
+        {/* Segmented Subject Navigation Bar */}
+        <div className="bg-slate-100 dark:bg-gray-800/90 p-1 rounded-xl border border-slate-200 dark:border-gray-700 inline-flex flex-wrap gap-1.5 w-full sm:w-auto">
           {OFFICIAL_SYLLABUS_TREE.syllabus.map((subject) => {
             const isActive = subject.id === activeSubjectId;
             const subProg = getSubjectProgress(subject.id);
@@ -230,40 +226,40 @@ export const SyllabusTreeTracker: React.FC = () => {
               <button
                 key={subject.id}
                 onClick={() => setActiveSubject(subject.id)}
-                className={`flex items-center space-x-2.5 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap shadow-xs ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs sm:text-sm transition-all cursor-pointer select-none ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-indigo-500/20 shadow-md ring-2 ring-indigo-600/30'
-                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700'
+                    ? 'bg-white dark:bg-gray-900 text-indigo-600 dark:text-indigo-400 font-bold shadow-xs border border-slate-200 dark:border-gray-700'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-gray-700 font-medium'
                 }`}
               >
-                <span className="text-base">{subject.icon}</span>
+                <span>{subject.icon}</span>
                 <span>{subject.name}</span>
                 <span
-                  className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${
+                  className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
                     isActive
-                      ? 'bg-white/20 text-white'
-                      : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                      ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
+                      : 'bg-slate-200 dark:bg-gray-700 text-slate-600 dark:text-slate-300'
                   }`}
                 >
-                  {subProg.percentage}%
+                  {subProg.completed}/{subProg.total}
                 </span>
               </button>
             );
           })}
         </div>
 
-        {/* Global Controls */}
-        <div className="flex items-center space-x-2 text-xs">
+        {/* Global Expand & Reset Controls */}
+        <div className="flex items-center space-x-2 text-xs self-end sm:self-auto">
           <button
             onClick={expandAll}
-            className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 text-xs font-semibold"
+            className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 text-xs font-semibold shadow-2xs cursor-pointer transition"
           >
             <Maximize2 className="w-3.5 h-3.5" />
             <span>Expand All</span>
           </button>
           <button
             onClick={collapseAll}
-            className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 text-xs font-semibold"
+            className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-900 border border-slate-200 dark:border-gray-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-gray-800 text-xs font-semibold shadow-2xs cursor-pointer transition"
           >
             <Minimize2 className="w-3.5 h-3.5" />
             <span>Collapse All</span>
@@ -274,7 +270,7 @@ export const SyllabusTreeTracker: React.FC = () => {
                 resetAllProgress();
               }
             }}
-            className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-600 dark:text-red-400 hover:bg-red-100 text-xs font-semibold"
+            className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/60 text-xs font-semibold cursor-pointer transition"
             title="Reset All Checks"
           >
             <RotateCcw className="w-3.5 h-3.5" />
@@ -283,11 +279,11 @@ export const SyllabusTreeTracker: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Filter Bar & Search Input */}
-      <div className="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
-        {/* Filters */}
+      {/* 3. Filter Controls & Search Bar */}
+      <div className="bg-white dark:bg-gray-900 p-3 sm:p-4 rounded-xl border border-slate-200 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
+        {/* Stage Filters */}
         <div className="flex items-center space-x-1.5 overflow-x-auto w-full sm:w-auto">
-          <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 hidden sm:inline">
+          <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mr-1 hidden sm:inline">
             Filter:
           </span>
           {(['ALL', 'PRELIMS', 'MAINS', 'UNCOMPLETED'] as TreeFilterType[]).map((f) => (
@@ -296,8 +292,8 @@ export const SyllabusTreeTracker: React.FC = () => {
               onClick={() => setActiveFilter(f)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 activeFilter === f
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-xs'
-                  : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                  ? 'bg-indigo-600 text-white shadow-xs'
+                  : 'bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-gray-700'
               }`}
             >
               {f === 'ALL'
@@ -318,8 +314,8 @@ export const SyllabusTreeTracker: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search topic, method or Vedic trick..."
-            className="w-full pl-9 pr-8 py-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 dark:text-white"
+            placeholder="Search topic or speed trick..."
+            className="w-full pl-9 pr-8 py-1.5 bg-slate-50 dark:bg-gray-800 border border-slate-300 dark:border-gray-700 rounded-lg text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50"
           />
           {searchQuery && (
             <button
@@ -333,7 +329,7 @@ export const SyllabusTreeTracker: React.FC = () => {
       </div>
 
       {/* 4. Active Subject Progress Overview Bar */}
-      <div className="bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-200 dark:border-indigo-900/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-indigo-50/70 dark:bg-indigo-950/30 border border-indigo-200/80 dark:border-indigo-900/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center space-x-3">
           <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-lg font-bold shadow-xs">
             {currentSubject.icon}
@@ -342,35 +338,35 @@ export const SyllabusTreeTracker: React.FC = () => {
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               {currentSubject.name} Mastery
             </h3>
-            <span className="text-xs text-indigo-700 dark:text-indigo-300">
-              {subjectProgress.completed} of {subjectProgress.total} items completed ({subjectProgress.percentage}%)
+            <span className="text-xs text-indigo-700 dark:text-indigo-300 font-medium">
+              {subjectProgress.completed} of {subjectProgress.total} concepts completed ({subjectProgress.percentage}%)
             </span>
           </div>
         </div>
 
         {/* Horizontal Progress Bar */}
         <div className="w-full sm:w-64 space-y-1">
-          <div className="w-full bg-indigo-200 dark:bg-indigo-950 rounded-full h-2.5 overflow-hidden">
+          <div className="w-full bg-slate-200 dark:bg-gray-800 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
+              className="bg-indigo-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${subjectProgress.percentage}%` }}
             />
           </div>
         </div>
       </div>
 
-      {/* 5. Tree Canvas (Card-Accordion Hybrid) */}
+      {/* 5. Tree Canvas: Hierarchical Syllabus Tree */}
       <div className="space-y-5">
         {filteredClusters.length === 0 ? (
-          <div className="bg-white dark:bg-slate-800 p-12 text-center rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
-            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-2xl mx-auto">
+          <div className="bg-white dark:bg-gray-900 p-12 text-center rounded-2xl border border-slate-200 dark:border-gray-800 space-y-3 shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-gray-800 flex items-center justify-center text-2xl mx-auto">
               🔍
             </div>
-            <h4 className="text-sm font-bold text-slate-800 dark:text-white">
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white">
               No matching topics found
             </h4>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-              No topics matched your search &apos;{searchQuery}&apos; or filter &apos;{activeFilter}&apos;. Try clearing filters.
+              No topics matched &apos;{searchQuery}&apos; with &apos;{activeFilter}&apos;. Try clearing filters.
             </p>
             <button
               onClick={() => {
@@ -392,16 +388,16 @@ export const SyllabusTreeTracker: React.FC = () => {
             return (
               <div
                 key={cluster.id}
-                className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden transition-all"
-                style={{ borderLeftWidth: '6px', borderLeftColor: cluster.accentColor || '#4f46e5' }}
+                className="bg-white dark:bg-gray-900 rounded-2xl border border-slate-200 dark:border-gray-800 shadow-sm overflow-hidden transition-all"
+                style={{ borderLeftWidth: '4px', borderLeftColor: cluster.accentColor || '#4f46e5' }}
               >
-                {/* Level 1: Cluster Header */}
+                {/* Level 1: Cluster Header (High Contrast Crisp Typography) */}
                 <div
                   onClick={() => toggleNodeExpanded(cluster.id)}
-                  className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-750 transition select-none"
+                  className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-gray-800/60 transition select-none"
                 >
-                  <div className="flex items-center space-x-3.5">
-                    {/* Tri-state Checkbox for entire cluster */}
+                  <div className="flex items-center gap-3.5">
+                    {/* Tri-state Checkbox for cluster */}
                     <TriStateCheckbox
                       state={clusterState}
                       onChange={() => toggleParentNode(clusterLeaves)}
@@ -410,39 +406,39 @@ export const SyllabusTreeTracker: React.FC = () => {
                     />
 
                     <div>
-                      <div className="flex items-center space-x-2">
-                        <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
                           {cluster.name}
                         </h3>
-                        <span className="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full font-semibold">
+                        <span className="text-[11px] bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-gray-700 px-2 py-0.5 rounded-full font-semibold">
                           {cluster.topics.length} Topics
                         </span>
                       </div>
-                      <span className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 block">
+                      <span className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 block font-normal">
                         Weightage: {cluster.weightage}
                       </span>
                     </div>
                   </div>
 
-                  {/* Right Cluster Progress and Chevron */}
-                  <div className="flex items-center space-x-4 self-end md:self-auto">
-                    <div className="text-right">
-                      <span className="text-xs font-black text-slate-800 dark:text-slate-200 block">
+                  {/* Right Progress Gauge & Chevron */}
+                  <div className="flex items-center gap-4 self-end md:self-auto">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-800">
                         {clusterProgress.percentage}% Mastered
                       </span>
-                      <span className="text-[10px] text-slate-400">
-                        {clusterProgress.completed}/{clusterProgress.total} items
+                      <span className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline">
+                        ({clusterProgress.completed}/{clusterProgress.total})
                       </span>
                     </div>
 
-                    <div className="w-20 sm:w-28 bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden hidden sm:block">
+                    <div className="w-20 sm:w-28 bg-slate-100 dark:bg-gray-800 rounded-full h-2 overflow-hidden hidden sm:block border border-slate-200/60 dark:border-gray-700">
                       <div
                         className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${clusterProgress.percentage}%` }}
                       />
                     </div>
 
-                    <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300">
+                    <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-gray-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
                       {isClusterExpanded ? (
                         <ChevronDown className="w-4 h-4" />
                       ) : (
@@ -452,9 +448,9 @@ export const SyllabusTreeTracker: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Level 2: Topics Container */}
+                {/* Level 2: Topic Rows Container (Surface Level 2: Slate 100 / Gray 800) */}
                 {isClusterExpanded && (
-                  <div className="border-t border-slate-100 dark:border-slate-700/60 p-4 sm:p-5 space-y-4 bg-slate-50/50 dark:bg-slate-850">
+                  <div className="border-t border-slate-100 dark:border-gray-800/80 p-3 sm:p-5 space-y-3.5 bg-slate-50/70 dark:bg-gray-950/60">
                     {cluster.topics.map((topic) => {
                       const isTopicExpanded = !!expandedNodeIds[topic.id];
                       const topicLeaves = getTopicLeafIds(topic);
@@ -462,25 +458,32 @@ export const SyllabusTreeTracker: React.FC = () => {
                       const topicProgress = getLeafProgress(topicLeaves);
                       const practiceSlug = getTopicSlug(topic.id);
 
-                      // Badge Color
-                      const badgeClasses = {
-                        'Prelims Core': 'bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-300 border-blue-200',
-                        'Mains Advanced': 'bg-purple-100 text-purple-800 dark:bg-purple-900/60 dark:text-purple-300 border-purple-200',
-                        'High Frequency': 'bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 border-amber-200',
-                        'Speed Drill': 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-300 border-emerald-200',
-                      }[topic.badgeTag || 'Prelims Core'];
-
                       return (
                         <div
                           key={topic.id}
-                          className="bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 shadow-xs overflow-hidden transition-all"
+                          className="border border-slate-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-2xs transition-all hover:border-slate-300 dark:hover:border-gray-700 ml-0 sm:ml-4"
                         >
-                          {/* Topic Card Bar */}
+                          {/* Level 2: Topic Row Header */}
                           <div
+                            className="flex items-center justify-between p-3.5 sm:p-4 cursor-pointer select-none hover:bg-slate-50/80 dark:hover:bg-gray-800/50 transition-colors"
                             onClick={() => toggleNodeExpanded(topic.id)}
-                            className="p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-750 select-none"
                           >
-                            <div className="flex items-center space-x-3">
+                            <div className="flex items-center gap-3">
+                              <button
+                                type="button"
+                                className="p-1 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-gray-800 transition cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleNodeExpanded(topic.id);
+                                }}
+                              >
+                                {isTopicExpanded ? (
+                                  <ChevronDown size={18} />
+                                ) : (
+                                  <ChevronRight size={18} />
+                                )}
+                              </button>
+
                               {/* Tri-state Checkbox for Topic */}
                               <TriStateCheckbox
                                 state={topicState}
@@ -489,112 +492,111 @@ export const SyllabusTreeTracker: React.FC = () => {
                                 size="md"
                               />
 
-                              <div className="flex items-center space-x-2 flex-wrap gap-y-1">
-                                <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+                              <div>
+                                <span className="text-sm md:text-base font-semibold text-slate-900 dark:text-slate-100 block">
                                   {topic.name}
-                                </h4>
-
-                                {topic.badgeTag && (
-                                  <span
-                                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${badgeClasses}`}
-                                  >
-                                    {topic.badgeTag}
+                                </span>
+                                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                  {topic.stageTag === 'PRELIMS' && (
+                                    <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+                                      Prelims Core
+                                    </span>
+                                  )}
+                                  {topic.stageTag === 'MAINS' && (
+                                    <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border border-purple-200 dark:border-purple-900">
+                                      Mains Advanced
+                                    </span>
+                                  )}
+                                  {topic.badgeTag && topic.badgeTag !== 'Prelims Core' && topic.badgeTag !== 'Mains Advanced' && (
+                                    <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                                      {topic.badgeTag}
+                                    </span>
+                                  )}
+                                  <span className="text-xs text-slate-500 dark:text-slate-400 font-normal">
+                                    Weightage: {topic.weightageTag || cluster.weightage}
                                   </span>
-                                )}
-
-                                {topic.stageTag && (
-                                  <span className="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full font-semibold">
-                                    {topic.stageTag}
-                                  </span>
-                                )}
+                                </div>
                               </div>
                             </div>
 
-                            {/* Right Controls */}
-                            <div className="flex items-center space-x-3 self-end sm:self-auto">
-                              {/* Topic Progress */}
-                              <div className="text-right">
-                                <span className="text-xs font-bold text-slate-800 dark:text-slate-200 block">
-                                  {topicProgress.percentage}%
+                            {/* Action & Status */}
+                            <div
+                              className="flex items-center gap-4"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <div className="hidden sm:flex flex-col items-end">
+                                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                  {topicProgress.percentage}% Mastered
                                 </span>
+                                <div className="w-16 h-1.5 bg-slate-100 dark:bg-gray-800 rounded-full mt-1 overflow-hidden border border-slate-200/60 dark:border-gray-700">
+                                  <div
+                                    className="h-full bg-indigo-600 rounded-full transition-all duration-300"
+                                    style={{ width: `${topicProgress.percentage}%` }}
+                                  />
+                                </div>
                               </div>
 
-                              <div className="w-16 bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
-                                <div
-                                  className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300"
-                                  style={{ width: `${topicProgress.percentage}%` }}
-                                />
-                              </div>
-
-                              {/* Link directly to Concept & Practice Arena */}
                               <Link
                                 href={`/practice/${practiceSlug}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 text-[11px] font-bold border border-indigo-200 dark:border-indigo-800 transition"
-                                title="Open Practice Arena for this topic"
+                                className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 rounded-lg transition-colors border border-indigo-200 dark:border-indigo-900"
                               >
-                                <span>Practice</span>
-                                <ExternalLink className="w-3 h-3" />
+                                <span>Practice Drill</span>
+                                <ExternalLink size={12} />
                               </Link>
-
-                              <div className="w-6 h-6 rounded flex items-center justify-center text-slate-400">
-                                {isTopicExpanded ? (
-                                  <ChevronDown className="w-4 h-4" />
-                                ) : (
-                                  <ChevronRight className="w-4 h-4" />
-                                )}
-                              </div>
                             </div>
                           </div>
 
-                          {/* Level 3 & Level 4: Nested Subtopics & Speed Arsenal */}
+                          {/* Expanded Tree Content: Real Hierarchy Tree Lines + Speed Arsenal */}
                           {isTopicExpanded && (
-                            <div className="border-t border-slate-100 dark:border-slate-700/60 p-4 space-y-4 bg-slate-50/40 dark:bg-slate-900/40">
-                              {/* Level 3: Sub-topics & Core Concepts */}
-                              <div className="space-y-3 relative pl-4 sm:pl-6 border-l-2 border-indigo-200 dark:border-indigo-900/60 ml-2 sm:ml-4">
-                                {topic.subtopics.map((subtopic, subIdx) => {
-                                  const subtopicLeafIds = subtopic.techniques.map(
+                            <div className="px-4 sm:px-6 pb-5 pt-3 bg-slate-50/50 dark:bg-gray-900/50 border-t border-slate-100 dark:border-gray-800/80 space-y-4">
+                              {/* Level 3: Subtopic Tree Guide Lines (Real Tree Hierarchy) */}
+                              <div className="relative border-l-2 border-slate-200 dark:border-gray-700 ml-3 sm:ml-6 pl-4 space-y-4">
+                                {topic.subtopics.map((sub, subIdx) => {
+                                  const subtopicLeafIds = sub.techniques.map(
                                     (_, techIdx) => `${topic.id}_sub_${subIdx}_tech_${techIdx}`
                                   );
                                   const subtopicState = getNodeCheckboxState(subtopicLeafIds);
 
                                   return (
-                                    <div key={subtopic.id || subIdx} className="space-y-1.5">
+                                    <div
+                                      key={sub.id || subIdx}
+                                      className="relative before:absolute before:-left-4 before:top-3 before:w-3 before:h-px before:bg-slate-300 dark:before:bg-gray-600 space-y-2"
+                                    >
                                       {/* Subtopic Header */}
-                                      <div className="flex items-center space-x-2">
+                                      <div className="flex items-center gap-2">
                                         <TriStateCheckbox
                                           state={subtopicState}
                                           onChange={() => toggleParentNode(subtopicLeafIds)}
                                           size="sm"
-                                          ariaLabel={`Check ${subtopic.name}`}
+                                          ariaLabel={`Check ${sub.name}`}
                                         />
-                                        <h5 className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200">
-                                          {subtopic.name}
-                                        </h5>
+                                        <span className="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">
+                                          {sub.name}
+                                        </span>
                                       </div>
 
-                                      {/* Specific Techniques Checklist */}
-                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pl-6">
-                                        {subtopic.techniques.map((tech, techIdx) => {
+                                      {/* Specific Techniques Micro-Bullets */}
+                                      <div className="ml-6 flex flex-wrap gap-2">
+                                        {sub.techniques.map((tech, techIdx) => {
                                           const leafId = `${topic.id}_sub_${subIdx}_tech_${techIdx}`;
                                           const isChecked = !!checkedItemIds[leafId];
 
                                           return (
                                             <label
                                               key={techIdx}
-                                              className={`flex items-center space-x-2 p-1.5 rounded-lg border text-xs cursor-pointer select-none transition-all ${
+                                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium border cursor-pointer select-none transition-all ${
                                                 isChecked
-                                                  ? 'bg-emerald-50/60 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800 text-slate-500 dark:text-slate-400 line-through'
-                                                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-indigo-300'
+                                                  ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 line-through'
+                                                  : 'bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700 text-slate-700 dark:text-slate-300 hover:border-indigo-300'
                                               }`}
                                             >
                                               <input
                                                 type="checkbox"
                                                 checked={isChecked}
                                                 onChange={() => toggleLeafItem(leafId)}
-                                                className="accent-indigo-600 w-3.5 h-3.5 rounded cursor-pointer shrink-0"
+                                                className="h-3 w-3 rounded text-indigo-600 border-slate-300 focus:ring-0 cursor-pointer"
                                               />
-                                              <span className="truncate">
+                                              <span>
                                                 <MathText text={tech} />
                                               </span>
                                             </label>
@@ -606,21 +608,20 @@ export const SyllabusTreeTracker: React.FC = () => {
                                 })}
                               </div>
 
-                              {/* Level 4: Speed Arsenal Pill Box */}
-                              {topic.speed_arsenal && topic.speed_arsenal.length > 0 && (
-                                <div className="mt-4 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 space-y-2.5">
-                                  <div className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-2 text-amber-900 dark:text-amber-300">
-                                      <Zap className="w-4 h-4 fill-amber-500 text-amber-500" />
-                                      <h6 className="text-xs font-black uppercase tracking-wider">
-                                        ⚡ Speed &amp; Fast-Solving Arsenal
-                                      </h6>
-                                      <span className="text-[10px] bg-amber-200 dark:bg-amber-900/80 text-amber-900 dark:text-amber-200 font-bold px-2 py-0.5 rounded-full">
+                              {/* Level 4: Speed & Fast-Solving Arsenal Power-Up Box */}
+                              {topic.speed_arsenal?.length > 0 && (
+                                <div className="mt-5 rounded-xl border border-amber-200 dark:border-amber-800/60 bg-gradient-to-r from-amber-50/80 to-orange-50/80 dark:from-amber-950/20 dark:to-orange-950/20 p-3.5 sm:p-4">
+                                  <div className="flex items-center justify-between mb-2.5 flex-wrap gap-2">
+                                    <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">
+                                      <Zap className="fill-amber-500 text-amber-500 w-3.5 h-3.5" />
+                                      <span>⚡ SPEED &amp; TRICK ARSENAL</span>
+                                      <span className="ml-1 px-1.5 py-0.5 rounded-full text-[10px] bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 font-extrabold border border-amber-200 dark:border-amber-800">
                                         {topic.speed_arsenal.length} Shortcuts
                                       </span>
                                     </div>
-                                    <span className="text-[11px] text-amber-700 dark:text-amber-400 font-medium">
-                                      Hover for real exam example
+                                    <span className="text-[11px] text-amber-700 dark:text-amber-400 flex items-center gap-1 font-medium">
+                                      <HelpCircle className="w-3 h-3" />
+                                      <span>Hover chip for 10-second exam trick</span>
                                     </span>
                                   </div>
 
@@ -630,7 +631,7 @@ export const SyllabusTreeTracker: React.FC = () => {
                                       const isArsenalChecked = !!checkedItemIds[arsenalLeafId];
                                       const tooltipText =
                                         topic.speed_arsenal_tooltips?.[arsenalName] ||
-                                        'Official banking exam speed calculation trick tested in SBI/IBPS/RRB PO & Clerk.';
+                                        'Official banking exam speed shortcut tested in SBI/IBPS/RRB PO & Clerk.';
 
                                       return (
                                         <SpeedArsenalPill
