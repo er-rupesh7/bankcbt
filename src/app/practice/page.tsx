@@ -8,6 +8,7 @@ import { TopicCategory, SyllabusTopicConfig } from '@/types/topicPractice';
 import { useTopicPracticeStore } from '@/store/useTopicPracticeStore';
 import { PracticeHeader } from '@/components/practice/PracticeHeader';
 import { TopicCard } from '@/components/practice/TopicCard';
+import { SyllabusTreeTracker } from '@/components/practice/SyllabusTreeTracker';
 import {
   Search,
   Filter,
@@ -18,6 +19,8 @@ import {
   TrendingUp,
   CheckCircle2,
   Layers,
+  Network,
+  LayoutGrid,
 } from 'lucide-react';
 
 const TARGET_EXAMS = [
@@ -31,6 +34,8 @@ const TARGET_EXAMS = [
 ];
 
 export default function PracticeHubPage() {
+  const [viewMode, setViewMode] = useState<'TREE' | 'GRID'>('TREE');
+
   const {
     selectedExam,
     selectedCategory,
@@ -169,119 +174,164 @@ export default function PracticeHubPage() {
           </div>
         </div>
 
-        {/* 3. Filter Bar (Exam Pills & Subject Tabs) */}
-        <div id="topics-grid" className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-xs space-y-4">
-          {/* Target Exam Filter Pills */}
-          <div className="space-y-1.5">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
-              Target Banking Examination:
-            </span>
-            <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
-              {TARGET_EXAMS.map((exam) => (
-                <button
-                  key={exam.key}
-                  onClick={() => setSelectedExam(exam.key)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-                    selectedExam === exam.key
-                      ? 'bg-[#0e3b64] text-white shadow-xs'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {exam.label}
-                </button>
-              ))}
-            </div>
+        {/* View Mode Toggle: Interactive Tree Tracker vs Cards Grid */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-800 p-2 rounded-xl border border-gray-200 dark:border-slate-700 shadow-xs">
+          <div className="flex items-center space-x-2 w-full sm:w-auto">
+            <button
+              onClick={() => setViewMode('TREE')}
+              className={`flex-1 sm:flex-none flex items-center justify-center space-x-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                viewMode === 'TREE'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+              }`}
+            >
+              <Network className="w-4 h-4" />
+              <span>Interactive Syllabus Tree</span>
+              <span className="text-[10px] bg-amber-400 text-slate-900 font-black px-1.5 py-0.5 rounded-full uppercase">
+                Arsenal
+              </span>
+            </button>
+
+            <button
+              onClick={() => setViewMode('GRID')}
+              className={`flex-1 sm:flex-none flex items-center justify-center space-x-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                viewMode === 'GRID'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700'
+              }`}
+            >
+              <LayoutGrid className="w-4 h-4" />
+              <span>Topic Cards Grid</span>
+            </button>
           </div>
 
-          {/* Subject Category Tabs & Search Bar */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-3 border-t border-gray-100">
-            {/* Subject Tabs */}
-            <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 md:pb-0">
-              <button
-                onClick={() => setSelectedCategory('ALL')}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
-                  selectedCategory === 'ALL'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                All Subjects ({SYLLABUS_TAXONOMY.length})
-              </button>
-              {TOPIC_CATEGORIES.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition flex items-center space-x-1.5 ${
-                    selectedCategory === cat.id
-                      ? 'bg-blue-600 text-white shadow-xs'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <span>{cat.icon}</span>
-                  <span>{cat.nameEn}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Keyword Search Input */}
-            <div className="relative w-full md:w-64">
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search topic or formula..."
-                className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-800 placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 bg-gray-50/50"
-              />
-            </div>
+          <div className="text-xs text-gray-500 dark:text-slate-400 px-2 font-medium hidden md:block">
+            {viewMode === 'TREE'
+              ? 'Hierarchical curriculum view with live progress rings & speed shortcuts'
+              : 'Direct topic access cards with mastery badges & practice links'}
           </div>
         </div>
 
-        {/* 4. Grouped Topic Cards Grid */}
-        {groupedByCluster.length === 0 ? (
-          <div className="bg-white border border-gray-200 rounded-xl p-12 text-center space-y-3">
-            <span className="text-3xl">🔍</span>
-            <h3 className="font-bold text-gray-800 text-base">No Topics Match Your Search</h3>
-            <p className="text-xs text-gray-500 max-w-sm mx-auto">
-              Try clearing the search query or changing your target exam and subject filters.
-            </p>
-            <button
-              onClick={() => {
-                setSelectedCategory('ALL');
-                setSelectedExam('ALL');
-                setSearchQuery('');
-              }}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition"
-            >
-              Reset All Filters
-            </button>
-          </div>
+        {/* Dynamic View Rendering */}
+        {viewMode === 'TREE' ? (
+          <SyllabusTreeTracker />
         ) : (
-          <div className="space-y-8">
-            {groupedByCluster.map(([clusterName, topics]) => (
-              <section key={clusterName} className="space-y-3.5">
-                <div className="flex items-center space-x-2 border-b border-gray-200 pb-2">
-                  <Layers className="w-4 h-4 text-blue-600" />
-                  <h3 className="text-base font-black text-gray-900 tracking-tight">
-                    {clusterName}
-                  </h3>
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    {topics.length} {topics.length === 1 ? 'Topic' : 'Topics'}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {topics.map((t) => (
-                    <TopicCard
-                      key={t.slug}
-                      topic={t}
-                      mastery={getTopicMastery(t.slug)}
-                    />
+          <>
+            {/* 3. Filter Bar (Exam Pills & Subject Tabs) */}
+            <div id="topics-grid" className="bg-white rounded-xl border border-gray-200 p-4 sm:p-5 shadow-xs space-y-4">
+              {/* Target Exam Filter Pills */}
+              <div className="space-y-1.5">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
+                  Target Banking Examination:
+                </span>
+                <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
+                  {TARGET_EXAMS.map((exam) => (
+                    <button
+                      key={exam.key}
+                      onClick={() => setSelectedExam(exam.key)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
+                        selectedExam === exam.key
+                          ? 'bg-[#0e3b64] text-white shadow-xs'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {exam.label}
+                    </button>
                   ))}
                 </div>
-              </section>
-            ))}
-          </div>
+              </div>
+
+              {/* Subject Category Tabs & Search Bar */}
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pt-3 border-t border-gray-100">
+                {/* Subject Tabs */}
+                <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 md:pb-0">
+                  <button
+                    onClick={() => setSelectedCategory('ALL')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${
+                      selectedCategory === 'ALL'
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    All Subjects ({SYLLABUS_TAXONOMY.length})
+                  </button>
+                  {TOPIC_CATEGORIES.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition flex items-center space-x-1.5 ${
+                        selectedCategory === cat.id
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      <span>{cat.icon}</span>
+                      <span>{cat.nameEn}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Keyword Search Input */}
+                <div className="relative w-full md:w-64">
+                  <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search topic or formula..."
+                    className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-800 placeholder-gray-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500 bg-gray-50/50"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Grouped Topic Cards Grid */}
+            {groupedByCluster.length === 0 ? (
+              <div className="bg-white border border-gray-200 rounded-xl p-12 text-center space-y-3">
+                <span className="text-3xl">🔍</span>
+                <h3 className="font-bold text-gray-800 text-base">No Topics Match Your Search</h3>
+                <p className="text-xs text-gray-500 max-w-sm mx-auto">
+                  Try clearing the search query or changing your target exam and subject filters.
+                </p>
+                <button
+                  onClick={() => {
+                    setSelectedCategory('ALL');
+                    setSelectedExam('ALL');
+                    setSearchQuery('');
+                  }}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition"
+                >
+                  Reset All Filters
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-8">
+                {groupedByCluster.map(([clusterName, topics]) => (
+                  <section key={clusterName} className="space-y-3.5">
+                    <div className="flex items-center space-x-2 border-b border-gray-200 pb-2">
+                      <Layers className="w-4 h-4 text-blue-600" />
+                      <h3 className="text-base font-black text-gray-900 tracking-tight">
+                        {clusterName}
+                      </h3>
+                      <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                        {topics.length} {topics.length === 1 ? 'Topic' : 'Topics'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {topics.map((t) => (
+                        <TopicCard
+                          key={t.slug}
+                          topic={t}
+                          mastery={getTopicMastery(t.slug)}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </main>
 
