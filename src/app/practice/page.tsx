@@ -2,7 +2,7 @@
 
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { SYLLABUS_TAXONOMY, TOPIC_CATEGORIES } from '@/data/syllabusTaxonomy';
 import { TopicCategory, SyllabusTopicConfig } from '@/types/topicPractice';
 import { useTopicPracticeStore } from '@/store/useTopicPracticeStore';
@@ -35,6 +35,11 @@ const TARGET_EXAMS = [
 
 export default function PracticeHubPage() {
   const [viewMode, setViewMode] = useState<'TREE' | 'GRID'>('TREE');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const {
     selectedExam,
@@ -47,16 +52,19 @@ export default function PracticeHubPage() {
     topicMasteryMap,
   } = useTopicPracticeStore();
 
-  // Filter topics based on category, exam relevance, and search query
+  // Filter topics based on category, exam relevance, and search query (SSR-safe)
+  const activeExam = mounted ? selectedExam : 'ALL';
+  const activeCategory = mounted ? selectedCategory : 'ALL';
+
   const filteredTopics = useMemo(() => {
     return SYLLABUS_TAXONOMY.filter((topic) => {
       // Category filter
-      if (selectedCategory !== 'ALL' && topic.category !== selectedCategory) {
+      if (activeCategory !== 'ALL' && topic.category !== activeCategory) {
         return false;
       }
 
       // Exam filter
-      if (selectedExam !== 'ALL' && !topic.examRelevance.includes(selectedExam)) {
+      if (activeExam !== 'ALL' && !topic.examRelevance.includes(activeExam)) {
         return false;
       }
 
@@ -74,7 +82,7 @@ export default function PracticeHubPage() {
 
       return true;
     });
-  }, [selectedCategory, selectedExam, searchQuery]);
+  }, [activeCategory, activeExam, searchQuery]);
 
   // Group topics by cluster
   const groupedByCluster = useMemo(() => {
@@ -87,9 +95,19 @@ export default function PracticeHubPage() {
     return Array.from(map.entries());
   }, [filteredTopics]);
 
-  // Global Mastery Statistics
+  // Global Mastery Statistics (SSR-safe: 0 on server & initial hydration, populates post-mount)
   const stats = useMemo(() => {
     const allTopics = SYLLABUS_TAXONOMY;
+    if (!mounted) {
+      return {
+        totalTopics: allTopics.length,
+        conceptsRead: 0,
+        totalAttempted: 0,
+        accuracy: 0,
+        masteredCount: 0,
+      };
+    }
+
     let totalAttempted = 0;
     let totalCorrect = 0;
     let conceptsRead = 0;
@@ -111,7 +129,7 @@ export default function PracticeHubPage() {
       accuracy,
       masteredCount,
     };
-  }, [getTopicMastery, topicMasteryMap]);
+  }, [mounted, getTopicMastery, topicMasteryMap]);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 font-sans flex flex-col justify-between transition-colors">
@@ -145,7 +163,10 @@ export default function PracticeHubPage() {
                   <span className="text-[10px] uppercase font-bold text-blue-200 block">
                     Exam Readiness
                   </span>
-                  <span className="text-base sm:text-lg font-black text-white">
+                  <span
+                    className="text-base sm:text-lg font-black text-white"
+                    suppressHydrationWarning
+                  >
                     {stats.masteredCount} / {stats.totalTopics} Topics PO Ready
                   </span>
                 </div>
@@ -160,15 +181,30 @@ export default function PracticeHubPage() {
               </div>
               <div className="bg-white/5 p-2.5 rounded-lg border border-white/10">
                 <span className="text-[11px] text-blue-200 block font-semibold">Concepts Read</span>
-                <span className="text-lg font-black text-emerald-400">{stats.conceptsRead} Completed</span>
+                <span
+                  className="text-lg font-black text-emerald-400"
+                  suppressHydrationWarning
+                >
+                  {stats.conceptsRead} Completed
+                </span>
               </div>
               <div className="bg-white/5 p-2.5 rounded-lg border border-white/10">
                 <span className="text-[11px] text-blue-200 block font-semibold">Questions Solved</span>
-                <span className="text-lg font-black text-amber-300">{stats.totalAttempted} Qs</span>
+                <span
+                  className="text-lg font-black text-amber-300"
+                  suppressHydrationWarning
+                >
+                  {stats.totalAttempted} Qs
+                </span>
               </div>
               <div className="bg-white/5 p-2.5 rounded-lg border border-white/10">
                 <span className="text-[11px] text-blue-200 block font-semibold">Average Accuracy</span>
-                <span className="text-lg font-black text-white">{stats.accuracy}%</span>
+                <span
+                  className="text-lg font-black text-white"
+                  suppressHydrationWarning
+                >
+                  {stats.accuracy}%
+                </span>
               </div>
             </div>
           </div>

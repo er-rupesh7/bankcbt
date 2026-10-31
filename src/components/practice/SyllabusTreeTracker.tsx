@@ -31,6 +31,12 @@ import {
 } from 'lucide-react';
 
 export const SyllabusTreeTracker: React.FC = () => {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const {
     checkedItemIds,
     expandedNodeIds,
@@ -52,18 +58,27 @@ export const SyllabusTreeTracker: React.FC = () => {
     getGlobalProgress,
   } = useSyllabusTreeStore();
 
+  const effectiveSubjectId = mounted ? activeSubjectId : 'quant';
+  const effectiveFilter = mounted ? activeFilter : 'ALL';
+
   const currentSubject: SyllabusSubjectNode = useMemo(() => {
     return (
-      OFFICIAL_SYLLABUS_TREE.syllabus.find((s) => s.id === activeSubjectId) ||
+      OFFICIAL_SYLLABUS_TREE.syllabus.find((s) => s.id === effectiveSubjectId) ||
       OFFICIAL_SYLLABUS_TREE.syllabus[0]
     );
-  }, [activeSubjectId]);
+  }, [effectiveSubjectId]);
 
-  const globalProgress = useMemo(() => getGlobalProgress(), [checkedItemIds, getGlobalProgress]);
-  const subjectProgress = useMemo(
-    () => getSubjectProgress(activeSubjectId),
-    [checkedItemIds, activeSubjectId, getSubjectProgress]
-  );
+  const globalProgress = useMemo(() => {
+    if (!mounted) return { completed: 0, total: 119, percentage: 0 };
+    return getGlobalProgress();
+  }, [mounted, checkedItemIds, getGlobalProgress]);
+
+  const subjectProgress = useMemo(() => {
+    if (!mounted) {
+      return { completed: 0, total: 35, percentage: 0 };
+    }
+    return getSubjectProgress(effectiveSubjectId);
+  }, [mounted, checkedItemIds, effectiveSubjectId, getSubjectProgress]);
 
   // SVG Circular progress math
   const radius = 28;
@@ -79,12 +94,12 @@ export const SyllabusTreeTracker: React.FC = () => {
       .map((cluster) => {
         const matchingTopics = cluster.topics.filter((topic) => {
           // Stage filter
-          if (activeFilter === 'PRELIMS' && topic.stageTag === 'MAINS') return false;
-          if (activeFilter === 'MAINS' && topic.stageTag === 'PRELIMS') return false;
+          if (effectiveFilter === 'PRELIMS' && topic.stageTag === 'MAINS') return false;
+          if (effectiveFilter === 'MAINS' && topic.stageTag === 'PRELIMS') return false;
 
           const topicLeaves = getTopicLeafIds(topic);
-          const topicProg = getLeafProgress(topicLeaves);
-          if (activeFilter === 'UNCOMPLETED' && topicProg.percentage === 100) return false;
+          const topicProg = mounted ? getLeafProgress(topicLeaves) : { percentage: 0 };
+          if (effectiveFilter === 'UNCOMPLETED' && topicProg.percentage === 100) return false;
 
           // Search query filter
           if (q) {
@@ -190,7 +205,10 @@ export const SyllabusTreeTracker: React.FC = () => {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-sm font-black text-slate-900 dark:text-white">
+                <span
+                  className="text-sm font-black text-slate-900 dark:text-white"
+                  suppressHydrationWarning
+                >
                   {globalProgress.percentage}%
                 </span>
               </div>
@@ -200,7 +218,10 @@ export const SyllabusTreeTracker: React.FC = () => {
               <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider block">
                 Total Syllabus Mastered
               </span>
-              <div className="text-base font-extrabold text-slate-900 dark:text-white">
+              <div
+                className="text-base font-extrabold text-slate-900 dark:text-white"
+                suppressHydrationWarning
+              >
                 {globalProgress.completed}{' '}
                 <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                   / {globalProgress.total} Concepts
@@ -219,8 +240,10 @@ export const SyllabusTreeTracker: React.FC = () => {
         {/* Segmented Subject Navigation Bar */}
         <div className="bg-slate-100 dark:bg-gray-800/90 p-1 rounded-xl border border-slate-200 dark:border-gray-700 inline-flex flex-wrap gap-1.5 w-full sm:w-auto">
           {OFFICIAL_SYLLABUS_TREE.syllabus.map((subject) => {
-            const isActive = subject.id === activeSubjectId;
-            const subProg = getSubjectProgress(subject.id);
+            const isActive = subject.id === effectiveSubjectId;
+            const subProg = mounted
+              ? getSubjectProgress(subject.id)
+              : { completed: 0, total: 35, percentage: 0 };
 
             return (
               <button
@@ -240,6 +263,7 @@ export const SyllabusTreeTracker: React.FC = () => {
                       ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800'
                       : 'bg-slate-200 dark:bg-gray-700 text-slate-600 dark:text-slate-300'
                   }`}
+                  suppressHydrationWarning
                 >
                   {subProg.completed}/{subProg.total}
                 </span>
@@ -382,8 +406,10 @@ export const SyllabusTreeTracker: React.FC = () => {
           filteredClusters.map((cluster) => {
             const isClusterExpanded = expandedNodeIds[cluster.id] !== false; // default open
             const clusterLeaves = cluster.topics.flatMap((t) => getTopicLeafIds(t));
-            const clusterState = getNodeCheckboxState(clusterLeaves);
-            const clusterProgress = getLeafProgress(clusterLeaves);
+            const clusterState = mounted ? getNodeCheckboxState(clusterLeaves) : 'UNCHECKED';
+            const clusterProgress = mounted
+              ? getLeafProgress(clusterLeaves)
+              : { completed: 0, total: clusterLeaves.length, percentage: 0 };
 
             return (
               <div
@@ -423,10 +449,16 @@ export const SyllabusTreeTracker: React.FC = () => {
                   {/* Right Progress Gauge & Chevron */}
                   <div className="flex items-center gap-4 self-end md:self-auto">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-800">
+                      <span
+                        className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-1 rounded-full border border-indigo-200 dark:border-indigo-800"
+                        suppressHydrationWarning
+                      >
                         {clusterProgress.percentage}% Mastered
                       </span>
-                      <span className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline">
+                      <span
+                        className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:inline"
+                        suppressHydrationWarning
+                      >
                         ({clusterProgress.completed}/{clusterProgress.total})
                       </span>
                     </div>
@@ -454,8 +486,10 @@ export const SyllabusTreeTracker: React.FC = () => {
                     {cluster.topics.map((topic) => {
                       const isTopicExpanded = !!expandedNodeIds[topic.id];
                       const topicLeaves = getTopicLeafIds(topic);
-                      const topicState = getNodeCheckboxState(topicLeaves);
-                      const topicProgress = getLeafProgress(topicLeaves);
+                      const topicState = mounted ? getNodeCheckboxState(topicLeaves) : 'UNCHECKED';
+                      const topicProgress = mounted
+                        ? getLeafProgress(topicLeaves)
+                        : { completed: 0, total: topicLeaves.length, percentage: 0 };
                       const practiceSlug = getTopicSlug(topic.id);
 
                       return (
@@ -525,7 +559,10 @@ export const SyllabusTreeTracker: React.FC = () => {
                               onClick={(e) => e.stopPropagation()}
                             >
                               <div className="hidden sm:flex flex-col items-end">
-                                <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                <span
+                                  className="text-xs font-semibold text-slate-700 dark:text-slate-300"
+                                  suppressHydrationWarning
+                                >
                                   {topicProgress.percentage}% Mastered
                                 </span>
                                 <div className="w-16 h-1.5 bg-slate-100 dark:bg-gray-800 rounded-full mt-1 overflow-hidden border border-slate-200/60 dark:border-gray-700">
@@ -555,7 +592,9 @@ export const SyllabusTreeTracker: React.FC = () => {
                                   const subtopicLeafIds = sub.techniques.map(
                                     (_, techIdx) => `${topic.id}_sub_${subIdx}_tech_${techIdx}`
                                   );
-                                  const subtopicState = getNodeCheckboxState(subtopicLeafIds);
+                                  const subtopicState = mounted
+                                    ? getNodeCheckboxState(subtopicLeafIds)
+                                    : 'UNCHECKED';
 
                                   return (
                                     <div
@@ -579,7 +618,7 @@ export const SyllabusTreeTracker: React.FC = () => {
                                       <div className="ml-6 flex flex-wrap gap-2">
                                         {sub.techniques.map((tech, techIdx) => {
                                           const leafId = `${topic.id}_sub_${subIdx}_tech_${techIdx}`;
-                                          const isChecked = !!checkedItemIds[leafId];
+                                          const isChecked = mounted ? !!checkedItemIds[leafId] : false;
 
                                           return (
                                             <label
@@ -628,7 +667,9 @@ export const SyllabusTreeTracker: React.FC = () => {
                                   <div className="flex flex-wrap gap-2 pt-1">
                                     {topic.speed_arsenal.map((arsenalName, arsenalIdx) => {
                                       const arsenalLeafId = `${topic.id}_arsenal_${arsenalIdx}`;
-                                      const isArsenalChecked = !!checkedItemIds[arsenalLeafId];
+                                      const isArsenalChecked = mounted
+                                        ? !!checkedItemIds[arsenalLeafId]
+                                        : false;
                                       const tooltipText =
                                         topic.speed_arsenal_tooltips?.[arsenalName] ||
                                         'Official banking exam speed shortcut tested in SBI/IBPS/RRB PO & Clerk.';
