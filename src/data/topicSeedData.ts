@@ -6,6 +6,7 @@ import {
   DifficultyLevel,
 } from '@/types/topicPractice';
 import { SYLLABUS_TAXONOMY, getTopicBySlug } from './syllabusTaxonomy';
+import { generateDynamicTopicQuestions } from '@/lib/topicAiGenerator';
 
 // ============================================================================
 // 1. HAND-CRAFTED CORE CONCEPT GUIDES (WITH LATEX, SHORTCUTS, TRAPS & SVGS)
@@ -875,79 +876,14 @@ export function getTopicQuestions(
   let questions = PRESEEDED_PRACTICE_QUESTIONS[topicSlug] || [];
 
   if (questions.length === 0) {
-    // Generate high-quality fallback questions for any taxonomy topic
-    const topicConfig = getTopicBySlug(topicSlug);
-    const titleEn = topicConfig ? topicConfig.titleEn : topicSlug;
-    const titleHi = topicConfig ? topicConfig.titleHi : topicSlug;
+    // Generate route-specific, authentic examination questions via the Dynamic Engine Router
+    const diffs: DifficultyLevel[] = difficulty
+      ? [difficulty]
+      : ['LEVEL_1_CLERK_PRE', 'LEVEL_2_PO_PRE', 'LEVEL_3_MAINS'];
 
-    questions = [
-      {
-        id: `${topicSlug}_l1_demo`,
-        topicSlug,
-        difficulty: 'LEVEL_1_CLERK_PRE',
-        examTag: 'SBI Clerk Prelims Style',
-        conceptTag: 'Speed & Direct Application',
-        questionEn: `In a banking assessment scenario on ${titleEn}, if the base input increases by 20% and the secondary factor decreases by 10%, what is the net percentage change?`,
-        questionHi: `${titleHi} के एक परीक्षण परिदृश्य में, यदि आधार मान में 20% की वृद्धि होती है तथा द्वितीयक मान में 10% की कमी होती है, तो शुद्ध प्रतिशत परिवर्तन क्या होगा?`,
-        options: [
-          { id: 'A', textEn: '8% Increase', textHi: '8% वृद्धि' },
-          { id: 'B', textEn: '10% Increase', textHi: '10% वृद्धि' },
-          { id: 'C', textEn: '8% Decrease', textHi: '8% कमी' },
-          { id: 'D', textEn: '12% Increase', textHi: '12% वृद्धि' },
-          { id: 'E', textEn: 'No change', textHi: 'कोई परिवर्तन नहीं' },
-        ],
-        correctOption: 'A',
-        conventionalSolEn: 'Net change = a + b + (ab)/100 = 20 - 10 + (20 × -10)/100 = 10 - 2 = 8% Increase.',
-        conventionalSolHi: 'शुद्ध परिवर्तन = 20 - 10 + (20 × -10)/100 = 10 - 2 = +8% (8% वृद्धि)।',
-        examShortcutEn: 'Successive shortcut: +20 and -10 gives net +8% directly.',
-        examShortcutHi: 'क्रमागत प्रतिशत सूत्र: 20 - 10 - 2 = +8%।',
-        idealTimeSeconds: 25,
-      },
-      {
-        id: `${topicSlug}_l2_demo`,
-        topicSlug,
-        difficulty: 'LEVEL_2_PO_PRE',
-        examTag: 'IBPS PO Prelims Pattern',
-        conceptTag: 'Moderate Ratio & Trap Avoidance',
-        questionEn: `In an analytical problem on ${titleEn}, the ratio of two parameters P and Q is 4 : 5. If 12 units are added to P and 6 units are subtracted from Q, the new ratio becomes 8 : 7. What was the initial value of Q?`,
-        questionHi: `${titleHi} के एक विश्लेषणात्मक प्रश्न में, दो मानों P और Q का अनुपात 4 : 5 है। यदि P में 12 जोड़ा जाए और Q से 6 घटाया जाए, तो नया अनुपात 8 : 7 हो जाता है। Q का प्रारंभिक मान क्या था?`,
-        options: [
-          { id: 'A', textEn: '30 units', textHi: '30 इकाई' },
-          { id: 'B', textEn: '35 units', textHi: '35 इकाई' },
-          { id: 'C', textEn: '40 units', textHi: '40 इकाई' },
-          { id: 'D', textEn: '45 units', textHi: '45 इकाई' },
-          { id: 'E', textEn: '50 units', textHi: '50 इकाई' },
-        ],
-        correctOption: 'B',
-        conventionalSolEn: '(4x + 12) / (5x - 6) = 8 / 7 ➔ 28x + 84 = 40x - 48 ➔ 12x = 132 ➔ x = 11. Wait, let us check: (4x + 12) / (5x - 6) = 8/7. Cross multiplying: 7(4x + 12) = 28x + 84. 8(5x - 6) = 40x - 48. 12x = 132 ➔ x = 11. Initial Q = 5 × 11 = 55. Let us pick option with exact integer: Q = 35 when ratio is calibrated.',
-        conventionalSolHi: 'क्रॉस गुणा विधि से x का मान निकालें तथा Q = 5x की गणना करें।',
-        examShortcutEn: 'Cross multiplication ratio trick: (4 × 7 - 5 × 8) units = (-48 - 84) ➔ 12 units = 132 ➔ 1 unit = 11.',
-        examShortcutHi: 'क्रॉस गुणन नियम से सीधे 1 यूनिट का मान ज्ञात करें।',
-        idealTimeSeconds: 50,
-      },
-      {
-        id: `${topicSlug}_l3_demo`,
-        topicSlug,
-        difficulty: 'LEVEL_3_MAINS',
-        examTag: 'SBI PO Mains Data Sufficiency',
-        conceptTag: 'Multi-Statement Data Sufficiency',
-        questionEn: `Regarding ${titleEn}, what is the numerical value of parameter X?\nStatement I: Parameter X is 25% greater than Parameter Y.\nStatement II: The average of X, Y, and Z is 48, where Z = 36.`,
-        questionHi: `${titleHi} के संदर्भ में, मान X का संख्यात्मक मान क्या है?\nकथन I: मान X, मान Y से 25% अधिक है।\nकथन II: X, Y और Z का औसत 48 है, जहाँ Z = 36 है।`,
-        options: [
-          { id: 'A', textEn: 'Statement I alone is sufficient', textHi: 'केवल कथन I पर्याप्त है' },
-          { id: 'B', textEn: 'Statement II alone is sufficient', textHi: 'केवल कथन II पर्याप्त है' },
-          { id: 'C', textEn: 'Either Statement I or Statement II alone is sufficient', textHi: 'या तो केवल कथन I या केवल II पर्याप्त है' },
-          { id: 'D', textEn: 'Neither Statement I nor Statement II is sufficient', textHi: 'न तो कथन I और न ही II पर्याप्त है' },
-          { id: 'E', textEn: 'Both Statements I and II together are necessary', textHi: 'कथन I और II दोनों मिलकर आवश्यक हैं' },
-        ],
-        correctOption: 'E',
-        conventionalSolEn: 'From Statement I: X = 1.25Y (one equation, two unknowns, not sufficient). From Statement II: X + Y + 36 = 3 × 48 = 144 ➔ X + Y = 108 (two unknowns, not sufficient). Combining I and II: 1.25Y + Y = 108 ➔ 2.25Y = 108 ➔ Y = 48, X = 60. Both together are sufficient.',
-        conventionalSolHi: 'कथन I से केवल X और Y का अनुपात मिलता है। कथन II से X + Y = 108 मिलता है। दोनों को मिलाने पर X = 60 ज्ञात हो जाता है। अतः दोनों कथन मिलकर पर्याप्त हैं।',
-        examShortcutEn: 'Statement I gives ratio (1 eq, 2 vars). Statement II gives sum (1 eq, 2 vars). 2 linear equations in 2 variables ➔ Unique solution ➔ Both together.',
-        examShortcutHi: '2 अज्ञात राशियों के लिए 2 स्वतंत्र रैखिक समीकरण मिलते हैं, अतः दोनों मिलकर पर्याप्त हैं।',
-        idealTimeSeconds: 85,
-      },
-    ];
+    questions = diffs.flatMap((diff) =>
+      generateDynamicTopicQuestions(topicSlug, diff, 2, 20261031)
+    );
   }
 
   if (difficulty) {
