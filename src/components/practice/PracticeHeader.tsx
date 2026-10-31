@@ -18,7 +18,10 @@ export const PracticeHeader: React.FC<PracticeHeaderProps> = ({
   showBackToHub = false,
 }) => {
   return (
-    <header className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] sticky top-0 z-40 h-16 flex items-center transition-colors shadow-md">
+    <header
+      className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] sticky top-0 z-40 h-16 flex items-center transition-colors shadow-md"
+      style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-3">
         <div className="flex items-center space-x-3">
           {showBackToHub ? (
@@ -40,7 +43,10 @@ export const PracticeHeader: React.FC<PracticeHeaderProps> = ({
               <h1 className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-2">
                 <span>{title}</span>
               </h1>
-              <span className="text-[10px] bg-[#F59E0B] text-[#0A2F5C] font-black px-2 py-0.5 rounded uppercase tracking-wider hidden sm:inline-block">
+              <span
+                className="text-[10px] bg-[#F59E0B] text-[#0A2F5C] font-black px-2 py-0.5 rounded uppercase tracking-wider hidden sm:inline-block"
+                style={{ backgroundColor: '#F59E0B', color: '#0A2F5C' }}
+              >
                 SBI &bull; IBPS &bull; RRB
               </span>
             </div>
@@ -52,6 +58,7 @@ export const PracticeHeader: React.FC<PracticeHeaderProps> = ({
           <Link
             href="/"
             className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-[#0A2F5C] font-black text-xs transition shadow-xs cursor-pointer"
+            style={{ backgroundColor: '#F59E0B', color: '#0A2F5C' }}
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Full Mock Tests</span>

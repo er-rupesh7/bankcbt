@@ -2,7 +2,8 @@
 
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { SYLLABUS_TAXONOMY, TOPIC_CATEGORIES } from '@/data/syllabusTaxonomy';
 import { TopicCategory, SyllabusTopicConfig } from '@/types/topicPractice';
 import { useTopicPracticeStore } from '@/store/useTopicPracticeStore';
@@ -30,11 +31,7 @@ const TARGET_EXAMS = [
 
 export default function PracticeHubPage() {
   const [viewMode, setViewMode] = useState<'GRID' | 'TREE'>('GRID');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   const {
     selectedExam,
@@ -150,7 +147,10 @@ export default function PracticeHubPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20 space-y-6 flex-1 w-full relative z-10">
         
         {/* Single Compact Formal Official Hero Banner (Bug C Fix) */}
-        <div className="rounded-2xl bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] p-5 sm:p-7 shadow-lg relative overflow-hidden">
+        <div
+          className="rounded-2xl bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] p-5 sm:p-7 shadow-lg relative overflow-hidden"
+          style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
+        >
           <div className="relative z-10 space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               {/* Left Column: Title & Mission */}
@@ -168,7 +168,10 @@ export default function PracticeHubPage() {
               </div>
 
               {/* Right Column: Unified Readiness Widget */}
-              <div className="bg-[#06203D] border border-blue-400/30 rounded-xl p-4 flex items-center gap-5 shrink-0 shadow-md self-start lg:self-auto">
+              <div
+                className="bg-[#06203D] border border-blue-400/30 rounded-xl p-4 flex items-center gap-5 shrink-0 shadow-md self-start lg:self-auto"
+                style={{ backgroundColor: '#06203D' }}
+              >
                 {/* SVG Progress Ring */}
                 <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
                   <svg className="w-16 h-16 -rotate-90 transform" viewBox="0 0 64 64">
@@ -236,11 +239,17 @@ export default function PracticeHubPage() {
 
             {/* Bottom Row: 4 Compact KPI Stat Boxes */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-5 border-t border-blue-900/60 text-center">
-              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+              <div
+                className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3"
+                style={{ backgroundColor: '#06203D' }}
+              >
                 <span className="text-[11px] text-blue-200 block font-semibold">Total Chapters</span>
                 <span className="text-lg font-black text-white">{stats.totalTopics} Topics</span>
               </div>
-              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+              <div
+                className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3"
+                style={{ backgroundColor: '#06203D' }}
+              >
                 <span className="text-[11px] text-blue-200 block font-semibold">Concepts Read</span>
                 <span
                   className="text-lg font-black text-emerald-400"
@@ -249,7 +258,10 @@ export default function PracticeHubPage() {
                   {stats.conceptsRead} Completed
                 </span>
               </div>
-              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+              <div
+                className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3"
+                style={{ backgroundColor: '#06203D' }}
+              >
                 <span className="text-[11px] text-blue-200 block font-semibold">Questions Solved</span>
                 <span
                   className="text-lg font-black text-amber-300"
@@ -258,7 +270,10 @@ export default function PracticeHubPage() {
                   {stats.totalAttempted} Qs
                 </span>
               </div>
-              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+              <div
+                className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3"
+                style={{ backgroundColor: '#06203D' }}
+              >
                 <span className="text-[11px] text-blue-200 block font-semibold">Average Accuracy</span>
                 <span
                   className="text-lg font-black text-cyan-300"

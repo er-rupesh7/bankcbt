@@ -2,8 +2,9 @@
 
 'use client';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import {
   useSyllabusTreeStore,
   getTopicLeafIds,
@@ -32,11 +33,7 @@ import {
 } from 'lucide-react';
 
 export const SyllabusTreeTracker: React.FC = () => {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   const {
     checkedItemIds,
@@ -69,6 +66,7 @@ export const SyllabusTreeTracker: React.FC = () => {
   }, [effectiveSubjectId]);
 
   const subjectProgress = useMemo(() => {
+    void checkedItemIds;
     if (!mounted) {
       const leafCount = getAllSubjectLeafIds(effectiveSubjectId).length;
       return { completed: 0, total: leafCount || 35, percentage: 0 };

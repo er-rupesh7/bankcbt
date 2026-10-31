@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { useExamStore } from '@/store/useExamStore';
 import { OFFICIAL_EXAM_CATALOG, ExamCategoryKey, ExamTemplateConfig } from '@/types/examCatalog';
 import { buildOfficialBankingExam } from '@/lib/generator/examBuilder';
@@ -33,11 +34,7 @@ export const ExamSelectionGateway: React.FC = () => {
   const [hasAgreedToDeclaration, setHasAgreedToDeclaration] = useState<boolean>(false);
   const [seed, setSeed] = useState<number>(8792);
   const [mockNumber, setMockNumber] = useState<number>(1);
-  const [mounted, setMounted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   const selectedTemplate: ExamTemplateConfig = OFFICIAL_EXAM_CATALOG[selectedCategoryKey];
 
@@ -61,7 +58,10 @@ export const ExamSelectionGateway: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F1F5F9] text-slate-900 font-sans flex flex-col justify-between selection:bg-[#0B4F8A] selection:text-white">
       {/* Top Gateway Header */}
-      <header className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] px-4 sm:px-8 py-3 shadow-md">
+      <header
+        className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] px-4 sm:px-8 py-3 shadow-md"
+        style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
+      >
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-[#0A2F5C] font-black text-xl shadow-xs">
@@ -70,7 +70,10 @@ export const ExamSelectionGateway: React.FC = () => {
             <div>
               <h1 className="text-base sm:text-xl font-black tracking-tight text-white flex items-center space-x-2">
                 <span>Indian Banking Examination Portal</span>
-                <span className="text-[10px] sm:text-xs bg-[#F59E0B] text-[#0A2F5C] font-black px-2 py-0.5 rounded uppercase">
+                <span
+                  className="text-[10px] sm:text-xs bg-[#F59E0B] text-[#0A2F5C] font-black px-2 py-0.5 rounded uppercase"
+                  style={{ backgroundColor: '#F59E0B', color: '#0A2F5C' }}
+                >
                   TCS iON CBT
                 </span>
               </h1>
@@ -84,6 +87,7 @@ export const ExamSelectionGateway: React.FC = () => {
             <Link
               href="/practice"
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-[#0A2F5C] font-black text-xs shadow-xs transition-all transform hover:-translate-y-0.5"
+              style={{ backgroundColor: '#F59E0B', color: '#0A2F5C' }}
             >
               <BookOpen className="w-3.5 h-3.5" />
               <span>📚 Topic Practice</span>
@@ -366,7 +370,10 @@ export const ExamSelectionGateway: React.FC = () => {
           /* STEP 2: OFFICIAL TCS iON INSTRUCTIONS SCREEN (Bug B Fix: Stacked responsive header, visible declaration, 2-col footer buttons) */
           <div className="bg-white rounded-xl shadow-lg border border-slate-300 overflow-hidden max-w-4xl mx-auto animate-in fade-in duration-200">
             {/* Header: Stacked cleanly on mobile */}
-            <div className="bg-[#0A2F5C] text-white px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-b-2 border-[#F59E0B]">
+            <div
+              className="bg-[#0A2F5C] text-white px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-b-2 border-[#F59E0B]"
+              style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
+            >
               <div>
                 <h2 className="text-base sm:text-lg font-bold text-white">
                   General Examination Instructions
@@ -376,7 +383,10 @@ export const ExamSelectionGateway: React.FC = () => {
                 </p>
               </div>
               <div className="self-start sm:self-auto">
-                <span className="bg-[#06203D] border border-blue-400/40 text-[#F59E0B] px-3 py-1 rounded font-mono text-xs font-bold inline-block">
+                <span
+                  className="bg-[#06203D] border border-blue-400/40 text-[#F59E0B] px-3 py-1 rounded font-mono text-xs font-bold inline-block"
+                  style={{ backgroundColor: '#06203D', color: '#F59E0B' }}
+                >
                   {selectedTemplate.title}
                 </span>
               </div>
@@ -410,28 +420,40 @@ export const ExamSelectionGateway: React.FC = () => {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                   <div className="flex items-center space-x-2 bg-slate-50 p-2 rounded border border-slate-200">
-                    <span className="w-7 h-7 rounded bg-[#E2E8F0] border border-[#CBD5E1] text-[#334155] flex items-center justify-center font-bold">
+                    <span
+                      className="w-7 h-7 rounded bg-[#E2E8F0] border border-[#CBD5E1] text-[#334155] flex items-center justify-center font-bold"
+                      style={{ backgroundColor: '#E2E8F0', color: '#334155' }}
+                    >
                       1
                     </span>
                     <span>You have not visited the question yet.</span>
                   </div>
 
                   <div className="flex items-center space-x-2 bg-slate-50 p-2 rounded border border-slate-200">
-                    <span className="w-7 h-7 rounded-t-sm rounded-b bg-[#DC2626] text-white flex items-center justify-center font-bold">
+                    <span
+                      className="w-7 h-7 rounded-t-sm rounded-b bg-[#DC2626] text-white flex items-center justify-center font-bold"
+                      style={{ backgroundColor: '#DC2626', color: '#ffffff' }}
+                    >
                       2
                     </span>
                     <span>You have not answered the question.</span>
                   </div>
 
                   <div className="flex items-center space-x-2 bg-slate-50 p-2 rounded border border-slate-200">
-                    <span className="w-7 h-7 rounded-t-sm rounded-b bg-[#16A34A] text-white flex items-center justify-center font-bold">
+                    <span
+                      className="w-7 h-7 rounded-t-sm rounded-b bg-[#16A34A] text-white flex items-center justify-center font-bold"
+                      style={{ backgroundColor: '#16A34A', color: '#ffffff' }}
+                    >
                       3
                     </span>
                     <span>You have answered the question.</span>
                   </div>
 
                   <div className="flex items-center space-x-2 bg-slate-50 p-2 rounded border border-slate-200">
-                    <span className="w-7 h-7 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold">
+                    <span
+                      className="w-7 h-7 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold"
+                      style={{ backgroundColor: '#7E22CE', color: '#ffffff' }}
+                    >
                       4
                     </span>
                     <span>You have marked the question for review (NOT evaluated).</span>
@@ -440,10 +462,16 @@ export const ExamSelectionGateway: React.FC = () => {
 
                 <div className="mt-2.5 p-2.5 bg-purple-50 border border-purple-200 rounded flex items-start space-x-2 text-xs">
                   <div className="relative shrink-0">
-                    <span className="w-7 h-7 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold">
+                    <span
+                      className="w-7 h-7 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold"
+                      style={{ backgroundColor: '#7E22CE', color: '#ffffff' }}
+                    >
                       5
                     </span>
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-[#16A34A] border border-white rounded-full flex items-center justify-center">
+                    <span
+                      className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-[#16A34A] border border-white rounded-full flex items-center justify-center"
+                      style={{ backgroundColor: '#16A34A' }}
+                    >
                       <svg className="w-2 h-2 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
                       </svg>
@@ -512,6 +540,7 @@ export const ExamSelectionGateway: React.FC = () => {
               <button
                 disabled={!hasAgreedToDeclaration}
                 onClick={handleStartExam}
+                style={hasAgreedToDeclaration ? { backgroundColor: '#0B4F8A', color: '#ffffff' } : {}}
                 className={`py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold shadow-sm transition-all flex items-center justify-center space-x-1.5 ${
                   hasAgreedToDeclaration
                     ? 'bg-[#0B4F8A] text-white hover:bg-[#083D6B] cursor-pointer active:scale-98'

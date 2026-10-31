@@ -2,9 +2,10 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { notFound, useSearchParams } from 'next/navigation';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { getTopicBySlug } from '@/data/syllabusTaxonomy';
 import { getConceptGuide, getTopicQuestions } from '@/data/topicSeedData';
 import { DifficultyLevel } from '@/types/topicPractice';
@@ -38,24 +39,11 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
     notFound();
   }
 
-  const [activeTab, setActiveTab] = useState<'CONCEPT' | 'PRACTICE' | 'ANALYTICS'>(() => {
-    if (tabParam === 'practice') return 'PRACTICE';
-    if (tabParam === 'analytics') return 'ANALYTICS';
-    return 'CONCEPT';
-  });
+  const tabFromUrl = tabParam === 'practice' ? 'PRACTICE' : tabParam === 'analytics' ? 'ANALYTICS' : 'CONCEPT';
+  const [userTab, setUserTab] = useState<'CONCEPT' | 'PRACTICE' | 'ANALYTICS' | null>(null);
+  const activeTab = userTab ?? tabFromUrl;
 
-  useEffect(() => {
-    if (tabParam === 'practice') {
-      setActiveTab('PRACTICE');
-    } else if (tabParam === 'analytics') {
-      setActiveTab('ANALYTICS');
-    }
-  }, [tabParam]);
-
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   const [isConceptDrawerOpen, setIsConceptDrawerOpen] = useState(false);
 
@@ -88,12 +76,12 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
       };
 
   const handleStartPractice = () => {
-    setActiveTab('PRACTICE');
+    setUserTab('PRACTICE');
   };
 
   const handleStartPracticeLevel = (level: DifficultyLevel) => {
     setSelectedDifficulty(level);
-    setActiveTab('PRACTICE');
+    setUserTab('PRACTICE');
   };
 
   return (
@@ -122,7 +110,7 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
           {/* Tab Switcher */}
           <div className="flex items-center space-x-1.5 bg-gray-100 p-1 rounded-lg border border-gray-200 self-start sm:self-auto">
             <button
-              onClick={() => setActiveTab('CONCEPT')}
+              onClick={() => setUserTab('CONCEPT')}
               className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center space-x-1.5 ${
                 activeTab === 'CONCEPT'
                   ? 'bg-white text-[#0B4F8A] shadow-xs'
@@ -134,7 +122,7 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('PRACTICE')}
+              onClick={() => setUserTab('PRACTICE')}
               className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center space-x-1.5 ${
                 activeTab === 'PRACTICE'
                   ? 'bg-white text-emerald-700 shadow-xs'
@@ -146,7 +134,7 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
             </button>
 
             <button
-              onClick={() => setActiveTab('ANALYTICS')}
+              onClick={() => setUserTab('ANALYTICS')}
               className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center space-x-1.5 ${
                 activeTab === 'ANALYTICS'
                   ? 'bg-white text-purple-700 shadow-xs'

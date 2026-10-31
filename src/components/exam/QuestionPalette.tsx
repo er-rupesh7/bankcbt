@@ -73,36 +73,52 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
     switch (state) {
       case 'NOT_VISITED':
         return (
-          <div className={`${baseStyle} bg-[#E2E8F0] text-[#334155] border border-[#CBD5E1] ${activeBorder}`}>
+          <div
+            className={`${baseStyle} bg-[#E2E8F0] text-[#334155] border border-[#CBD5E1] ${activeBorder}`}
+            style={{ backgroundColor: '#E2E8F0', color: '#334155' }}
+          >
             {num}
           </div>
         );
       case 'NOT_ANSWERED':
         return (
-          <div className={`${baseStyle} bg-[#DC2626] text-white rounded-t-sm rounded-b-md ${activeBorder}`}>
+          <div
+            className={`${baseStyle} bg-[#DC2626] text-white rounded-t-sm rounded-b-md ${activeBorder}`}
+            style={{ backgroundColor: '#DC2626', color: '#ffffff' }}
+          >
             {num}
           </div>
         );
       case 'ANSWERED':
         return (
-          <div className={`${baseStyle} bg-[#16A34A] text-white rounded-t-sm rounded-b-md ${activeBorder}`}>
+          <div
+            className={`${baseStyle} bg-[#16A34A] text-white rounded-t-sm rounded-b-md ${activeBorder}`}
+            style={{ backgroundColor: '#16A34A', color: '#ffffff' }}
+          >
             {num}
           </div>
         );
       case 'MARKED_FOR_REVIEW':
         return (
-          <div className={`${baseStyle} bg-[#7E22CE] text-white rounded-full ${activeBorder}`}>
+          <div
+            className={`${baseStyle} bg-[#7E22CE] text-white rounded-full ${activeBorder}`}
+            style={{ backgroundColor: '#7E22CE', color: '#ffffff' }}
+          >
             {num}
           </div>
         );
       case 'ANSWERED_AND_MARKED_FOR_REVIEW':
         return (
-          <div className={`${baseStyle} bg-[#7E22CE] text-white rounded-full ${activeBorder}`}>
+          <div
+            className={`${baseStyle} bg-[#7E22CE] text-white rounded-full ${activeBorder}`}
+            style={{ backgroundColor: '#7E22CE', color: '#ffffff' }}
+          >
             {num}
             {/* Small green badge at bottom right representing Answered + Evaluated */}
             <span
               title="Answered & Marked for Review (Evaluated in IBPS)"
               className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#16A34A] border border-white rounded-full flex items-center justify-center shadow-xs"
+              style={{ backgroundColor: '#16A34A' }}
             >
               <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
@@ -116,8 +132,12 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
   const content = (
     <div className="flex flex-col h-full bg-[#F8FAFC] select-none text-slate-800">
       {/* Mobile Drawer Header: Candidate Profile Info + Close Button */}
+      {/* Mobile Drawer Header: Candidate Profile Info + Close Button */}
       {isMobileDrawer && (
-        <div className="p-3 bg-[#0A2F5C] text-white flex items-center justify-between border-b-2 border-[#F59E0B]">
+        <div
+          className="p-3 bg-[#0A2F5C] text-white flex items-center justify-between border-b-2 border-[#F59E0B]"
+          style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
+        >
           <div className="flex items-center space-x-2.5">
             <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[#0A2F5C] border border-white">
               <User className="w-4 h-4" />
@@ -146,7 +166,10 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
         <div className="grid grid-cols-2 gap-2 text-[11px] leading-tight">
           {/* Answered */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-t-sm rounded-b bg-[#16A34A] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            <span
+              className="w-6 h-6 rounded-t-sm rounded-b bg-[#16A34A] text-white flex items-center justify-center font-bold text-xs shrink-0"
+              style={{ backgroundColor: '#16A34A', color: '#ffffff' }}
+            >
               {answeredCount}
             </span>
             <span className="text-slate-700">Answered</span>
@@ -154,7 +177,10 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
 
           {/* Not Answered */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-t-sm rounded-b bg-[#DC2626] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            <span
+              className="w-6 h-6 rounded-t-sm rounded-b bg-[#DC2626] text-white flex items-center justify-center font-bold text-xs shrink-0"
+              style={{ backgroundColor: '#DC2626', color: '#ffffff' }}
+            >
               {notAnsweredCount}
             </span>
             <span className="text-slate-700">Not Answered</span>
@@ -162,7 +188,10 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
 
           {/* Not Visited */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded bg-[#E2E8F0] border border-[#CBD5E1] text-[#334155] flex items-center justify-center font-bold text-xs shrink-0">
+            <span
+              className="w-6 h-6 rounded bg-[#E2E8F0] border border-[#CBD5E1] text-[#334155] flex items-center justify-center font-bold text-xs shrink-0"
+              style={{ backgroundColor: '#E2E8F0', color: '#334155' }}
+            >
               {notVisitedCount}
             </span>
             <span className="text-slate-700">Not Visited</span>
@@ -170,7 +199,10 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
 
           {/* Marked for Review */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            <span
+              className="w-6 h-6 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold text-xs shrink-0"
+              style={{ backgroundColor: '#7E22CE', color: '#ffffff' }}
+            >
               {markedForReviewCount}
             </span>
             <span className="text-slate-700">Marked for Review</span>
@@ -180,10 +212,16 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
         {/* Answered and Marked for Review (Evaluated Notice) */}
         <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-start space-x-2 text-[10.5px]">
           <div className="relative shrink-0">
-            <span className="w-6 h-6 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold text-xs">
+            <span
+              className="w-6 h-6 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold text-xs"
+              style={{ backgroundColor: '#7E22CE', color: '#ffffff' }}
+            >
               {answeredAndMarkedCount}
             </span>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#16A34A] border border-white rounded-full flex items-center justify-center">
+            <span
+              className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#16A34A] border border-white rounded-full flex items-center justify-center"
+              style={{ backgroundColor: '#16A34A' }}
+            >
               <svg className="w-1.5 h-1.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
               </svg>
@@ -196,9 +234,15 @@ export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
       </div>
 
       {/* Section Filter Banner */}
-      <div className="bg-[#0A2F5C] text-white px-3 py-1.5 text-xs font-semibold flex items-center justify-between">
+      <div
+        className="bg-[#0A2F5C] text-white px-3 py-1.5 text-xs font-semibold flex items-center justify-between"
+        style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
+      >
         <span>Section: {currentSection.displayName}</span>
-        <span className="font-mono text-[11px] text-[#F59E0B]">
+        <span
+          className="font-mono text-[11px] text-[#F59E0B]"
+          style={{ color: '#F59E0B' }}
+        >
           Q: 1 to {currentSection.questions.length}
         </span>
       </div>

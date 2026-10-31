@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useSyncExternalStore } from 'react';
 import { Monitor, Smartphone, CheckCircle, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useExamStore } from '@/store/useExamStore';
 
@@ -15,31 +15,38 @@ export const MobileDeviceAdvisoryModal: React.FC<MobileDeviceAdvisoryModalProps>
   onDismiss,
   forceShow = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { returnToGateway } = useExamStore();
 
-  useEffect(() => {
-    // Only check on client side
-    if (typeof window === 'undefined') return;
+  const isSmallScreen = useSyncExternalStore(
+    (notify) => {
+      window.addEventListener('resize', notify);
+      return () => window.removeEventListener('resize', notify);
+    },
+    () => window.innerWidth < 1024,
+    () => false
+  );
 
-    const isSmallScreen = window.innerWidth < 1024;
-    const isDismissed = sessionStorage.getItem(STORAGE_KEY) === 'true';
+  const isSessionDismissed = useSyncExternalStore(
+    () => () => {},
+    () => sessionStorage.getItem(STORAGE_KEY) === 'true',
+    () => false
+  );
 
-    if ((isSmallScreen && !isDismissed) || forceShow) {
-      setIsOpen(true);
-    }
-  }, [forceShow]);
+  const [userDismissed, setUserDismissed] = useState(false);
+  const isOpen = !userDismissed && (forceShow || (isSmallScreen && !isSessionDismissed));
 
   const handleContinue = () => {
-    if (typeof window !== 'undefined') {
+    try {
       sessionStorage.setItem(STORAGE_KEY, 'true');
+    } catch {
+      // ignore storage access errors
     }
-    setIsOpen(false);
+    setUserDismissed(true);
     onDismiss?.();
   };
 
   const handleBackToDashboard = () => {
-    setIsOpen(false);
+    setUserDismissed(true);
     returnToGateway();
   };
 

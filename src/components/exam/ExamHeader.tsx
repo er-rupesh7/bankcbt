@@ -46,12 +46,18 @@ export const ExamHeader: React.FC = () => {
   });
 
   return (
-    <header className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] select-none shadow-md shrink-0">
+    <header
+      className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] select-none shadow-md shrink-0"
+      style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
+    >
       {/* Mobile Compact Top Header (< 1024px) */}
       <div className="flex lg:hidden items-center justify-between px-3 h-14 gap-2">
         {/* Left: Exam Title + Tag */}
         <div className="flex items-center space-x-1.5 min-w-0">
-          <span className="bg-[#F59E0B] text-[#0A2F5C] font-black text-[10px] px-1.5 py-0.5 rounded tracking-wider uppercase shrink-0">
+          <span
+            className="bg-[#F59E0B] text-[#0A2F5C] font-black text-[10px] px-1.5 py-0.5 rounded tracking-wider uppercase shrink-0"
+            style={{ backgroundColor: '#F59E0B', color: '#0A2F5C' }}
+          >
             {exam.examBody}
           </span>
           <h1 className="text-xs sm:text-sm font-bold text-white truncate max-w-[120px] sm:max-w-[200px]" title={exam.title}>
@@ -66,6 +72,7 @@ export const ExamHeader: React.FC = () => {
               ? 'bg-red-600 border border-red-400 text-white animate-pulse'
               : 'bg-[#06203D] border border-blue-400/40 text-[#F59E0B]'
           }`}
+          style={{ backgroundColor: isUrgent ? '#DC2626' : '#06203D' }}
         >
           <Clock className={`w-3.5 h-3.5 ${isUrgent ? 'text-white' : 'text-[#F59E0B]'}`} />
           <span className="tracking-wider">{formattedTime}</span>
@@ -103,7 +110,10 @@ export const ExamHeader: React.FC = () => {
       <div className="hidden lg:flex items-center justify-between px-4 py-2.5 gap-4">
         {/* Left: Exam Title & Badge */}
         <div className="flex items-center space-x-3">
-          <div className="bg-[#F59E0B] text-[#0A2F5C] font-black text-xs px-2.5 py-1 rounded tracking-wider uppercase shadow-xs">
+          <div
+            className="bg-[#F59E0B] text-[#0A2F5C] font-black text-xs px-2.5 py-1 rounded tracking-wider uppercase shadow-xs"
+            style={{ backgroundColor: '#F59E0B', color: '#0A2F5C' }}
+          >
             {exam.examBody} {exam.post} {exam.stage}
           </div>
           <div>
@@ -124,6 +134,7 @@ export const ExamHeader: React.FC = () => {
                 ? 'bg-red-600/90 border-red-400 text-white animate-pulse'
                 : 'bg-[#06203D] border-blue-400/40 text-[#F59E0B]'
             }`}
+            style={{ backgroundColor: isUrgent ? '#DC2626' : '#06203D' }}
           >
             <Clock className={`w-4 h-4 ${isUrgent ? 'text-white' : 'text-[#F59E0B]'}`} />
             <span className="text-xs uppercase font-sans tracking-wide text-gray-300">

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { useExamStore } from '@/store/useExamStore';
 import { ExamSelectionGateway } from './ExamSelectionGateway';
 import { ExamHeader } from './ExamHeader';
@@ -13,11 +14,7 @@ import { AnalyticsDashboard } from './AnalyticsDashboard';
 import { MobileDeviceAdvisoryModal } from './MobileDeviceAdvisoryModal';
 
 export const ExamInterface: React.FC = () => {
-  const [mounted, setMounted] = React.useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   const {
     exam,
