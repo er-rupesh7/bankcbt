@@ -116,7 +116,7 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
             <ChevronRight className="w-3.5 h-3.5 text-gray-400 shrink-0" />
             <span className="text-gray-600 shrink-0">{topic.clusterName}</span>
             <ChevronRight className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-            <span className="text-[#0e3b64] font-bold shrink-0">{topic.titleEn}</span>
+            <span className="text-[#0A2F5C] font-bold shrink-0">{topic.titleEn}</span>
           </nav>
 
           {/* Tab Switcher */}
@@ -125,7 +125,7 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
               onClick={() => setActiveTab('CONCEPT')}
               className={`px-3 py-1.5 rounded-md text-xs font-bold transition flex items-center space-x-1.5 ${
                 activeTab === 'CONCEPT'
-                  ? 'bg-white text-blue-700 shadow-xs'
+                  ? 'bg-white text-[#0B4F8A] shadow-xs'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -195,7 +195,7 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
         <div className="fixed inset-0 z-50 overflow-hidden bg-black/50 backdrop-blur-xs flex justify-end animate-in fade-in">
           <div className="w-full max-w-lg bg-white h-full shadow-2xl flex flex-col justify-between overflow-hidden border-l border-gray-200">
             {/* Drawer Header */}
-            <div className="p-4 bg-[#0e3b64] text-white flex items-center justify-between border-b-2 border-[#ff9900]">
+            <div className="p-4 bg-[#0A2F5C] text-white flex items-center justify-between border-b-2 border-[#F59E0B]">
               <div className="flex items-center space-x-2">
                 <HelpCircle className="w-5 h-5 text-[#ff9900]" />
                 <h3 className="font-bold text-sm text-white">

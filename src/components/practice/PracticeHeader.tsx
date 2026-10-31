@@ -18,20 +18,20 @@ export const PracticeHeader: React.FC<PracticeHeaderProps> = ({
   showBackToHub = false,
 }) => {
   return (
-    <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 h-16 flex items-center transition-colors">
+    <header className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] sticky top-0 z-40 h-16 flex items-center transition-colors shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-3">
         <div className="flex items-center space-x-3">
           {showBackToHub ? (
             <Link
               href="/practice"
-              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition text-xs font-semibold"
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 transition text-xs font-semibold cursor-pointer"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Syllabus Hub</span>
             </Link>
           ) : (
-            <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold shadow-xs">
-              <GraduationCap className="w-5 h-5 text-blue-400" />
+            <div className="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-[#F59E0B] font-bold shadow-xs">
+              <GraduationCap className="w-5 h-5 text-[#F59E0B]" />
             </div>
           )}
 
@@ -40,18 +40,18 @@ export const PracticeHeader: React.FC<PracticeHeaderProps> = ({
               <h1 className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-2">
                 <span>{title}</span>
               </h1>
-              <span className="text-[10px] bg-amber-500/15 text-amber-400 border border-amber-500/30 font-extrabold px-2 py-0.5 rounded-md uppercase tracking-wider hidden sm:inline-block">
+              <span className="text-[10px] bg-[#F59E0B] text-[#0A2F5C] font-black px-2 py-0.5 rounded uppercase tracking-wider hidden sm:inline-block">
                 SBI &bull; IBPS &bull; RRB
               </span>
             </div>
-            <p className="text-xs text-slate-400 line-clamp-1 hidden md:block">{subtitle}</p>
+            <p className="text-xs text-blue-200 line-clamp-1 hidden md:block">{subtitle}</p>
           </div>
         </div>
 
         <div className="flex items-center space-x-2.5">
           <Link
             href="/"
-            className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs transition shadow-sm shadow-blue-600/30"
+            className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-[#0A2F5C] font-black text-xs transition shadow-xs cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Full Mock Tests</span>
@@ -60,9 +60,9 @@ export const PracticeHeader: React.FC<PracticeHeaderProps> = ({
           {!showBackToHub && (
             <a
               href="#topics-grid"
-              className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700 font-medium text-xs transition hidden sm:inline-flex"
+              className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 font-medium text-xs transition hidden sm:inline-flex cursor-pointer"
             >
-              <BookOpen className="w-3.5 h-3.5 text-blue-400" />
+              <BookOpen className="w-3.5 h-3.5 text-[#F59E0B]" />
               <span>Browse Grid</span>
             </a>
           )}

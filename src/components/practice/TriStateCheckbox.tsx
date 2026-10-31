@@ -44,7 +44,7 @@ export const TriStateCheckbox: React.FC<TriStateCheckboxProps> = ({
           ? 'bg-blue-600 border-blue-600 text-white shadow-xs'
           : state === 'INDETERMINATE'
           ? 'bg-blue-500 border-blue-500 text-white shadow-xs'
-          : 'bg-slate-900 border-slate-700 hover:border-blue-400'
+          : 'bg-white border-slate-300 hover:border-[#0B4F8A]'
       } ${className}`}
     >
       {state === 'CHECKED' && <Check className="w-3 h-3 stroke-[3]" />}

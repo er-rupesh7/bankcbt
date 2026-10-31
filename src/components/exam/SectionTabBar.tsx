@@ -18,9 +18,9 @@ export const SectionTabBar: React.FC = () => {
   const isSectionLocked = exam.timingType === 'SECTIONAL_LOCKED';
 
   return (
-    <div className="bg-[#e4ebf2] border-b border-[#b0c4de] px-4 py-1.5 flex flex-wrap items-center justify-between gap-2 select-none">
-      <div className="flex items-center space-x-1 sm:space-x-2">
-        <span className="text-xs font-bold text-[#0e3b64] uppercase tracking-wider mr-2 hidden sm:inline">
+    <div className="bg-slate-100 border-b border-slate-300 px-3 sm:px-4 py-1.5 flex items-center justify-between gap-2 select-none shrink-0 overflow-x-auto no-scrollbar">
+      <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+        <span className="text-xs font-bold text-[#0A2F5C] uppercase tracking-wider mr-1 hidden sm:inline">
           Sections:
         </span>
         {exam.sections.map((section: Section) => {
@@ -44,20 +44,20 @@ export const SectionTabBar: React.FC = () => {
                   ? 'Section already completed and submitted.'
                   : `Switch to ${section.displayName}`
               }
-              className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-t text-xs font-semibold border-t border-l border-r transition-all ${
+              className={`flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-t text-xs font-semibold border-t border-l border-r transition-all whitespace-nowrap shrink-0 ${
                 isActive
-                  ? 'bg-white text-[#0e3b64] border-[#0e3b64] shadow-sm font-bold border-b-2 border-b-white translate-y-[1px]'
+                  ? 'bg-white text-[#0B4F8A] border-slate-300 shadow-xs font-bold border-b-2 border-b-white translate-y-[1px]'
                   : isCompleted
-                  ? 'bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed opacity-80'
+                  ? 'bg-slate-200 text-slate-500 border-slate-300 cursor-not-allowed opacity-80'
                   : isLocked
-                  ? 'bg-gray-200/90 text-gray-400 border-gray-300 cursor-not-allowed'
-                  : 'bg-white/70 text-[#0e3b64] border-gray-300 hover:bg-white cursor-pointer'
+                  ? 'bg-slate-200/90 text-slate-400 border-slate-300 cursor-not-allowed'
+                  : 'bg-white/70 text-slate-700 border-slate-300 hover:bg-white cursor-pointer'
               }`}
             >
               <span>{section.displayName}</span>
-              {isLocked && <Lock className="w-3 h-3 text-gray-400 ml-1" />}
-              {isCompleted && <CheckCircle2 className="w-3 h-3 text-emerald-600 ml-1" />}
-              <span className="text-[10px] bg-blue-100 text-[#0e3b64] px-1 py-0.2 rounded font-mono">
+              {isLocked && <Lock className="w-3 h-3 text-slate-400 ml-0.5" />}
+              {isCompleted && <CheckCircle2 className="w-3 h-3 text-emerald-600 ml-0.5" />}
+              <span className="text-[10px] bg-blue-100 text-[#0B4F8A] px-1 py-0.2 rounded font-mono font-bold">
                 {section.questions.length}
               </span>
             </button>
@@ -65,9 +65,9 @@ export const SectionTabBar: React.FC = () => {
         })}
       </div>
 
-      <div className="flex items-center space-x-2 text-[11px] text-[#0e3b64]">
+      <div className="hidden sm:flex items-center space-x-2 text-[11px] text-[#0A2F5C] shrink-0">
         <span className="inline-flex items-center bg-blue-50 border border-blue-200 px-2 py-0.5 rounded text-blue-900 font-medium">
-          <Info className="w-3 h-3 mr-1 text-blue-600" />
+          <Info className="w-3 h-3 mr-1 text-[#0B4F8A]" />
           {isSectionLocked
             ? `Strict Sectional Timing (${Math.round((exam.sections.find((s) => s.id === currentSectionId)?.durationSeconds ?? 1200) / 60)}m)`
             : 'Composite Time (Free Navigation)'}

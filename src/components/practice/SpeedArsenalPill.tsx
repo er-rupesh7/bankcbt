@@ -34,8 +34,8 @@ export const SpeedArsenalPill: React.FC<SpeedArsenalPillProps> = ({
         onClick={onToggle}
         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border shadow-xs transition-all cursor-pointer select-none ${
           isChecked
-            ? 'bg-amber-950/60 border-amber-500/80 text-amber-200 line-through decoration-amber-500'
-            : 'bg-slate-900 border-amber-700/40 text-slate-200 hover:border-amber-400 hover:bg-slate-850'
+            ? 'bg-amber-100 border-amber-400 text-amber-900 line-through decoration-amber-600'
+            : 'bg-white border-amber-300 text-slate-800 hover:border-amber-500 hover:bg-amber-50/50'
         }`}
         aria-label={`Shortcut: ${name}`}
       >

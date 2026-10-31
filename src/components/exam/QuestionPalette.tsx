@@ -3,20 +3,32 @@
 import React from 'react';
 import { useExamStore } from '@/store/useExamStore';
 import { PaletteState, Question } from '@/types/exam';
+import { X, User, Send } from 'lucide-react';
 
-export const QuestionPalette: React.FC = () => {
+interface QuestionPaletteProps {
+  isMobileDrawer?: boolean;
+  onClose?: () => void;
+}
+
+export const QuestionPalette: React.FC<QuestionPaletteProps> = ({
+  isMobileDrawer = false,
+  onClose,
+}) => {
   const {
     exam,
     currentSectionId,
     currentQuestionId,
     questionStates,
     jumpToQuestion,
+    openSubmitModal,
   } = useExamStore();
 
   if (!exam || !currentSectionId) return null;
 
   const currentSection = exam.sections.find((s) => s.id === currentSectionId);
   if (!currentSection) return null;
+
+  const isLastSection = exam.sections[exam.sections.length - 1]?.id === currentSectionId;
 
   // Calculate counts for current section
   let notVisitedCount = 0;
@@ -46,44 +58,51 @@ export const QuestionPalette: React.FC = () => {
     }
   });
 
+  const handleSelectQuestion = (qId: string) => {
+    jumpToQuestion(qId);
+    if (isMobileDrawer && onClose) {
+      onClose();
+    }
+  };
+
   const renderBadgeIcon = (state: PaletteState, num: number, isCurrent: boolean) => {
     const baseStyle =
       'w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center font-bold text-xs sm:text-sm rounded relative transition-transform shadow-xs';
-    const activeBorder = isCurrent ? 'ring-2 ring-blue-700 ring-offset-1 scale-105 z-10' : '';
+    const activeBorder = isCurrent ? 'ring-2 ring-[#0B4F8A] ring-offset-1 scale-105 z-10' : '';
 
     switch (state) {
       case 'NOT_VISITED':
         return (
-          <div className={`${baseStyle} bg-[#e0e0e0] text-gray-700 border border-gray-400 ${activeBorder}`}>
+          <div className={`${baseStyle} bg-[#E2E8F0] text-[#334155] border border-[#CBD5E1] ${activeBorder}`}>
             {num}
           </div>
         );
       case 'NOT_ANSWERED':
         return (
-          <div className={`${baseStyle} bg-[#e53935] text-white rounded-t-sm rounded-b-md ${activeBorder}`}>
+          <div className={`${baseStyle} bg-[#DC2626] text-white rounded-t-sm rounded-b-md ${activeBorder}`}>
             {num}
           </div>
         );
       case 'ANSWERED':
         return (
-          <div className={`${baseStyle} bg-[#2e7d32] text-white rounded-t-sm rounded-b-md ${activeBorder}`}>
+          <div className={`${baseStyle} bg-[#16A34A] text-white rounded-t-sm rounded-b-md ${activeBorder}`}>
             {num}
           </div>
         );
       case 'MARKED_FOR_REVIEW':
         return (
-          <div className={`${baseStyle} bg-[#7b1fa2] text-white rounded-full ${activeBorder}`}>
+          <div className={`${baseStyle} bg-[#7E22CE] text-white rounded-full ${activeBorder}`}>
             {num}
           </div>
         );
       case 'ANSWERED_AND_MARKED_FOR_REVIEW':
         return (
-          <div className={`${baseStyle} bg-[#7b1fa2] text-white rounded-full ${activeBorder}`}>
+          <div className={`${baseStyle} bg-[#7E22CE] text-white rounded-full ${activeBorder}`}>
             {num}
             {/* Small green badge at bottom right representing Answered + Evaluated */}
             <span
               title="Answered & Marked for Review (Evaluated in IBPS)"
-              className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#00c853] border border-white rounded-full flex items-center justify-center shadow-xs"
+              className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#16A34A] border border-white rounded-full flex items-center justify-center shadow-xs"
             >
               <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
@@ -94,76 +113,98 @@ export const QuestionPalette: React.FC = () => {
     }
   };
 
-  return (
-    <aside className="w-full lg:w-80 bg-[#f4f7fa] border-l border-[#c4d1db] flex flex-col h-full select-none text-gray-800">
+  const content = (
+    <div className="flex flex-col h-full bg-[#F8FAFC] select-none text-slate-800">
+      {/* Mobile Drawer Header: Candidate Profile Info + Close Button */}
+      {isMobileDrawer && (
+        <div className="p-3 bg-[#0A2F5C] text-white flex items-center justify-between border-b-2 border-[#F59E0B]">
+          <div className="flex items-center space-x-2.5">
+            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-[#0A2F5C] border border-white">
+              <User className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-xs font-bold text-white">Karna (Candidate)</div>
+              <div className="text-[10px] text-blue-200 font-mono">Roll: 2408199201 • Node: C042</div>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-md text-white/80 hover:text-white hover:bg-white/10 cursor-pointer"
+            aria-label="Close question palette"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      )}
+
       {/* Legend Area (Exact TCS iON Legend) */}
-      <div className="p-3 bg-white border-b border-[#c4d1db] shadow-xs">
-        <h3 className="text-xs font-bold text-[#0e3b64] uppercase tracking-wider mb-2 border-b pb-1">
+      <div className="p-3 bg-white border-b border-slate-300 shadow-xs">
+        <h3 className="text-xs font-bold text-[#0A2F5C] uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">
           Question Palette Legend
         </h3>
 
         <div className="grid grid-cols-2 gap-2 text-[11px] leading-tight">
           {/* Answered */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-t-sm rounded-b bg-[#2e7d32] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            <span className="w-6 h-6 rounded-t-sm rounded-b bg-[#16A34A] text-white flex items-center justify-center font-bold text-xs shrink-0">
               {answeredCount}
             </span>
-            <span className="text-gray-700">Answered</span>
+            <span className="text-slate-700">Answered</span>
           </div>
 
           {/* Not Answered */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-t-sm rounded-b bg-[#e53935] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            <span className="w-6 h-6 rounded-t-sm rounded-b bg-[#DC2626] text-white flex items-center justify-center font-bold text-xs shrink-0">
               {notAnsweredCount}
             </span>
-            <span className="text-gray-700">Not Answered</span>
+            <span className="text-slate-700">Not Answered</span>
           </div>
 
           {/* Not Visited */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded bg-[#e0e0e0] border border-gray-400 text-gray-700 flex items-center justify-center font-bold text-xs shrink-0">
+            <span className="w-6 h-6 rounded bg-[#E2E8F0] border border-[#CBD5E1] text-[#334155] flex items-center justify-center font-bold text-xs shrink-0">
               {notVisitedCount}
             </span>
-            <span className="text-gray-700">Not Visited</span>
+            <span className="text-slate-700">Not Visited</span>
           </div>
 
           {/* Marked for Review */}
           <div className="flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-full bg-[#7b1fa2] text-white flex items-center justify-center font-bold text-xs shrink-0">
+            <span className="w-6 h-6 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold text-xs shrink-0">
               {markedForReviewCount}
             </span>
-            <span className="text-gray-700">Marked for Review</span>
+            <span className="text-slate-700">Marked for Review</span>
           </div>
         </div>
 
         {/* Answered and Marked for Review (Evaluated Notice) */}
-        <div className="mt-2.5 pt-2 border-t border-gray-100 flex items-start space-x-2 text-[10.5px]">
+        <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-start space-x-2 text-[10.5px]">
           <div className="relative shrink-0">
-            <span className="w-6 h-6 rounded-full bg-[#7b1fa2] text-white flex items-center justify-center font-bold text-xs">
+            <span className="w-6 h-6 rounded-full bg-[#7E22CE] text-white flex items-center justify-center font-bold text-xs">
               {answeredAndMarkedCount}
             </span>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#00c853] border border-white rounded-full flex items-center justify-center">
+            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#16A34A] border border-white rounded-full flex items-center justify-center">
               <svg className="w-1.5 h-1.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
               </svg>
             </span>
           </div>
-          <span className="text-purple-900 font-medium">
+          <span className="text-purple-900 font-medium leading-tight">
             Answered & Marked for Review (<span className="text-emerald-700 font-bold">will be evaluated</span>)
           </span>
         </div>
       </div>
 
       {/* Section Filter Banner */}
-      <div className="bg-[#0e3b64] text-white px-3 py-1.5 text-xs font-semibold flex items-center justify-between">
+      <div className="bg-[#0A2F5C] text-white px-3 py-1.5 text-xs font-semibold flex items-center justify-between">
         <span>Section: {currentSection.displayName}</span>
-        <span className="font-mono text-[11px] text-amber-300">
-          Q: {currentSection.questions.length} Total
+        <span className="font-mono text-[11px] text-[#F59E0B]">
+          Q: 1 to {currentSection.questions.length}
         </span>
       </div>
 
       {/* Question Grid */}
-      <div className="p-3 overflow-y-auto flex-1 bg-[#edf2f7]">
+      <div className="p-3 overflow-y-auto flex-1 bg-[#F1F5F9]">
         <div className="grid grid-cols-5 gap-2 justify-items-center">
           {currentSection.questions.map((q: Question) => {
             const state = questionStates[q.id]?.paletteState || 'NOT_VISITED';
@@ -172,7 +213,7 @@ export const QuestionPalette: React.FC = () => {
             return (
               <button
                 key={q.id}
-                onClick={() => jumpToQuestion(q.id)}
+                onClick={() => handleSelectQuestion(q.id)}
                 title={`Question ${q.orderInSection}: ${state.replace(/_/g, ' ')}`}
                 className="cursor-pointer focus:outline-none"
               >
@@ -182,6 +223,40 @@ export const QuestionPalette: React.FC = () => {
           })}
         </div>
       </div>
+
+      {/* Mobile Drawer Footer: Quick Submit Button */}
+      {isMobileDrawer && (
+        <div className="p-3 bg-white border-t border-slate-300">
+          <button
+            onClick={() => {
+              onClose?.();
+              openSubmitModal();
+            }}
+            className="w-full py-2.5 px-4 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm"
+          >
+            <Send className="w-3.5 h-3.5" />
+            <span>{isLastSection ? 'Submit Test' : 'Submit Exam'}</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
+  // If Mobile Drawer Mode: render modal overlay wrapper
+  if (isMobileDrawer) {
+    return (
+      <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end animate-in fade-in duration-200">
+        <div className="w-full max-w-xs sm:max-w-sm h-full shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-200">
+          {content}
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop Sidebar Layout (>= 1024px)
+  return (
+    <aside className="hidden lg:flex w-80 shrink-0 border-l border-slate-300 flex-col h-full select-none text-slate-800">
+      {content}
     </aside>
   );
 };

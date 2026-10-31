@@ -42,6 +42,8 @@ interface ExamStoreState {
   tickTimer: () => void;
   setLanguage: (lang: Language) => void;
   returnToGateway: () => void;
+  toggleQuestionPalette: () => void;
+  setQuestionPaletteOpen: (open: boolean) => void;
   
   // Navigation & Palette Actions
   selectOptionDraft: (optionId: string) => void;
@@ -49,6 +51,7 @@ interface ExamStoreState {
   markForReviewAndNext: () => void;
   clearResponse: () => void;
   jumpToQuestion: (targetQuestionId: string) => void;
+  goToPrevQuestion: () => void;
   
   // Section Navigation
   switchSection: (targetSectionId: string) => void;
@@ -75,7 +78,7 @@ export const useExamStore = create<ExamStoreState>()(
       completedSectionIds: [],
       questionStates: {},
       currentDraftOptionId: null,
-      isQuestionPaletteOpen: true,
+      isQuestionPaletteOpen: false,
       isSubmitModalOpen: false,
       isGatewayOpen: true,
       submissionResult: null,
@@ -130,6 +133,7 @@ export const useExamStore = create<ExamStoreState>()(
           completedSectionIds: [],
           questionStates: initialQuestionStates,
           currentDraftOptionId: null,
+          isQuestionPaletteOpen: false,
           submissionResult: null,
         });
       },
@@ -403,6 +407,29 @@ export const useExamStore = create<ExamStoreState>()(
           questionStates: updatedStates,
           currentDraftOptionId: targetState.selectedOptionId, // Load previously saved answer if any
         });
+      },
+
+      goToPrevQuestion: () => {
+        const state = get();
+        const { currentQuestionId, currentSectionId, exam } = state;
+        if (!currentQuestionId || !currentSectionId || !exam) return;
+
+        const currentSection = exam.sections.find((s) => s.id === currentSectionId);
+        if (!currentSection) return;
+
+        const currentIndex = currentSection.questions.findIndex((q) => q.id === currentQuestionId);
+        if (currentIndex > 0) {
+          const prevQuestion = currentSection.questions[currentIndex - 1];
+          get().jumpToQuestion(prevQuestion.id);
+        }
+      },
+
+      toggleQuestionPalette: () => {
+        set((state) => ({ isQuestionPaletteOpen: !state.isQuestionPaletteOpen }));
+      },
+
+      setQuestionPaletteOpen: (open: boolean) => {
+        set({ isQuestionPaletteOpen: open });
       },
 
       switchSection: (targetSectionId: string) => {

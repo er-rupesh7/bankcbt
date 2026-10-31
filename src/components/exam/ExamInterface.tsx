@@ -10,26 +10,39 @@ import { QuestionPalette } from './QuestionPalette';
 import { ActionFooter } from './ActionFooter';
 import { SubmitConfirmModal } from './SubmitConfirmModal';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
+import { MobileDeviceAdvisoryModal } from './MobileDeviceAdvisoryModal';
 
 export const ExamInterface: React.FC = () => {
+  const [mounted, setMounted] = React.useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const {
     exam,
     isExamStarted,
     isExamSubmitted,
     isGatewayOpen,
+    isQuestionPaletteOpen,
+    setQuestionPaletteOpen,
     tickTimer,
   } = useExamStore();
 
   // Master 1-second interval ticking the store's timer engine
   useEffect(() => {
-    if (!isExamStarted || isExamSubmitted || isGatewayOpen) return;
+    if (!mounted || !isExamStarted || isExamSubmitted || isGatewayOpen) return;
 
     const interval = setInterval(() => {
       tickTimer();
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isExamStarted, isExamSubmitted, isGatewayOpen, tickTimer]);
+  }, [mounted, isExamStarted, isExamSubmitted, isGatewayOpen, tickTimer]);
+
+  if (!mounted) {
+    return <ExamSelectionGateway />;
+  }
 
   // 1. If Exam has been submitted, show Analytics & Diagnostics Dashboard
   if (isExamSubmitted) {
@@ -43,24 +56,37 @@ export const ExamInterface: React.FC = () => {
 
   // 3. Official TCS iON Examination CBT Arena
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-gray-100 font-sans select-none">
+    <div className="flex flex-col h-screen w-screen overflow-hidden bg-[#F1F5F9] font-sans select-none">
       {/* 1. TCS iON Top Header */}
       <ExamHeader />
 
-      {/* 2. Section Navigation Tab Bar (Hard sectional lock or composite) */}
+      {/* 2. Section Navigation Tab Bar */}
       <SectionTabBar />
 
-      {/* 3. Center Workspace: Main Question Viewport (Left 75%) + Palette Grid (Right 25%) */}
+      {/* 3. Center Workspace: Main Question Viewport (100% on mobile, 75% on desktop) + Permanent Palette Grid on Desktop (Right 25%) */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         <DualPaneQuestionArea />
-        <QuestionPalette />
+        <QuestionPalette isMobileDrawer={false} />
       </div>
+
+      {/* 3b. Slide-Over Mobile Question Palette Drawer (Mobile Only) */}
+      {isQuestionPaletteOpen && (
+        <div className="lg:hidden">
+          <QuestionPalette
+            isMobileDrawer={true}
+            onClose={() => setQuestionPaletteOpen(false)}
+          />
+        </div>
+      )}
 
       {/* 4. TCS iON Bottom Action Footer */}
       <ActionFooter />
 
       {/* 5. Submission Confirmation Modal */}
       <SubmitConfirmModal />
+
+      {/* 6. Mobile Device Advisory Modal */}
+      <MobileDeviceAdvisoryModal />
     </div>
   );
 };

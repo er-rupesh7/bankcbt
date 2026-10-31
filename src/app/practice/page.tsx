@@ -142,36 +142,33 @@ export default function PracticeHubPage() {
     circumference - (globalTreeProgress.percentage / 100) * circumference;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans flex flex-col justify-between selection:bg-blue-600 selection:text-white relative overflow-x-hidden">
-      {/* Background Radial Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(37,99,235,0.18),transparent)] pointer-events-none" />
-
-      {/* 1. Sticky Header Navbar */}
+    <div className="min-h-screen bg-[#F1F5F9] text-slate-900 font-sans flex flex-col justify-between selection:bg-[#0B4F8A] selection:text-white relative overflow-x-hidden">
+      {/* 1. Official Sticky Header Navbar */}
       <PracticeHeader showBackToHub={false} />
 
-      {/* 2. Main Content Container (pt-8 pb-20 guarantees no top clipping) */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 space-y-6 flex-1 w-full relative z-10">
+      {/* 2. Main Content Container */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-20 space-y-6 flex-1 w-full relative z-10">
         
-        {/* Consolidated Hero & Live Telemetry Header */}
-        <div className="rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950/80 to-slate-900 border border-blue-500/20 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        {/* Single Compact Formal Official Hero Banner (Bug C Fix) */}
+        <div className="rounded-2xl bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] p-5 sm:p-7 shadow-lg relative overflow-hidden">
           <div className="relative z-10 space-y-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               {/* Left Column: Title & Mission */}
               <div className="space-y-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                  <Zap className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[#F59E0B]/20 text-amber-300 border border-[#F59E0B]/40">
+                  <Zap className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
                   <span>OFFICIAL TCS iON SYLLABUS ENGINE</span>
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
                   Topic-Wise Concept Mastery &amp; Speed Drills
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                <p className="text-xs sm:text-sm text-blue-200 max-w-2xl leading-relaxed">
                   Master every single chapter of SBI PO, SBI Clerk, IBPS PO, and RRB exams. Study 20-second shortcuts, memorize formula sheets, and practice calibrated drills from Level 1 (Clerk Speed) to Level 3 (Mains Analysis).
                 </p>
               </div>
 
               {/* Right Column: Unified Readiness Widget */}
-              <div className="bg-slate-900/80 border border-slate-700/70 rounded-xl p-4 flex items-center gap-5 shrink-0 shadow-lg self-start lg:self-auto">
+              <div className="bg-[#06203D] border border-blue-400/30 rounded-xl p-4 flex items-center gap-5 shrink-0 shadow-md self-start lg:self-auto">
                 {/* SVG Progress Ring */}
                 <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
                   <svg className="w-16 h-16 -rotate-90 transform" viewBox="0 0 64 64">
@@ -190,7 +187,7 @@ export default function PracticeHubPage() {
                       r={radius}
                       stroke="currentColor"
                       strokeWidth="5"
-                      className="text-blue-500 transition-all duration-700 ease-out"
+                      className="text-[#F59E0B] transition-all duration-700 ease-out"
                       fill="transparent"
                       strokeDasharray={circumference}
                       strokeDashoffset={strokeDashoffset}
@@ -209,7 +206,7 @@ export default function PracticeHubPage() {
 
                 <div className="space-y-1">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300 block">
                       Topics PO Ready
                     </span>
                     <span
@@ -217,17 +214,17 @@ export default function PracticeHubPage() {
                       suppressHydrationWarning
                     >
                       {mounted ? stats.masteredCount : 0}{' '}
-                      <span className="text-xs text-slate-400 font-semibold">
+                      <span className="text-xs text-blue-300 font-semibold">
                         / {stats.totalTopics} Chapters
                       </span>
                     </span>
                   </div>
-                  <div className="pt-1 border-t border-slate-800">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400 block">
+                  <div className="pt-1 border-t border-blue-900/60">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 block">
                       Curriculum Granular Mastery
                     </span>
                     <span
-                      className="text-xs font-bold text-slate-300"
+                      className="text-xs font-bold text-slate-200"
                       suppressHydrationWarning
                     >
                       {mounted ? globalTreeProgress.completed : 0} / {globalTreeProgress.total} Sub-Concepts
@@ -237,14 +234,14 @@ export default function PracticeHubPage() {
               </div>
             </div>
 
-            {/* Bottom Row: 4 Compact KPI Stat Pills */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-6 border-t border-slate-800/80 text-center">
-              <div className="bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
-                <span className="text-[11px] text-slate-400 block font-semibold">Total Chapters</span>
+            {/* Bottom Row: 4 Compact KPI Stat Boxes */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 pt-5 border-t border-blue-900/60 text-center">
+              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+                <span className="text-[11px] text-blue-200 block font-semibold">Total Chapters</span>
                 <span className="text-lg font-black text-white">{stats.totalTopics} Topics</span>
               </div>
-              <div className="bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
-                <span className="text-[11px] text-slate-400 block font-semibold">Concepts Read</span>
+              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+                <span className="text-[11px] text-blue-200 block font-semibold">Concepts Read</span>
                 <span
                   className="text-lg font-black text-emerald-400"
                   suppressHydrationWarning
@@ -252,19 +249,19 @@ export default function PracticeHubPage() {
                   {stats.conceptsRead} Completed
                 </span>
               </div>
-              <div className="bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
-                <span className="text-[11px] text-slate-400 block font-semibold">Questions Solved</span>
+              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+                <span className="text-[11px] text-blue-200 block font-semibold">Questions Solved</span>
                 <span
-                  className="text-lg font-black text-amber-400"
+                  className="text-lg font-black text-amber-300"
                   suppressHydrationWarning
                 >
                   {stats.totalAttempted} Qs
                 </span>
               </div>
-              <div className="bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
-                <span className="text-[11px] text-slate-400 block font-semibold">Average Accuracy</span>
+              <div className="bg-[#06203D] border border-blue-400/20 rounded-xl px-4 py-3">
+                <span className="text-[11px] text-blue-200 block font-semibold">Average Accuracy</span>
                 <span
-                  className="text-lg font-black text-cyan-400"
+                  className="text-lg font-black text-cyan-300"
                   suppressHydrationWarning
                 >
                   {stats.accuracy}%
@@ -274,18 +271,18 @@ export default function PracticeHubPage() {
           </div>
         </div>
 
-        {/* 3. Unified View Switcher & Sticky Filter Control Bar */}
-        <div id="topics-grid" className="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg space-y-4 backdrop-blur-md">
+        {/* 3. Official View Switcher & Filter Control Bar */}
+        <div id="topics-grid" className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs space-y-4">
           {/* Row 1: View Mode Segmented Control + Search Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             {/* View Mode Segmented Bar */}
-            <div className="bg-slate-950 p-1 rounded-xl border border-slate-800 inline-flex flex-1 sm:flex-none">
+            <div className="bg-slate-100 p-1 rounded-xl border border-slate-200 inline-flex flex-1 sm:flex-none">
               <button
                 onClick={() => setViewMode('GRID')}
                 className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   viewMode === 'GRID'
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                    ? 'bg-[#0B4F8A] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                 }`}
               >
                 <LayoutGrid className="w-4 h-4" />
@@ -296,8 +293,8 @@ export default function PracticeHubPage() {
                 onClick={() => setViewMode('TREE')}
                 className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   viewMode === 'TREE'
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                    ? 'bg-[#0B4F8A] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                 }`}
               >
                 <GitBranch className="w-4 h-4" />
@@ -316,12 +313,12 @@ export default function PracticeHubPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search topic or shortcut..."
-                className="w-full pl-9 pr-8 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-hidden focus:border-blue-500"
+                className="w-full pl-9 pr-8 py-2 bg-white border border-slate-300 rounded-lg text-xs text-slate-900 placeholder-slate-400 focus:outline-hidden focus:border-[#0B4F8A]"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -329,20 +326,20 @@ export default function PracticeHubPage() {
             </div>
           </div>
 
-          {/* Row 2: Target Banking Examination Filter */}
-          <div className="space-y-1.5 pt-2 border-t border-slate-800/80">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 block">
+          {/* Row 2: Target Banking Examination Filter (Responsive horizontal scroll) */}
+          <div className="space-y-1.5 pt-2 border-t border-slate-200">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
               Target Banking Examination:
             </span>
-            <div className="flex items-center space-x-1.5 overflow-x-auto pb-1">
+            <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar pb-1">
               {TARGET_EXAMS.map((exam) => (
                 <button
                   key={exam.key}
                   onClick={() => setSelectedExam(exam.key)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer ${
                     activeExam === exam.key
-                      ? 'bg-blue-600 text-white border border-blue-500 shadow-sm shadow-blue-500/20'
-                      : 'bg-slate-950/80 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white'
+                      ? 'bg-[#0B4F8A] text-white border border-[#0B4F8A] shadow-xs'
+                      : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
                   }`}
                 >
                   {exam.label}
@@ -351,14 +348,14 @@ export default function PracticeHubPage() {
             </div>
           </div>
 
-          {/* Row 3: Subject Category Tabs */}
-          <div className="flex items-center space-x-1.5 overflow-x-auto pt-2 border-t border-slate-800/80 pb-1">
+          {/* Row 3: Subject Category Tabs (Responsive horizontal scroll) */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar pt-2 border-t border-slate-200 pb-1">
             <button
               onClick={() => setSelectedCategory('ALL')}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition cursor-pointer ${
                 activeCategory === 'ALL'
-                  ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 font-semibold shadow-xs'
-                  : 'bg-slate-950/80 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-700'
+                  ? 'bg-blue-50 text-[#0B4F8A] border border-blue-300 font-bold shadow-xs'
+                  : 'bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 hover:text-slate-900'
               }`}
             >
               All Subjects ({SYLLABUS_TAXONOMY.length})
@@ -371,8 +368,8 @@ export default function PracticeHubPage() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition flex items-center space-x-1.5 cursor-pointer ${
                     activeCategory === cat.id
-                      ? 'bg-indigo-600/20 text-indigo-300 border border-indigo-500/40 font-semibold shadow-xs'
-                      : 'bg-slate-950/80 text-slate-400 border border-slate-800 hover:text-slate-200 hover:border-slate-700'
+                      ? 'bg-blue-50 text-[#0B4F8A] border border-blue-300 font-bold shadow-xs'
+                      : 'bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 hover:text-slate-900'
                   }`}
                 >
                   <span>{cat.icon}</span>
@@ -389,10 +386,10 @@ export default function PracticeHubPage() {
         ) : (
           <div>
             {groupedByCluster.length === 0 ? (
-              <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-12 text-center space-y-3 shadow-xl">
+              <div className="bg-white border border-slate-200 rounded-xl p-12 text-center space-y-3 shadow-xs">
                 <span className="text-3xl">🔍</span>
-                <h3 className="font-bold text-white text-base">No Topics Match Your Search</h3>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                <h3 className="font-bold text-slate-900 text-base">No Topics Match Your Search</h3>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto">
                   Try clearing the search query or changing your target exam and subject filters.
                 </p>
                 <button
@@ -401,7 +398,7 @@ export default function PracticeHubPage() {
                     setSelectedExam('ALL');
                     setSearchQuery('');
                   }}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition cursor-pointer"
+                  className="px-4 py-2 bg-[#0B4F8A] hover:bg-[#083D6B] text-white rounded-lg text-xs font-bold transition cursor-pointer"
                 >
                   Reset All Filters
                 </button>
@@ -410,14 +407,14 @@ export default function PracticeHubPage() {
               <div className="space-y-8">
                 {groupedByCluster.map(([clusterName, topics]) => (
                   <section key={clusterName} className="space-y-4">
-                    {/* Cluster Section Header (High Contrast Crisp White Typography!) */}
-                    <div className="flex items-center justify-between pt-4 pb-2 border-b border-slate-800/80">
+                    {/* Cluster Section Header (High Contrast Official Light Typography) */}
+                    <div className="flex items-center justify-between pt-4 pb-2 border-b border-slate-300">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-2 h-5 rounded-full bg-blue-500" />
-                        <h2 className="text-lg font-bold text-white tracking-tight">
+                        <div className="w-2 h-5 rounded-full bg-[#0B4F8A]" />
+                        <h2 className="text-lg font-bold text-slate-900 tracking-tight">
                           {clusterName}
                         </h2>
-                        <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                        <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-[#0B4F8A] border border-blue-200">
                           {topics.length} {topics.length === 1 ? 'Topic' : 'Topics'}
                         </span>
                       </div>
@@ -441,8 +438,8 @@ export default function PracticeHubPage() {
         )}
       </main>
 
-      {/* 5. Cohesive Dark Slate Footer */}
-      <footer className="bg-slate-950 border-t border-slate-900 text-center py-6 text-xs text-slate-500">
+      {/* 5. Official Light Footer */}
+      <footer className="bg-white border-t border-slate-200 text-center py-6 text-xs text-slate-500">
         <p>
           Official Banking Examination CBT Portal &bull; Designed according to latest SBI &amp; IBPS TCS iON testing guidelines.
         </p>

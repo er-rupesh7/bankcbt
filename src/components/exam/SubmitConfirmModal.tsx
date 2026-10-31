@@ -20,7 +20,7 @@ export const SubmitConfirmModal: React.FC = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-150">
       <div className="bg-white rounded-lg shadow-2xl border border-gray-300 max-w-2xl w-full overflow-hidden">
         {/* Modal Header */}
-        <div className="bg-[#0e3b64] text-white px-5 py-3 flex items-center justify-between">
+        <div className="bg-[#0A2F5C] text-white px-5 py-3 flex items-center justify-between border-b-2 border-[#F59E0B]">
           <div className="flex items-center space-x-2">
             <AlertTriangle className="w-5 h-5 text-amber-400" />
             <h2 className="text-sm sm:text-base font-bold">Exam Summary & Confirmation</h2>
