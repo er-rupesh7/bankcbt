@@ -871,25 +871,31 @@ TCS iON भारतीय बैंकिंग परीक्षाओं म
 
 export function getTopicQuestions(
   topicSlug: string,
-  difficulty?: DifficultyLevel
+  difficulty?: DifficultyLevel,
+  count: number = 10,
+  seed: number = 20261031
 ): TopicPracticeQuestionData[] {
-  let questions = PRESEEDED_PRACTICE_QUESTIONS[topicSlug] || [];
+  const diff: DifficultyLevel = difficulty || 'LEVEL_1_CLERK_PRE';
+  const preseeded = PRESEEDED_PRACTICE_QUESTIONS[topicSlug] || [];
+  const filtered = preseeded.filter((q) => q.difficulty === diff);
 
-  if (questions.length === 0) {
-    // Generate route-specific, authentic examination questions via the Dynamic Engine Router
-    const diffs: DifficultyLevel[] = difficulty
-      ? [difficulty]
-      : ['LEVEL_1_CLERK_PRE', 'LEVEL_2_PO_PRE', 'LEVEL_3_MAINS'];
-
-    questions = diffs.flatMap((diff) =>
-      generateDynamicTopicQuestions(topicSlug, diff, 2, 20261031)
-    );
+  if (filtered.length >= count) {
+    return filtered.slice(0, count);
   }
 
-  if (difficulty) {
-    const filtered = questions.filter((q) => q.difficulty === difficulty);
-    return filtered.length > 0 ? filtered : questions;
+  const needed = count - filtered.length;
+  const dynamic = generateDynamicTopicQuestions(topicSlug, diff, needed, seed);
+
+  const combined: TopicPracticeQuestionData[] = [];
+  const seen = new Set<string>();
+
+  for (const q of [...filtered, ...dynamic]) {
+    const key = q.questionEn.trim().replace(/\s+/g, ' ');
+    if (!seen.has(key)) {
+      seen.add(key);
+      combined.push(q);
+    }
   }
 
-  return questions;
+  return combined;
 }

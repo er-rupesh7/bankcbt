@@ -73,12 +73,68 @@ export const TopicPracticeArena: React.FC<TopicPracticeArenaProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [showDrillSummaryModal, setShowDrillSummaryModal] = useState(false);
 
-  // Initialize session on mount or when topic/difficulty changes
+  // Change difficulty filter & regenerate questions
+  const handleDifficultyChange = async (diff: DifficultyLevel) => {
+    setSelectedDifficulty(diff);
+    try {
+      setIsGenerating(true);
+      const res = await fetch('/api/topic-engine/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topicSlug: topic.slug,
+          difficulty: diff,
+          count: 10,
+          attemptSeed: Date.now() + Math.floor(Math.random() * 100000),
+          forceFresh: true,
+        }),
+      });
+      const data = await res.json();
+      if (data.success && data.questions) {
+        startSession(topic.slug, data.questions, practiceMode, diff);
+      }
+    } catch {
+      // fallback
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  // Fetch / Generate 10 Fresh AI Questions with Entropy Seed
+  const handleGenerateFreshQuestions = async () => {
+    try {
+      setIsGenerating(true);
+      const res = await fetch('/api/topic-engine/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topicSlug: topic.slug,
+          difficulty: selectedDifficulty,
+          count: 10,
+          attemptSeed: Date.now() + Math.floor(Math.random() * 100000),
+          forceFresh: true,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.questions && data.questions.length > 0) {
+        startSession(topic.slug, data.questions, practiceMode, selectedDifficulty);
+      }
+    } catch (err) {
+      console.error('Failed to generate fresh questions:', err);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  // Initialize session on mount or when topic changes
   useEffect(() => {
-    if (activeQuestions.length === 0 || useTopicPracticeStore.getState().activeTopicSlug !== topic.slug) {
+    const storeSlug = useTopicPracticeStore.getState().activeTopicSlug;
+    const storeQuestions = useTopicPracticeStore.getState().activeQuestions;
+    if (storeQuestions.length === 0 || storeSlug !== topic.slug) {
       startSession(topic.slug, initialQuestions, practiceMode, selectedDifficulty);
     }
-  }, [topic.slug, initialQuestions, startSession, practiceMode, selectedDifficulty, activeQuestions.length]);
+  }, [topic.slug, initialQuestions, startSession, practiceMode, selectedDifficulty]);
 
   // Master timer interval
   useEffect(() => {
@@ -95,59 +151,6 @@ export const TopicPracticeArena: React.FC<TopicPracticeArenaProps> = ({
   const isCorrect = selectedOption && currentQ ? selectedOption === currentQ.correctOption : false;
   const timeSpentOnQ = questionTimeSpent[qId] || 0;
   const isBookmarked = globalBookmarks.includes(qId);
-
-  // Fetch / Generate 10 Fresh AI Questions with Entropy Seed
-  const handleGenerateFreshQuestions = async () => {
-    try {
-      setIsGenerating(true);
-      const res = await fetch('/api/topic-engine/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          topicSlug: topic.slug,
-          difficulty: selectedDifficulty,
-          count: 10,
-          attemptSeed: Date.now(),
-          forceFresh: true,
-        }),
-      });
-
-      const data = await res.json();
-      if (data.success && data.questions && data.questions.length > 0) {
-        startSession(topic.slug, data.questions, practiceMode, selectedDifficulty);
-      }
-    } catch (err) {
-      console.error('Failed to generate fresh questions:', err);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  // Change difficulty filter & regenerate questions
-  const handleDifficultyChange = async (diff: DifficultyLevel) => {
-    setSelectedDifficulty(diff);
-    try {
-      setIsGenerating(true);
-      const res = await fetch('/api/topic-engine/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          topicSlug: topic.slug,
-          difficulty: diff,
-          count: 10,
-          attemptSeed: Date.now(),
-        }),
-      });
-      const data = await res.json();
-      if (data.success && data.questions) {
-        startSession(topic.slug, data.questions, practiceMode, diff);
-      }
-    } catch {
-      // fallback
-    } finally {
-      setIsGenerating(false);
-    }
-  };
 
   const handleFinishDrill = () => {
     submitDrill();

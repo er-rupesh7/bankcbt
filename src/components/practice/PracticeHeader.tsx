@@ -19,7 +19,7 @@ export const PracticeHeader: React.FC<PracticeHeaderProps> = ({
 }) => {
   return (
     <header
-      className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] sticky top-0 z-40 h-16 flex items-center transition-colors shadow-md"
+      className="bg-[#0A2F5C] text-white border-b-[3px] border-[#F59E0B] sticky top-0 z-40 min-h-16 py-2 flex items-center transition-colors shadow-md overflow-hidden"
       style={{ backgroundColor: '#0A2F5C', color: '#ffffff' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex items-center justify-between gap-3">

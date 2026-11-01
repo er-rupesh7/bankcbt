@@ -94,7 +94,7 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
       />
 
       {/* 2. Breadcrumb & Navigation Sub-Bar */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-white border-b border-gray-200 relative z-20 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
           {/* Breadcrumbs */}
           <nav className="flex items-center space-x-1.5 text-gray-500 font-medium overflow-x-auto py-0.5">

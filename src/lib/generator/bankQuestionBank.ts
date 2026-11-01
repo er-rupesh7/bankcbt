@@ -102,6 +102,57 @@ export function generateDynamicQuadraticQuestion(
   };
 }
 
+// Balanced Options Generator (guarantees 5 unique options and rotates correct option across A-E)
+export function createBalancedOptions(
+  correctVal: string | number,
+  distractors: (string | number)[],
+  qNum: number,
+  qId: string
+): Option[] {
+  const strCorrect = correctVal.toString();
+  const rawUnique: string[] = [strCorrect];
+  for (const d of distractors) {
+    const s = d.toString();
+    if (!rawUnique.includes(s) && rawUnique.length < 5) {
+      rawUnique.push(s);
+    }
+  }
+  let fillOffset = 1;
+  const num = typeof correctVal === 'number' ? correctVal : parseInt(strCorrect, 10);
+  while (rawUnique.length < 5) {
+    if (!isNaN(num)) {
+      const candidate = (num + (fillOffset * 7)).toString();
+      if (!rawUnique.includes(candidate)) rawUnique.push(candidate);
+    } else {
+      rawUnique.push(`Option ${rawUnique.length + 1}`);
+    }
+    fillOffset++;
+  }
+
+  // Distribute correct answer across A, B, C, D, E using qNum rotation
+  const targetPos = Math.abs(qNum * 2 + 1) % 5;
+  const finalOptions: string[] = new Array(5);
+  finalOptions[targetPos] = strCorrect;
+
+  const others = rawUnique.filter((x) => x !== strCorrect);
+  let otherIdx = 0;
+  for (let i = 0; i < 5; i++) {
+    if (i !== targetPos) {
+      finalOptions[i] = others[otherIdx++];
+    }
+  }
+
+  const identifiers: ('A' | 'B' | 'C' | 'D' | 'E')[] = ['A', 'B', 'C', 'D', 'E'];
+  return finalOptions.map((optText, i) => ({
+    id: `opt_${qId}_${i}`,
+    questionId: qId,
+    identifier: identifiers[i],
+    optionTextEn: optText,
+    optionTextHi: optText,
+    isCorrect: i === targetPos,
+  }));
+}
+
 // ---------------------------------------------------------------------------
 // 2. DYNAMIC MISSING / WRONG NUMBER SERIES GENERATOR
 // ---------------------------------------------------------------------------
@@ -121,79 +172,110 @@ export function generateDynamicNumberSeriesQuestion(
   let sequence: number[] = [];
   let explanation = '';
   let answerVal: number = 0;
+  let missingIdx: number = 3;
 
   if (patternType === 1) {
     // Prime difference
-    const start = randInt(10, 30, rng) + (qNum % 7) * 3;
-    const primes = [2, 3, 5, 7, 11, 13];
+    const start = randInt(11, 45, rng);
+    const primeSets = [
+      [2, 3, 5, 7, 11, 13],
+      [3, 5, 7, 11, 13, 17],
+      [7, 11, 13, 17, 19, 23],
+    ];
+    const primes = primeSets[qNum % primeSets.length];
     sequence = [start];
     for (let i = 0; i < primes.length; i++) {
       sequence.push(sequence[sequence.length - 1] + primes[i]);
     }
-    answerVal = sequence[4];
-    explanation = `The pattern is consecutive prime differences: +2, +3, +5, +7, +11. Missing number = ${sequence[3]} + 7 = ${answerVal}.`;
+    missingIdx = 2 + (qNum % 3);
+    answerVal = sequence[missingIdx];
+    explanation = `The pattern is consecutive prime differences (${primes.slice(0, 5).map(p => `+${p}`).join(', ')}). Missing number = ${sequence[missingIdx - 1]} + ${primes[missingIdx - 1]} = ${answerVal}.`;
   } else if (patternType === 2) {
     // Multiply by 0.5 + 0.5 pattern
-    const startList = [12, 16, 20, 24, 28, 32, 36, 40];
-    const start = startList[(qNum + randInt(0, 7, rng)) % startList.length];
+    const startList = [8, 12, 16, 20, 24, 28, 32, 40, 48];
+    const start = startList[(qNum + randInt(0, 8, rng)) % startList.length];
     sequence = [start];
     const multipliers = [0.5, 1.0, 1.5, 2.0, 2.5];
     for (const m of multipliers) {
       sequence.push(Math.round(sequence[sequence.length - 1] * m + m));
     }
-    answerVal = sequence[3];
+    missingIdx = 2 + (qNum % 3);
+    answerVal = sequence[missingIdx];
     explanation = `The pattern is: ×0.5 + 0.5, ×1.0 + 1.0, ×1.5 + 1.5, ×2.0 + 2.0. Missing number = ${answerVal}.`;
   } else if (patternType === 3) {
     // Squares difference
-    const start = randInt(15, 40, rng) + (qNum % 5) * 4;
-    const sqDiffs = [4, 9, 16, 25, 36];
+    const start = randInt(15, 60, rng);
+    const sqOffset = (qNum % 3) + 1;
+    const sqDiffs = [
+      (sqOffset + 1) ** 2,
+      (sqOffset + 2) ** 2,
+      (sqOffset + 3) ** 2,
+      (sqOffset + 4) ** 2,
+      (sqOffset + 5) ** 2,
+    ];
     sequence = [start];
     for (const d of sqDiffs) {
       sequence.push(sequence[sequence.length - 1] + d);
     }
-    answerVal = sequence[4];
-    explanation = `The pattern is consecutive squares difference: +2²(+4), +3²(+9), +4²(+16), +5²(+25). Missing number = ${answerVal}.`;
+    missingIdx = 2 + (qNum % 3);
+    answerVal = sequence[missingIdx];
+    explanation = `The pattern is consecutive squares difference: ${sqDiffs.slice(0, 4).map(d => `+${d}`).join(', ')}. Missing number = ${answerVal}.`;
   } else if (patternType === 4) {
-    // Cube - 1 difference
-    const start = randInt(5, 20, rng) + (qNum % 5) * 2;
-    const diffs = [7, 26, 63, 124]; // 2^3-1, 3^3-1, 4^3-1, 5^3-1
+    // Cube +/- 1 difference
+    const start = randInt(10, 40, rng);
+    const sign = qNum % 2 === 0 ? 1 : -1;
+    const diffs = [
+      2 ** 3 + sign,
+      3 ** 3 + sign,
+      4 ** 3 + sign,
+      5 ** 3 + sign,
+    ];
     sequence = [start];
     for (const d of diffs) {
       sequence.push(sequence[sequence.length - 1] + d);
     }
-    answerVal = sequence[3];
-    explanation = `The pattern is (n³ - 1) difference: +7 (2³-1), +26 (3³-1), +63 (4³-1). Missing number = ${answerVal}.`;
+    missingIdx = 2 + (qNum % 2);
+    answerVal = sequence[missingIdx];
+    explanation = `The pattern is (n³ ${sign >= 0 ? '+' : '-'} 1) difference: ${diffs.slice(0, 3).map(d => `+${d}`).join(', ')}. Missing number = ${answerVal}.`;
   } else if (patternType === 5) {
     // Alternating addition and subtraction
-    const start = randInt(60, 100, rng) + (qNum % 7) * 5;
+    const start = randInt(50, 120, rng);
+    const addVal = [12, 14, 15, 18, 20][qNum % 5];
+    const subVal = [8, 9, 10, 12, 15][(qNum + 2) % 5];
     sequence = [start];
-    const steps = [+15, -12, +15, -12, +15];
+    const steps = [+addVal, -subVal, +addVal, -subVal, +addVal];
     for (const s of steps) {
       sequence.push(sequence[sequence.length - 1] + s);
     }
-    answerVal = sequence[4];
-    explanation = `The pattern is alternating: +15, -12, +15, -12, +15. Missing number = ${answerVal}.`;
+    missingIdx = 2 + (qNum % 3);
+    answerVal = sequence[missingIdx];
+    explanation = `The pattern is alternating: +${addVal}, -${subVal}, +${addVal}, -${subVal}, +${addVal}. Missing number = ${answerVal}.`;
   } else if (patternType === 6) {
-    // Double difference (+3, +6, +12, +24, +48)
-    const start = randInt(10, 25, rng) + (qNum % 5) * 3;
+    // Double difference (+a, +2a, +4a, +8a, +16a)
+    const start = randInt(12, 35, rng);
+    const baseDiff = [3, 4, 5, 6, 7][qNum % 5];
     sequence = [start];
-    const diffs = [3, 6, 12, 24, 48];
+    const diffs = [baseDiff, baseDiff * 2, baseDiff * 4, baseDiff * 8, baseDiff * 16];
     for (const d of diffs) {
       sequence.push(sequence[sequence.length - 1] + d);
     }
-    answerVal = sequence[4];
-    explanation = `The pattern is doubling difference: +3, +6, +12, +24, +48. Missing number = ${sequence[3]} + 24 = ${answerVal}.`;
+    missingIdx = 2 + (qNum % 3);
+    answerVal = sequence[missingIdx];
+    explanation = `The pattern is doubling difference: +${baseDiff}, +${baseDiff * 2}, +${baseDiff * 4}, +${baseDiff * 8}. Missing number = ${answerVal}.`;
   } else {
-    // Triangular difference (+1, +3, +6, +10, +15)
-    const start = randInt(20, 50, rng) + (qNum % 5) * 2;
-    sequence = [start];
-    const diffs = [1, 3, 6, 10, 15];
-    for (const d of diffs) {
-      sequence.push(sequence[sequence.length - 1] + d);
+    // Fibonacci addition
+    const n1 = randInt(3, 8, rng) + (qNum % 4);
+    const n2 = randInt(n1 + 1, n1 + 5, rng);
+    sequence = [n1, n2];
+    for (let i = 2; i < 6; i++) {
+      sequence.push(sequence[i - 1] + sequence[i - 2]);
     }
-    answerVal = sequence[4];
-    explanation = `The pattern is triangular number differences: +1, +3, +6, +10, +15. Missing number = ${sequence[3]} + 10 = ${answerVal}.`;
+    missingIdx = 3 + (qNum % 2);
+    answerVal = sequence[missingIdx];
+    explanation = `The pattern is Fibonacci addition: each term is the sum of the two preceding terms (${sequence[missingIdx - 2]} + ${sequence[missingIdx - 1]} = ${answerVal}).`;
   }
+
+  const qId = `q_num_series_${qNum}`;
 
   if (isWrongNumber) {
     const wrongIdx = randInt(2, sequence.length - 2, rng);
@@ -203,11 +285,11 @@ export function generateDynamicNumberSeriesQuestion(
     const wrongSeq = sequence.map((v, idx) => (idx === wrongIdx ? wrongVal : v));
     const displayedSeq = wrongSeq.join(', ');
 
-    const choiceNumbers = Array.from(new Set([wrongVal, sequence[0], sequence[1], sequence[sequence.length - 1], sequence[wrongIdx - 1]])).slice(0, 5).sort((a, b) => a - b);
-    const correctIdx = choiceNumbers.indexOf(wrongVal);
+    const distractors = [sequence[0], sequence[1], sequence[sequence.length - 1], sequence[wrongIdx - 1], correctVal + 10];
+    const options = createBalancedOptions(wrongVal, distractors, qNum, qId);
 
     return {
-      id: `q_num_series_${qNum}`,
+      id: qId,
       sectionId: secId,
       questionNumber: qNum,
       orderInSection: orderInSec,
@@ -221,26 +303,26 @@ export function generateDynamicNumberSeriesQuestion(
       avgIdealTimeSeconds: 30,
       conventionalSolutionEn: `${explanation}\nInstead of ${wrongVal}, the correct number should be ${correctVal}. Hence the wrong number is ${wrongVal}.`,
       shortcutTrickEn: 'Calculate consecutive differences: The wrong term produces two faulty adjacent differences.',
-      options: choiceNumbers.map((c, i) => ({
-        id: `opt_ns_${qNum}_${i}`,
-        questionId: `q_num_series_${qNum}`,
-        identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
-        optionTextEn: c.toString(),
-        optionTextHi: c.toString(),
-        isCorrect: i === correctIdx,
-      })),
+      options,
     };
   }
 
   // Create presentation string with '?' at the answer spot
-  const displayedSeq = sequence.map((val) => (val === answerVal ? '?' : val)).join(', ');
+  const displayedSeq = sequence.map((val, idx) => (idx === missingIdx ? '?' : val)).join(', ');
 
-  const distractors = [answerVal + 2, answerVal - 2, answerVal + 5, answerVal - 4];
-  const allChoices = Array.from(new Set([answerVal, ...distractors])).slice(0, 5).sort((a, b) => a - b);
-  const correctIdx = allChoices.indexOf(answerVal);
+  const distractorOffsets = [
+    [+2, -2, +5, -4],
+    [+3, -3, +6, -5],
+    [+4, -4, +8, -6],
+    [+5, -5, +10, -7],
+    [+1, -1, +4, -3],
+  ];
+  const offsets = distractorOffsets[qNum % distractorOffsets.length];
+  const distractors = offsets.map((o) => answerVal + o);
+  const options = createBalancedOptions(answerVal, distractors, qNum, qId);
 
   return {
-    id: `q_num_series_${qNum}`,
+    id: qId,
     sectionId: secId,
     questionNumber: qNum,
     orderInSection: orderInSec,
@@ -254,14 +336,7 @@ export function generateDynamicNumberSeriesQuestion(
     avgIdealTimeSeconds: 25,
     conventionalSolutionEn: explanation,
     shortcutTrickEn: 'Check step-1 difference first; if differences grow rapidly, check (n² or n³ - 1) or multiplicative factors.',
-    options: allChoices.map((c, i) => ({
-      id: `opt_ns_${qNum}_${i}`,
-      questionId: `q_num_series_${qNum}`,
-      identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
-      optionTextEn: c.toString(),
-      optionTextHi: c.toString(),
-      isCorrect: i === correctIdx,
-    })),
+    options,
   };
 }
 
@@ -300,11 +375,11 @@ export function generateDynamicSimplificationQuestion(
     const ans = a * b + pctVal - c;
 
     const distractors = [ans + 10, ans - 10, ans + 25, ans - 15];
-    const choices = Array.from(new Set([ans, ...distractors])).slice(0, 5).sort((x, y) => x - y);
-    const correctIdx = choices.indexOf(ans);
+    const qId = `q_simp_${qNum}`;
+    const options = createBalancedOptions(ans, distractors, qNum, qId);
 
     return {
-      id: `q_simp_${qNum}`,
+      id: qId,
       sectionId: secId,
       questionNumber: qNum,
       orderInSection: orderInSec,
@@ -318,14 +393,7 @@ export function generateDynamicSimplificationQuestion(
       avgIdealTimeSeconds: 20,
       conventionalSolutionEn: `Step 1: $${a} \\times ${b} = ${a * b}$\nStep 2: $${pct}\\% \\text{ of } ${baseNum} = (${pct}/100) \\times ${baseNum} = ${pctVal}$\nStep 3: $${a * b} + ${pctVal} - ${c} = ${ans}$.`,
       shortcutTrickEn: `Fraction conversion: $${pct}\\% = \\frac{${pct}}{100}$. Use unit digit calculation: $((${a} \\times ${b})\\%10 + ${pctVal}\\%10 - ${c}\\%10) = ${ans % 10}$.`,
-      options: choices.map((cVal, i) => ({
-        id: `opt_simp_${qNum}_${i}`,
-        questionId: `q_simp_${qNum}`,
-        identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
-        optionTextEn: cVal.toString(),
-        optionTextHi: cVal.toString(),
-        isCorrect: i === correctIdx,
-      })),
+      options,
     };
   } else {
     // Square root and power simplification
@@ -337,11 +405,11 @@ export function generateDynamicSimplificationQuestion(
     const ans = sqrtVal * 12 + sqVal - addVal;
 
     const distractors = [ans + 12, ans - 12, ans + 24, ans - 18];
-    const choices = Array.from(new Set([ans, ...distractors])).slice(0, 5).sort((x, y) => x - y);
-    const correctIdx = choices.indexOf(ans);
+    const qId = `q_simp_${qNum}`;
+    const options = createBalancedOptions(ans, distractors, qNum, qId);
 
     return {
-      id: `q_simp_${qNum}`,
+      id: qId,
       sectionId: secId,
       questionNumber: qNum,
       orderInSection: orderInSec,
@@ -355,14 +423,7 @@ export function generateDynamicSimplificationQuestion(
       avgIdealTimeSeconds: 20,
       conventionalSolutionEn: `Step 1: $\\sqrt{${baseRoot}} = ${sqrtVal}$\nStep 2: $${sqrtVal} \\times 12 = ${sqrtVal * 12}$\nStep 3: ${sqNum}² = $${sqVal}$\nStep 4: $${sqrtVal * 12} + ${sqVal} - ${addVal} = ${ans}$.`,
       shortcutTrickEn: `Instant evaluation: $\\sqrt{${baseRoot}} = ${sqrtVal}$, ${sqNum}² = ${sqVal}. Evaluate mental sum in <12 seconds.`,
-      options: choices.map((cVal, i) => ({
-        id: `opt_simp_${qNum}_${i}`,
-        questionId: `q_simp_${qNum}`,
-        identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
-        optionTextEn: cVal.toString(),
-        optionTextHi: cVal.toString(),
-        isCorrect: i === correctIdx,
-      })),
+      options,
     };
   }
 }
@@ -407,13 +468,13 @@ export function generateDynamicApproximationQuestion(
     const ans = pctPart + sqrtObj.root - prodPart;
 
     const distractors = [ans - 16, ans + 10, ans + 20, ans - 12];
-    const choices = Array.from(new Set([ans, ...distractors])).slice(0, 5).sort((x, y) => x - y);
-    const correctIdx = choices.indexOf(ans);
+    const qId = `q_approx_${qNum}`;
+    const options = createBalancedOptions(ans, distractors, qNum, qId);
 
     const questionFormula = `${pctObj.raw} \\text{ of } ${pctObj.baseRaw} + \\sqrt{${sqrtObj.raw}} - (${aRaw} \\times ${bRaw}) = ?`;
 
     return {
-      id: `q_approx_${qNum}`,
+      id: qId,
       sectionId: secId,
       questionNumber: qNum,
       orderInSection: orderInSec,
@@ -427,14 +488,7 @@ export function generateDynamicApproximationQuestion(
       avgIdealTimeSeconds: 25,
       conventionalSolutionEn: `Round off each term to its nearest integer/perfect square:\n1. $${pctObj.raw} \\text{ of } ${pctObj.baseRaw} \\approx ${pctObj.round}\\% \\times ${pctObj.baseRound} = ${pctPart}$\n2. $\\sqrt{${sqrtObj.raw}} \\approx \\sqrt{${sqrtObj.round}} = ${sqrtObj.root}$\n3. $(${aRaw} \\times ${bRaw}) \\approx (${aRound} \\times ${bRound}) = ${prodPart}$\n\nEquation: $${pctPart} + ${sqrtObj.root} - ${prodPart} = ${ans}$.`,
       shortcutTrickEn: `Approximation Rule: Recognize $\\sqrt{${sqrtObj.round}} = ${sqrtObj.root}$ instantly. $${pctObj.round}\\% \\text{ of } ${pctObj.baseRound} = ${pctPart}$. Mental calculation: $${pctPart} + ${sqrtObj.root} - ${prodPart} = ${ans}$.`,
-      options: choices.map((cVal, i) => ({
-        id: `opt_approx_${qNum}_${i}`,
-        questionId: `q_approx_${qNum}`,
-        identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
-        optionTextEn: cVal.toString(),
-        optionTextHi: cVal.toString(),
-        isCorrect: i === correctIdx,
-      })),
+      options,
     };
   } else {
     // Multiplicative and square approximation
@@ -446,13 +500,13 @@ export function generateDynamicApproximationQuestion(
     const ans = a * b - c;
 
     const distractors = [ans + 15, ans - 12, ans + 20, ans - 25];
-    const choices = Array.from(new Set([ans, ...distractors])).slice(0, 5).sort((x, y) => x - y);
-    const correctIdx = choices.indexOf(ans);
+    const qId = `q_approx_${qNum}`;
+    const options = createBalancedOptions(ans, distractors, qNum, qId);
 
     const questionFormula = `${aRaw} \\times ${bRaw} - ${c}.12 = ?`;
 
     return {
-      id: `q_approx_${qNum}`,
+      id: qId,
       sectionId: secId,
       questionNumber: qNum,
       orderInSection: orderInSec,
@@ -466,14 +520,7 @@ export function generateDynamicApproximationQuestion(
       avgIdealTimeSeconds: 20,
       conventionalSolutionEn: `Round off numbers:\n$${aRaw} \\approx ${a}$\n$${bRaw} \\approx ${b}$\n$${c}.12 \\approx ${c}$\nCalculation: $${a} \\times ${b} - ${c} = ${a * b} - ${c} = ${ans}$.`,
       shortcutTrickEn: 'Rounding rule: Numbers with decimal .95+ round up, .05- round down. Calculate mentally in <15 seconds.',
-      options: choices.map((cVal, i) => ({
-        id: `opt_approx_${qNum}_${i}`,
-        questionId: `q_approx_${qNum}`,
-        identifier: (['A', 'B', 'C', 'D', 'E'] as const)[i],
-        optionTextEn: cVal.toString(),
-        optionTextHi: cVal.toString(),
-        isCorrect: i === correctIdx,
-      })),
+      options,
     };
   }
 }

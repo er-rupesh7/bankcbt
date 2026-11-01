@@ -31,21 +31,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Try preseeded questions first if count is small and seed is default
-    const preseeded = getTopicQuestions(topicSlug, difficulty as DifficultyLevel);
-    let questions = preseeded;
-
-    // If more questions requested or user clicked "Generate Fresh", generate dynamically with entropy seed
-    if (questions.length < count || body.forceFresh) {
-      const dynamic = generateDynamicTopicQuestions(
-        topicSlug,
-        difficulty as DifficultyLevel,
-        count,
-        attemptSeed
-      );
-      // Combine or use dynamic set
-      questions = dynamic;
-    }
+    // Generate strictly unique, calibrated dynamic questions using the Bank Examination Engine
+    const questions = generateDynamicTopicQuestions(
+      topicSlug,
+      difficulty as DifficultyLevel,
+      count,
+      attemptSeed
+    );
 
     return NextResponse.json({
       success: true,
