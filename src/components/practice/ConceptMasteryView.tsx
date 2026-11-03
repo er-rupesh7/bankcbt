@@ -5,8 +5,8 @@
 import React, { useState } from 'react';
 import { ConceptGuideData, ContentLanguage, SyllabusTopicConfig } from '@/types/topicPractice';
 import { MathText } from '@/components/common/MathText';
+import { ConceptMarkdown } from '@/components/common/ConceptMarkdown';
 import {
-  Lightbulb,
   AlertTriangle,
   Zap,
   ChevronDown,
@@ -114,9 +114,9 @@ export const ConceptMasteryView: React.FC<ConceptMasteryViewProps> = ({
 
         {/* SVG Mental Model Diagram */}
         {conceptGuide.conceptSvgDiagram && (
-          <div className="rounded-lg overflow-hidden border border-gray-200 bg-slate-50 p-2 sm:p-4 my-4 flex items-center justify-center shadow-inner">
+          <div className="rounded-xl overflow-hidden border border-gray-200 bg-slate-50/70 p-3 sm:p-5 my-4 flex items-center justify-center shadow-inner">
             <div
-              className="w-full max-w-2xl"
+              className="w-full max-w-3xl overflow-x-auto flex justify-center [&>svg]:w-full [&>svg]:h-auto [&>svg]:max-w-full [&>svg]:block [&>svg]:mx-auto"
               dangerouslySetInnerHTML={{ __html: conceptGuide.conceptSvgDiagram }}
             />
           </div>
@@ -125,24 +125,26 @@ export const ConceptMasteryView: React.FC<ConceptMasteryViewProps> = ({
         {/* Theory Text (English & Hindi) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm leading-relaxed">
           {showEn && (
-            <div className="bg-blue-50/50 p-4 rounded-lg border border-blue-100 space-y-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100/60 px-2 py-0.5 rounded">
-                English Concept Note
-              </span>
-              <div className="text-gray-800 whitespace-pre-line prose prose-sm max-w-none">
-                <MathText text={conceptGuide.coreTheoryEn} />
+            <div className="bg-blue-50/40 p-4 sm:p-5 rounded-xl border border-blue-100 space-y-3 shadow-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-blue-100/80">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100/80 px-2.5 py-0.5 rounded-full">
+                  English Concept Note
+                </span>
+                <span className="text-[11px] text-blue-600 font-semibold">TCS iON Framework</span>
               </div>
+              <ConceptMarkdown content={conceptGuide.coreTheoryEn} theme="blue" />
             </div>
           )}
 
           {showHi && (
-            <div className="bg-emerald-50/50 p-4 rounded-lg border border-emerald-100 space-y-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">
-                हिन्दी संकल्पना विवरण
-              </span>
-              <div className="text-gray-800 whitespace-pre-line prose prose-sm max-w-none">
-                <MathText text={conceptGuide.coreTheoryHi} />
+            <div className="bg-emerald-50/40 p-4 sm:p-5 rounded-xl border border-emerald-100 space-y-3 shadow-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-emerald-100/80">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100/80 px-2.5 py-0.5 rounded-full">
+                  हिन्दी संकल्पना विवरण
+                </span>
+                <span className="text-[11px] text-emerald-600 font-semibold">टीसीएस आईओएन संकल्पना</span>
               </div>
+              <ConceptMarkdown content={conceptGuide.coreTheoryHi} theme="emerald" />
             </div>
           )}
         </div>
@@ -257,9 +259,9 @@ export const ConceptMasteryView: React.FC<ConceptMasteryViewProps> = ({
                     <span className="text-[11px] font-bold uppercase text-red-700 bg-red-100/60 px-2 py-0.5 rounded">
                       ❌ School Method (Slow)
                     </span>
-                    <p className="text-gray-700 whitespace-pre-line">
-                      <MathText text={showEn ? trick.conventionalMethodEn : trick.conventionalMethodHi} />
-                    </p>
+                    <div className="text-gray-700">
+                      <ConceptMarkdown content={showEn ? trick.conventionalMethodEn : trick.conventionalMethodHi} theme="default" />
+                    </div>
                   </div>
 
                   {/* Smart PO Shortcut */}
@@ -268,9 +270,9 @@ export const ConceptMasteryView: React.FC<ConceptMasteryViewProps> = ({
                       <Sparkles className="w-3 h-3" />
                       <span>⚡ Bank PO 20s Method (Fast)</span>
                     </span>
-                    <p className="text-gray-900 font-medium whitespace-pre-line">
-                      <MathText text={showEn ? trick.shortcutStepsEn : trick.shortcutStepsHi} />
-                    </p>
+                    <div className="text-gray-900 font-medium">
+                      <ConceptMarkdown content={showEn ? trick.shortcutStepsEn : trick.shortcutStepsHi} theme="emerald" />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -393,9 +395,9 @@ export const ConceptMasteryView: React.FC<ConceptMasteryViewProps> = ({
                           <BookOpen className="w-3.5 h-3.5 text-blue-600" />
                           <span>Foundational Step-by-Step Derivation:</span>
                         </span>
-                        <p className="text-gray-700 whitespace-pre-line pl-5 border-l-2 border-blue-200">
-                          <MathText text={showEn ? ex.conventionalSolEn : ex.conventionalSolHi} />
-                        </p>
+                        <div className="text-gray-700 pl-5 border-l-2 border-blue-200">
+                          <ConceptMarkdown content={showEn ? ex.conventionalSolEn : ex.conventionalSolHi} theme="blue" />
+                        </div>
                       </div>
 
                       {/* 20-Second Shortcut Trick */}
@@ -404,9 +406,9 @@ export const ConceptMasteryView: React.FC<ConceptMasteryViewProps> = ({
                           <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
                           <span>Bank PO 20s Shortcut Trick:</span>
                         </span>
-                        <p className="text-emerald-800 whitespace-pre-line font-medium pl-5 border-l-2 border-emerald-300">
-                          <MathText text={showEn ? ex.shortcutTrickEn : ex.shortcutTrickHi} />
-                        </p>
+                        <div className="text-emerald-800 font-medium pl-5 border-l-2 border-emerald-300">
+                          <ConceptMarkdown content={showEn ? ex.shortcutTrickEn : ex.shortcutTrickHi} theme="emerald" />
+                        </div>
                       </div>
 
                       {/* Final Answer Badge */}

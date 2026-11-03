@@ -212,7 +212,9 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
                     <div className="bg-white p-2 rounded border border-gray-200 font-mono text-center text-blue-900 my-1">
                       <MathText text={`$$${f.latexFormula}$$`} />
                     </div>
-                    <p className="text-gray-600 text-xs">{f.explanationEn}</p>
+                    <div className="text-gray-600 text-xs">
+                      <MathText text={f.explanationEn} />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -226,9 +228,9 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
                 {conceptGuide.shortcutTricks.map((t, i) => (
                   <div key={i} className="bg-emerald-50/60 p-3 rounded-lg border border-emerald-200 space-y-1">
                     <span className="font-bold text-emerald-900 text-xs block">{t.trickName}</span>
-                    <p className="text-emerald-800 text-xs whitespace-pre-line font-medium">
-                      {t.shortcutStepsEn}
-                    </p>
+                    <div className="text-emerald-800 text-xs font-medium whitespace-pre-line">
+                      <MathText text={t.shortcutStepsEn} />
+                    </div>
                   </div>
                 ))}
               </div>
@@ -242,10 +244,13 @@ export const TopicWorkspaceClient: React.FC<TopicWorkspaceClientProps> = ({
                 {conceptGuide.commonTraps.map((tr, i) => (
                   <div key={i} className="bg-red-50/60 p-3 rounded-lg border border-red-200 space-y-1">
                     <span className="font-bold text-red-900 text-xs block">{tr.trapTitle}</span>
-                    <p className="text-red-700 text-xs">{tr.mistakeStudentsMake}</p>
-                    <p className="text-emerald-800 text-xs font-semibold pt-1">
-                      ✓ Avoid: {tr.howToAvoid}
-                    </p>
+                    <div className="text-red-700 text-xs">
+                      <MathText text={tr.mistakeStudentsMake} />
+                    </div>
+                    <div className="text-emerald-800 text-xs font-semibold pt-1 flex items-start space-x-1">
+                      <span>✓ Avoid:</span>
+                      <MathText text={tr.howToAvoid} />
+                    </div>
                   </div>
                 ))}
               </div>

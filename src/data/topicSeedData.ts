@@ -38,30 +38,30 @@ export const PRESEEDED_CONCEPT_GUIDES: Record<string, ConceptGuideData> = {
    - कुछ A, B नहीं हैं (Some A are not B)
    - *मुख्य निष्कर्ष:* सभी A कभी भी B नहीं हो सकते, लेकिन सभी B, A हो सकते हैं।
 4. **"केवल A, B हैं (Only A are B)":** इसका अर्थ है "सभी B, A हैं" और B का संबंध किसी तीसरे पद से कभी नहीं हो सकता।`,
-    conceptSvgDiagram: `<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+    conceptSvgDiagram: `<svg width="100%" height="auto" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto max-w-full block">
   <rect width="600" height="300" fill="#f8fafc" rx="12" />
-  <text x="300" y="30" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="16">Syllogism: &quot;Only a few A are B&quot; Venn Model</text>
+  <text x="300" y="30" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="16">Syllogism: &quot;Only a few A are B&quot; Venn Model</text>
   
   <!-- Circle A -->
-  <circle cx="230" cy="150" r="95" fill="#3b82f6" fillOpacity="0.2" stroke="#2563eb" strokeWidth="2.5" />
-  <text x="170" y="150" fill="#1e40af" fontWeight="bold" fontSize="18">Set A</text>
+  <circle cx="230" cy="150" r="95" fill="#3b82f6" fill-opacity="0.2" stroke="#2563eb" stroke-width="2.5" />
+  <text x="170" y="150" fill="#1e40af" font-weight="bold" font-size="18">Set A</text>
   
   <!-- Circle B -->
-  <circle cx="370" cy="150" r="95" fill="#10b981" fillOpacity="0.2" stroke="#059669" strokeWidth="2.5" />
-  <text x="430" y="150" fill="#065f46" fontWeight="bold" fontSize="18">Set B</text>
+  <circle cx="370" cy="150" r="95" fill="#10b981" fill-opacity="0.2" stroke="#059669" stroke-width="2.5" />
+  <text x="430" y="150" fill="#065f46" font-weight="bold" font-size="18">Set B</text>
   
   <!-- Overlap Region -->
-  <text x="300" y="145" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="13">Some A</text>
-  <text x="300" y="165" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="13">are B (✓)</text>
+  <text x="300" y="145" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="13">Some A</text>
+  <text x="300" y="165" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="13">are B (✓)</text>
   
   <!-- Shaded Restricted A -->
-  <path d="M 180 100 Q 210 150 180 200" stroke="#ef4444" strokeWidth="3" strokeDasharray="4 4" fill="none" />
-  <text x="145" y="240" fill="#dc2626" fontWeight="bold" fontSize="12">⚠️ Some A are NOT B</text>
-  <text x="145" y="258" fill="#64748b" fontSize="11">(All A can NEVER be B)</text>
+  <path d="M 180 100 Q 210 150 180 200" stroke="#ef4444" stroke-width="3" stroke-dasharray="4 4" fill="none" />
+  <text x="145" y="240" fill="#dc2626" font-weight="bold" font-size="12">⚠️ Some A are NOT B</text>
+  <text x="145" y="258" fill="#64748b" font-size="11">(All A can NEVER be B)</text>
   
   <!-- Possibility Rule -->
-  <text x="440" y="240" fill="#059669" fontWeight="bold" fontSize="12">✓ All B can be A</text>
-  <text x="440" y="258" fill="#64748b" fontSize="11">(Allowed possibility)</text>
+  <text x="440" y="240" fill="#059669" font-weight="bold" font-size="12">✓ All B can be A</text>
+  <text x="440" y="258" fill="#64748b" font-size="11">(Allowed possibility)</text>
 </svg>`,
     formulasAndRules: [
       {
@@ -171,27 +171,27 @@ If in both equations, the constant term $c$ is negative (e.g. $x^2 + 5x - 24 = 0
 
 ### 2-सेकंड "संबंध निर्धारित नहीं किया जा सकता (CND)" नियम:
 यदि दोनों समीकरणों में अचर पद $c$ ऋणात्मक ($-$) है, तो उत्तर हमेशा **"संबंध स्थापित नहीं किया जा सकता ($x = y$ या CND)"** होगा। गुणनखंड निकालने की कोई आवश्यकता नहीं है!`,
-    conceptSvgDiagram: `<svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
-  <rect width="600" height="280" fill="#f8fafc" rx="12" />
-  <text x="300" y="32" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="16">Quadratic Equation: 20-Second Sign Matrix</text>
+    conceptSvgDiagram: `<svg width="100%" height="auto" viewBox="0 0 660 280" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto max-w-full block">
+  <rect width="660" height="280" fill="#f8fafc" rx="12" />
+  <text x="330" y="32" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="16">Quadratic Equation: 20-Second Sign Matrix</text>
 
   <!-- Box 1: Minus-Plus to Plus-Plus -->
-  <rect x="40" y="60" width="240" height="90" rx="8" fill="#ecfdf5" stroke="#10b981" strokeWidth="2" />
-  <text x="55" y="88" fill="#065f46" fontWeight="bold" fontSize="14">Case 1: ax² - bx + c = 0</text>
-  <text x="55" y="112" fill="#047857" fontSize="13">Signs: ( - , + ) ➔ Roots: ( + , + )</text>
-  <text x="55" y="134" fill="#64748b" fontSize="11">Example: x² - 7x + 12 = 0 ➔ x = +4, +3</text>
+  <rect x="35" y="55" width="280" height="95" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2" />
+  <text x="50" y="82" fill="#065f46" font-weight="bold" font-size="14">Case 1: ax² - bx + c = 0</text>
+  <text x="50" y="106" fill="#047857" font-size="13">Signs: ( - , + ) ➔ Roots: ( + , + )</text>
+  <text x="50" y="130" fill="#64748b" font-size="11.5">Example: x² - 7x + 12 = 0 ➔ x = +4, +3</text>
 
   <!-- Box 2: Plus-Plus to Minus-Minus -->
-  <rect x="320" y="60" width="240" height="90" rx="8" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2" />
-  <text x="335" y="88" fill="#1e40af" fontWeight="bold" fontSize="14">Case 2: ax² + bx + c = 0</text>
-  <text x="335" y="112" fill="#1d4ed8" fontSize="13">Signs: ( + , + ) ➔ Roots: ( - , - )</text>
-  <text x="335" y="134" fill="#64748b" fontSize="11">Example: y² + 9y + 20 = 0 ➔ y = -4, -5</text>
+  <rect x="345" y="55" width="280" height="95" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+  <text x="360" y="82" fill="#1e40af" font-weight="bold" font-size="14">Case 2: ax² + bx + c = 0</text>
+  <text x="360" y="106" fill="#1d4ed8" font-size="13">Signs: ( + , + ) ➔ Roots: ( - , - )</text>
+  <text x="360" y="130" fill="#64748b" font-size="11.5">Example: y² + 9y + 20 = 0 ➔ y = -4, -5</text>
 
   <!-- Box 3: 2-Second Trap Shortcut -->
-  <rect x="40" y="170" width="520" height="85" rx="8" fill="#fef2f2" stroke="#ef4444" strokeWidth="2" />
-  <text x="55" y="198" fill="#991b1b" fontWeight="bold" fontSize="14">⚡ 2-Second Super Shortcut: Both Constant Terms Negative</text>
-  <text x="55" y="222" fill="#b91c1c" fontSize="13">If c₁ &lt; 0 and c₂ &lt; 0 (e.g. x² + 3x - 18 = 0 and y² - 4y - 21 = 0)</text>
-  <text x="55" y="242" fill="#b91c1c" fontWeight="bold" fontSize="13">➔ Direct Answer: x = y or Relationship Cannot Be Established (CND)</text>
+  <rect x="35" y="165" width="590" height="95" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" />
+  <text x="50" y="195" fill="#991b1b" font-weight="bold" font-size="14">⚡ 2-Second Super Shortcut: Both Constant Terms Negative</text>
+  <text x="50" y="220" fill="#b91c1c" font-size="12.5">If c₁ &lt; 0 and c₂ &lt; 0 (e.g. x² + 3x - 18 = 0 and y² - 4y - 21 = 0)</text>
+  <text x="50" y="242" fill="#b91c1c" font-weight="bold" font-size="12.5">➔ Direct Answer: x = y or Relationship Cannot Be Established (CND)</text>
 </svg>`,
     formulasAndRules: [
       {
@@ -306,25 +306,25 @@ $$\\text{दूरी (Distance)} = \\text{चाल (Speed)} \\times \\text{स
    - ऊर्ध्वप्रवाह (Upstream) चाल: $U = u - v$
    - शांत जल में नाव: $u = \\frac{D + U}{2}$
    - धारा की चाल: $v = \\frac{D - U}{2}$`,
-    conceptSvgDiagram: `<svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+    conceptSvgDiagram: `<svg width="100%" height="auto" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto max-w-full block">
   <rect width="600" height="280" fill="#f8fafc" rx="12" />
-  <text x="300" y="32" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="16">Boats &amp; Streams: Vector Speed Analysis</text>
+  <text x="300" y="32" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="16">Boats &amp; Streams: Vector Speed Analysis</text>
 
   <!-- Downstream Section -->
-  <rect x="40" y="60" width="240" height="180" rx="8" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2" />
-  <text x="160" y="90" textAnchor="middle" fill="#1e40af" fontWeight="bold" fontSize="15">Downstream (धारा के अनुकूल)</text>
-  <path d="M 80 130 L 220 130" stroke="#2563eb" strokeWidth="4" markerEnd="url(#arrow)" />
-  <text x="160" y="120" textAnchor="middle" fill="#1d4ed8" fontSize="12">Boat (u) ➔ Stream (v) ➔</text>
-  <text x="160" y="165" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="16">D = u + v</text>
-  <text x="160" y="200" textAnchor="middle" fill="#64748b" fontSize="12">Speeds add up (Fastest)</text>
+  <rect x="40" y="60" width="240" height="180" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+  <text x="160" y="90" text-anchor="middle" fill="#1e40af" font-weight="bold" font-size="15">Downstream (धारा के अनुकूल)</text>
+  <path d="M 80 130 L 220 130" stroke="#2563eb" stroke-width="4" />
+  <text x="160" y="120" text-anchor="middle" fill="#1d4ed8" font-size="12">Boat (u) ➔ Stream (v) ➔</text>
+  <text x="160" y="165" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="16">D = u + v</text>
+  <text x="160" y="200" text-anchor="middle" fill="#64748b" font-size="12">Speeds add up (Fastest)</text>
 
   <!-- Upstream Section -->
-  <rect x="320" y="60" width="240" height="180" rx="8" fill="#fef2f2" stroke="#ef4444" strokeWidth="2" />
-  <text x="440" y="90" textAnchor="middle" fill="#991b1b" fontWeight="bold" fontSize="15">Upstream (धारा के प्रतिकूल)</text>
-  <path d="M 500 130 L 380 130" stroke="#dc2626" strokeWidth="4" />
-  <text x="440" y="120" textAnchor="middle" fill="#b91c1c" fontSize="12">Boat (u) ➔ ⚡ 🠔 Stream (v)</text>
-  <text x="440" y="165" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="16">U = u - v</text>
-  <text x="440" y="200" textAnchor="middle" fill="#64748b" fontSize="12">Speeds subtract (Slower)</text>
+  <rect x="320" y="60" width="240" height="180" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" />
+  <text x="440" y="90" text-anchor="middle" fill="#991b1b" font-weight="bold" font-size="15">Upstream (धारा के प्रतिकूल)</text>
+  <path d="M 500 130 L 380 130" stroke="#dc2626" stroke-width="4" />
+  <text x="440" y="120" text-anchor="middle" fill="#b91c1c" font-size="12">Boat (u) ➔ ⚡ 🠔 Stream (v)</text>
+  <text x="440" y="165" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="16">U = u - v</text>
+  <text x="440" y="200" text-anchor="middle" fill="#64748b" font-size="12">Speeds subtract (Slower)</text>
 </svg>`,
     formulasAndRules: [
       {
@@ -442,21 +442,21 @@ $$\\text{दूरी (Distance)} = \\text{चाल (Speed)} \\times \\text{स
    वाक्य के प्रारंभ में प्रयुक्त पार्टिसिपल सीधे कॉमा के बाद आने वाले कर्ता से संबंधित होना चाहिए।
 5. **तुलना का नियम (That of / Those of):**
    समान वस्तुओं या विशेषताओं की ही तुलना की जानी चाहिए।`,
-    conceptSvgDiagram: `<svg viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+    conceptSvgDiagram: `<svg width="100%" height="auto" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto max-w-full block">
   <rect width="600" height="280" fill="#f8fafc" rx="12" />
-  <text x="300" y="32" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="16">Banking Grammar: Subject-Verb Inversion Architecture</text>
+  <text x="300" y="32" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="16">Banking Grammar: Subject-Verb Inversion Architecture</text>
 
   <!-- Rule 1 -->
-  <rect x="40" y="60" width="520" height="90" rx="8" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2" />
-  <text x="60" y="88" fill="#1e40af" fontWeight="bold" fontSize="14">Rule 1: Negative Adverb Opening ➔ Auxiliary BEFORE Subject</text>
-  <text x="60" y="112" fill="#0f172a" fontSize="13">Hardly / Scarcely + [had / did] + Subject + V3 + ... + WHEN + clause</text>
-  <text x="60" y="132" fill="#059669" fontWeight="bold" fontSize="12">✓ Example: Hardly HAD the manager ARRIVED when the bell rang.</text>
+  <rect x="40" y="60" width="520" height="90" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+  <text x="60" y="88" fill="#1e40af" font-weight="bold" font-size="14">Rule 1: Negative Adverb Opening ➔ Auxiliary BEFORE Subject</text>
+  <text x="60" y="112" fill="#0f172a" font-size="13">Hardly / Scarcely + [had / did] + Subject + V3 + ... + WHEN + clause</text>
+  <text x="60" y="132" fill="#059669" font-weight="bold" font-size="12">✓ Example: Hardly HAD the manager ARRIVED when the bell rang.</text>
 
   <!-- Rule 2 -->
-  <rect x="40" y="165" width="520" height="90" rx="8" fill="#fef2f2" stroke="#ef4444" strokeWidth="2" />
-  <text x="60" y="193" fill="#991b1b" fontWeight="bold" fontSize="14">Rule 2: Correlative Pair Trap (Common TCS iON Error)</text>
-  <text x="60" y="217" fill="#b91c1c" fontSize="13">❌ Hardly had the bell rung THAN the students left (Wrong pair)</text>
-  <text x="60" y="237" fill="#15803d" fontWeight="bold" fontSize="12">✓ Correct: Hardly ➔ WHEN | No sooner ➔ THAN</text>
+  <rect x="40" y="165" width="520" height="90" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" />
+  <text x="60" y="193" fill="#991b1b" font-weight="bold" font-size="14">Rule 2: Correlative Pair Trap (Common TCS iON Error)</text>
+  <text x="60" y="217" fill="#b91c1c" font-size="13">❌ Hardly had the bell rung THAN the students left (Wrong pair)</text>
+  <text x="60" y="237" fill="#15803d" font-weight="bold" font-size="12">✓ Correct: Hardly ➔ WHEN | No sooner ➔ THAN</text>
 </svg>`,
     formulasAndRules: [
       {
@@ -785,23 +785,23 @@ TCS iON भारतीय बैंकिंग परीक्षाओं म
    - **क्लर्क प्रीलिम्स:** एकल-चरणीय प्रत्यक्ष गणना (लक्ष्य समय: 25–35 सेकंड)।
    - **पीओ प्रीलिम्स:** द्वि-चरणीय वैचारिक प्रश्न एवं जाल विकल्प (लक्ष्य समय: 45–60 सेकंड)।
    - **मेन्स चरण:** कथन आधारित, मात्रा तुलना (Q1 vs Q2) एवं बहु-चर आधारित प्रश्न (लक्ष्य समय: 75–120 सेकंड)।`,
-    conceptSvgDiagram: `<svg viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+    conceptSvgDiagram: `<svg width="100%" height="auto" viewBox="0 0 600 240" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto max-w-full block">
   <rect width="600" height="240" fill="#f8fafc" rx="12" />
-  <text x="300" y="36" textAnchor="middle" fill="#0f172a" fontWeight="bold" fontSize="16">${titleEn} Concept Mastery</text>
-  <rect x="50" y="70" width="150" height="120" rx="8" fill="#eff6ff" stroke="#3b82f6" strokeWidth="2" />
-  <text x="125" y="110" textAnchor="middle" fill="#1e40af" fontWeight="bold" fontSize="14">Level 1</text>
-  <text x="125" y="135" textAnchor="middle" fill="#1e40af" fontSize="12">Clerk Prelims</text>
-  <text x="125" y="160" textAnchor="middle" fill="#64748b" fontSize="11">Speed &amp; Basics</text>
+  <text x="300" y="36" text-anchor="middle" fill="#0f172a" font-weight="bold" font-size="16">${titleEn} Concept Mastery</text>
+  <rect x="50" y="70" width="150" height="120" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" />
+  <text x="125" y="110" text-anchor="middle" fill="#1e40af" font-weight="bold" font-size="14">Level 1</text>
+  <text x="125" y="135" text-anchor="middle" fill="#1e40af" font-size="12">Clerk Prelims</text>
+  <text x="125" y="160" text-anchor="middle" fill="#64748b" font-size="11">Speed &amp; Basics</text>
   
-  <rect x="225" y="70" width="150" height="120" rx="8" fill="#ecfdf5" stroke="#10b981" strokeWidth="2" />
-  <text x="300" y="110" textAnchor="middle" fill="#065f46" fontWeight="bold" fontSize="14">Level 2</text>
-  <text x="300" y="135" textAnchor="middle" fill="#065f46" fontSize="12">PO Prelims</text>
-  <text x="300" y="160" textAnchor="middle" fill="#64748b" fontSize="11">Traps &amp; Ratios</text>
+  <rect x="225" y="70" width="150" height="120" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2" />
+  <text x="300" y="110" text-anchor="middle" fill="#065f46" font-weight="bold" font-size="14">Level 2</text>
+  <text x="300" y="135" text-anchor="middle" fill="#065f46" font-size="12">PO Prelims</text>
+  <text x="300" y="160" text-anchor="middle" fill="#64748b" font-size="11">Traps &amp; Ratios</text>
   
-  <rect x="400" y="70" width="150" height="120" rx="8" fill="#fef2f2" stroke="#ef4444" strokeWidth="2" />
-  <text x="475" y="110" textAnchor="middle" fill="#991b1b" fontWeight="bold" fontSize="14">Level 3</text>
-  <text x="475" y="135" textAnchor="middle" fill="#991b1b" fontSize="12">Mains Analysis</text>
-  <text x="475" y="160" textAnchor="middle" fill="#64748b" fontSize="11">Multi-Variable</text>
+  <rect x="400" y="70" width="150" height="120" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2" />
+  <text x="475" y="110" text-anchor="middle" fill="#991b1b" font-weight="bold" font-size="14">Level 3</text>
+  <text x="475" y="135" text-anchor="middle" fill="#991b1b" font-size="12">Mains Analysis</text>
+  <text x="475" y="160" text-anchor="middle" fill="#64748b" font-size="11">Multi-Variable</text>
 </svg>`,
     formulasAndRules: [
       {
