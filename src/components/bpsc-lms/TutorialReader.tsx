@@ -35,9 +35,160 @@ import {
   Edit3,
   Trash2,
   Save,
-  Languages
+  Languages,
+  Flame,
+  Star,
+  History as HistoryIcon,
+  ShieldAlert
 } from 'lucide-react';
 import Link from 'next/link';
+
+// ============================================================================
+// RICH MARKDOWN & HIGHLIGHTER FORMATTER
+// Turns raw asterisks, bullets, formulas, and story blocks into human-readable,
+// beautifully styled, multi-colored typography with yellow highlighters.
+// ============================================================================
+function parseInlineFormatting(text: string): React.ReactNode[] {
+  if (!text) return [];
+
+  // Regex to match **bold**, ==highlight==, `code`, and $formula$
+  const tokenRegex = /(\*\*[\s\S]+?\*\*|==[\s\S]+?==|`[\s\S]+?`|\$[\s\S]+?\$)/g;
+  const parts = text.split(tokenRegex);
+
+  return parts.map((part, idx) => {
+    if (!part) return null;
+
+    // 1. Bold text: **text**
+    if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
+      const inner = part.slice(2, -2);
+      return (
+        <strong key={idx} className="font-extrabold text-slate-900 dark:text-amber-100">
+          {parseInlineFormatting(inner)}
+        </strong>
+      );
+    }
+
+    // 2. Yellow Highlighter: ==text==
+    if (part.startsWith('==') && part.endsWith('==') && part.length >= 4) {
+      const inner = part.slice(2, -2);
+      return (
+        <mark
+          key={idx}
+          className="bg-yellow-200/90 text-amber-950 dark:bg-yellow-400/25 dark:text-yellow-200 px-1.5 py-0.5 rounded font-bold border-b-2 border-yellow-400 dark:border-yellow-500 shadow-sm mx-0.5"
+        >
+          {inner}
+        </mark>
+      );
+    }
+
+    // 3. Inline code: `code`
+    if (part.startsWith('`') && part.endsWith('`') && part.length >= 2) {
+      const inner = part.slice(1, -1);
+      return (
+        <code
+          key={idx}
+          className="rounded bg-indigo-50 dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-slate-700 px-1.5 py-0.5 font-mono text-xs font-semibold"
+        >
+          {inner}
+        </code>
+      );
+    }
+
+    // 4. Math formula: $formula$
+    if (part.startsWith('$') && part.endsWith('$') && part.length >= 2) {
+      const inner = part.slice(1, -1)
+        .replace(/\\rightarrow/g, ' → ')
+        .replace(/\\times/g, ' × ')
+        .replace(/\\le/g, ' ≤ ')
+        .replace(/\\ge/g, ' ≥ ')
+        .replace(/\\theta/g, 'θ')
+        .replace(/\\approx/g, ' ≈ ');
+      return (
+        <span
+          key={idx}
+          className="font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50/80 dark:bg-blue-950/40 px-1.5 py-0.5 rounded text-xs mx-0.5 border border-blue-200/60 dark:border-blue-900/40"
+        >
+          {inner}
+        </span>
+      );
+    }
+
+    // Regular text (substitute escaped LaTeX arrows if any)
+    const cleanText = part
+      .replace(/\\rightarrow/g, ' → ')
+      .replace(/\\times/g, ' × ');
+
+    return <React.Fragment key={idx}>{cleanText}</React.Fragment>;
+  });
+}
+
+function renderRichLmsText(rawText: string, isHindi = false): React.ReactNode {
+  if (!rawText) return null;
+
+  const lines = rawText.split('\n');
+
+  return (
+    <div className={`space-y-3 ${isHindi ? 'font-hindi' : ''}`}>
+      {lines.map((line, lineIdx) => {
+        const trimmed = line.trim();
+        if (!trimmed) return <div key={lineIdx} className="h-1.5" />;
+
+        // Sub-headings (e.g. ### Title or **Title:**)
+        if (trimmed.startsWith('### ')) {
+          return (
+            <h4
+              key={lineIdx}
+              className="text-base font-extrabold text-slate-900 dark:text-white pt-3 pb-1 border-b border-slate-100 dark:border-slate-800 flex items-center gap-2"
+            >
+              <span className="h-2 w-2 rounded-full bg-blue-600" />
+              {trimmed.replace('### ', '')}
+            </h4>
+          );
+        }
+
+        // Bullet item (* or -)
+        const isBullet = trimmed.startsWith('* ') || trimmed.startsWith('- ');
+        if (isBullet) {
+          const content = trimmed.slice(2).trim();
+          return (
+            <div key={lineIdx} className="flex items-start gap-2.5 my-1.5 pl-1 sm:pl-2">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300 font-black text-xs mt-0.5 shadow-xs">
+                •
+              </span>
+              <div className="flex-1 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+                {parseInlineFormatting(content)}
+              </div>
+            </div>
+          );
+        }
+
+        // Numbered list item (e.g. 1. or 2.)
+        const numberedMatch = trimmed.match(/^(\d+)\.\s+(.+)$/);
+        if (numberedMatch) {
+          const num = numberedMatch[1];
+          const content = numberedMatch[2];
+          return (
+            <div key={lineIdx} className="flex items-start gap-2.5 my-1.5 pl-1 sm:pl-2">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300 font-bold text-xs mt-0.5">
+                {num}
+              </span>
+              <div className="flex-1 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+                {parseInlineFormatting(content)}
+              </div>
+            </div>
+          );
+        }
+
+        // Regular paragraph with rich inline formatting
+        return (
+          <p key={lineIdx} className="text-sm leading-relaxed text-slate-800 dark:text-slate-200">
+            {parseInlineFormatting(trimmed)}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
 
 interface TutorialReaderProps {
   course: LMSCourse;
@@ -441,6 +592,87 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
         </div>
 
         {/* ======================================================== */}
+        {/* EXAM TRACK RECORD & QUESTION PROBABILITY SPOTLIGHT CARD  */}
+        {/* ======================================================== */}
+        <div className="mb-6 rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 via-yellow-50/60 to-orange-50/40 p-5 shadow-sm dark:border-amber-800/70 dark:from-amber-950/30 dark:via-slate-900 dark:to-slate-900">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-3 border-b border-amber-200/80 dark:border-amber-800/50 pb-3">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500 text-white font-black text-sm shadow-sm">
+                🏛️
+              </span>
+              <div>
+                <h3 className="text-xs font-black uppercase tracking-wider text-amber-950 dark:text-amber-200 flex items-center gap-1.5">
+                  Official BPSC TRE Exam Track Record & Question Probability
+                  <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
+                </h3>
+                <p className="text-[11px] text-amber-800 dark:text-amber-400">
+                  Real question trend analysis across official TRE 1.0, 2.0 & 3.0 question booklets
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-black shadow-xs ${
+                currentTopic.examImportance === 'CRITICAL_HIGH_YIELD'
+                  ? 'bg-rose-600 text-white shadow-rose-200'
+                  : currentTopic.examImportance === 'HIGH_YIELD'
+                  ? 'bg-amber-600 text-white shadow-amber-200'
+                  : 'bg-blue-600 text-white shadow-blue-200'
+              }`}>
+                <Flame className="h-3.5 w-3.5" />
+                {currentTopic.examImportance === 'CRITICAL_HIGH_YIELD' && '🔥 CRITICAL: HIGH-YIELD (Must-Read)'}
+                {currentTopic.examImportance === 'HIGH_YIELD' && '⭐ HIGH YIELD (Repeated Pattern)'}
+                {(!currentTopic.examImportance || currentTopic.examImportance === 'MODERATE') && '📘 ESSENTIAL SYLLABUS CORE'}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div className="rounded-xl bg-white/90 dark:bg-slate-800/80 p-3 border border-amber-200/70 dark:border-slate-700 shadow-2xs">
+              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">
+                Was a question ever asked?
+              </span>
+              <span className="font-extrabold text-emerald-700 dark:text-emerald-400 flex items-center gap-1 text-sm">
+                ✅ YES: OFFICIALLY ASKED
+              </span>
+            </div>
+
+            <div className="rounded-xl bg-white/90 dark:bg-slate-800/80 p-3 border border-amber-200/70 dark:border-slate-700 shadow-2xs">
+              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">
+                Verified BPSC Papers
+              </span>
+              <span className="font-bold text-slate-900 dark:text-slate-100">
+                {currentTopic.pyqAppearanceSummary || `${currentTopic.pyqCount} Verified PYQs (TRE 1.0, 2.0 & 3.0)`}
+              </span>
+            </div>
+
+            <div className="rounded-xl bg-white/90 dark:bg-slate-800/80 p-3 border border-amber-200/70 dark:border-slate-700 shadow-2xs">
+              <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">
+                TRE 4.0 Expected Weightage
+              </span>
+              <span className="font-extrabold text-indigo-700 dark:text-indigo-400">
+                🎯 1 to 2 Questions (~1–2 Marks)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Story Mode Banner if History / Narrative Topic */}
+        {(currentTopic.isStoryFormat || currentSubject.key === 'BIHAR_SPECIAL_GK' || currentSubject.key === 'INDIAN_HISTORY') && (
+          <div className="mb-6 rounded-2xl border-2 border-amber-300/80 bg-gradient-to-r from-amber-100/70 via-orange-50 to-yellow-100/50 p-4 dark:border-amber-700/60 dark:from-amber-950/40 dark:via-slate-900 dark:to-slate-900 flex items-center gap-3 shadow-xs">
+            <span className="text-2xl shrink-0">📜</span>
+            <div>
+              <h4 className="text-xs font-black uppercase tracking-wider text-amber-900 dark:text-amber-200 flex items-center gap-1.5">
+                Historical Story Mode Active {currentTopic.storyEra ? `• ${currentTopic.storyEra}` : '• Complete Narrative'}
+              </h4>
+              <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
+                Taught in a captivating chronological story format with hero spotlights, battle accounts, and memorable dialogue so you can effortlessly retain every historical fact for BPSC TRE.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
         {/* SECTION 2: LEARNING OBJECTIVES                           */}
         {/* ======================================================== */}
         <div className="mb-8 rounded-xl border border-blue-200 bg-blue-50/50 p-5 dark:border-blue-900/40 dark:bg-blue-950/20">
@@ -465,13 +697,13 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
           <h3 className="text-sm font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Conceptual Foundation
           </h3>
-          <p className="text-base text-slate-800 dark:text-slate-200 leading-relaxed">
-            {tut.introductionEn}
-          </p>
+          <div className="text-base text-slate-800 dark:text-slate-200 leading-relaxed">
+            {renderRichLmsText(tut.introductionEn)}
+          </div>
           {languagePreference !== 'EN' && tut.introductionHi && (
-            <p className="text-sm text-slate-600 dark:text-slate-400 font-hindi leading-relaxed border-l-2 border-slate-300 pl-3 dark:border-slate-700">
-              {tut.introductionHi}
-            </p>
+            <div className="text-sm text-slate-600 dark:text-slate-400 font-hindi leading-relaxed border-l-2 border-slate-300 pl-3 dark:border-slate-700 mt-2">
+              {renderRichLmsText(tut.introductionHi, true)}
+            </div>
           )}
         </div>
 
@@ -485,9 +717,9 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
                 {sec.title}
               </h3>
 
-              {/* Markdown Content */}
-              <div className="prose prose-slate dark:prose-invert max-w-none text-sm leading-relaxed whitespace-pre-line text-slate-700 dark:text-slate-300">
-                {sec.contentMarkdownEn}
+              {/* Rich Markdown & Highlighter Content */}
+              <div className="max-w-none text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                {renderRichLmsText(sec.contentMarkdownEn)}
               </div>
 
               {/* Code Snippet if present */}
@@ -578,7 +810,7 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
               {tut.importantDefinitions.map((def, idx) => (
                 <div key={idx} className="rounded-xl border border-slate-100 bg-slate-50/60 p-4 dark:border-slate-800 dark:bg-slate-800/40">
                   <h4 className="text-xs font-bold text-blue-700 dark:text-blue-400 mb-1">{def.term}</h4>
-                  <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{def.definitionEn}</p>
+                  <div className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{parseInlineFormatting(def.definitionEn)}</div>
                   {languagePreference !== 'EN' && def.definitionHi && (
                     <p className="text-xs text-slate-500 dark:text-slate-400 font-hindi mt-1">{def.definitionHi}</p>
                   )}
@@ -601,10 +833,10 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
               {tut.rulesAndFormulas.map((rf, idx) => (
                 <div key={idx} className="rounded-xl bg-white p-4 shadow-sm border border-slate-200 dark:bg-slate-900 dark:border-slate-800">
                   <div className="text-xs font-bold text-slate-800 dark:text-white mb-1">{rf.title}</div>
-                  <div className="rounded-lg bg-slate-100 p-2.5 font-mono text-xs font-semibold text-blue-700 dark:bg-slate-800 dark:text-blue-300 my-2 overflow-x-auto">
+                  <div className="rounded-lg bg-blue-50/80 p-2.5 font-mono text-xs font-bold text-blue-800 dark:bg-slate-800 dark:text-blue-300 my-2 overflow-x-auto border border-blue-200/60 dark:border-slate-700">
                     {rf.formulaOrRule}
                   </div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">{rf.explanationEn}</p>
+                  <div className="text-xs text-slate-600 dark:text-slate-400">{parseInlineFormatting(rf.explanationEn)}</div>
                 </div>
               ))}
             </div>
@@ -627,15 +859,19 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">
                   {ex.problemEn}
                 </p>
-                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-800/40 text-xs text-slate-700 dark:text-slate-300 whitespace-pre-line leading-relaxed">
-                  {ex.stepByStepSolutionEn}
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-800/40 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                  {renderRichLmsText(ex.stepByStepSolutionEn)}
                 </div>
                 {ex.shortcutTrick && (
-                  <div className="flex items-start gap-2 rounded-xl bg-emerald-50 border border-emerald-200 p-3 text-xs text-emerald-900 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-300">
-                    <Lightbulb className="h-4 w-4 shrink-0 text-emerald-600 mt-0.5" />
+                  <div className="flex items-start gap-2 rounded-xl bg-amber-50/80 border border-amber-200/80 p-3.5 text-xs text-amber-950 dark:border-amber-800/60 dark:bg-amber-950/30 dark:text-amber-200">
+                    <Lightbulb className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
                     <div>
-                      <strong className="block font-bold">20-Second BPSC Inspection Shortcut:</strong>
-                      <span>{ex.shortcutTrick}</span>
+                      <strong className="block font-black text-amber-900 dark:text-amber-100 mb-0.5">
+                        ⚡ 20-Second BPSC Inspection Shortcut:
+                      </strong>
+                      <span className="bg-yellow-200/80 dark:bg-yellow-400/25 px-1 py-0.5 rounded font-medium">
+                        {ex.shortcutTrick}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -657,13 +893,13 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
               {tut.commonMistakesAndMisconceptions.map((mis, idx) => (
                 <div key={idx} className="rounded-xl bg-white p-4 shadow-sm border border-rose-100 dark:bg-slate-900 dark:border-slate-800 space-y-2">
                   <div className="text-xs font-bold text-rose-600 dark:text-rose-400">
-                    ❌ Common Mistake: "{mis.mistakeEn}"
+                    ❌ Common Mistake: "{parseInlineFormatting(mis.mistakeEn)}"
                   </div>
                   <div className="text-xs text-slate-600 dark:text-slate-400">
-                    <strong>Why It's Wrong:</strong> {mis.whyWrongEn}
+                    <strong>Why It's Wrong:</strong> {parseInlineFormatting(mis.whyWrongEn)}
                   </div>
                   <div className="text-xs font-semibold text-emerald-700 dark:text-emerald-400">
-                    ✅ Correct Examination Standard: {mis.correctWayEn}
+                    ✅ Correct Examination Standard: {parseInlineFormatting(mis.correctWayEn)}
                   </div>
                 </div>
               ))}
@@ -684,7 +920,7 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
               <strong className="block text-slate-900 dark:text-white font-bold mb-2">Frequently Tested Question Patterns:</strong>
               <ul className="list-disc pl-4 space-y-1">
                 {tut.bpscTrePerspective.frequentlyTestedAspects.map((aspect, i) => (
-                  <li key={i}>{aspect}</li>
+                  <li key={i}>{parseInlineFormatting(aspect)}</li>
                 ))}
               </ul>
             </div>
@@ -692,7 +928,7 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
               <strong className="block text-slate-900 dark:text-white font-bold mb-2">Common Distractor Traps in Options:</strong>
               <ul className="list-disc pl-4 space-y-1">
                 {tut.bpscTrePerspective.commonDistractorTraps.map((dist, i) => (
-                  <li key={i}>{dist}</li>
+                  <li key={i}>{parseInlineFormatting(dist)}</li>
                 ))}
               </ul>
             </div>
@@ -736,18 +972,18 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
                       )}
                     </div>
                     <div className="text-xs font-semibold text-slate-900 dark:text-white leading-relaxed">
-                      {pyq.questionTextEn}
+                      {parseInlineFormatting(pyq.questionTextEn)}
                     </div>
                     {pyq.questionTextHi && (
                       <div className="text-xs text-slate-600 dark:text-slate-400 font-hindi">
-                        {pyq.questionTextHi}
+                        {parseInlineFormatting(pyq.questionTextHi)}
                       </div>
                     )}
                     <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold pt-1">
                       ✅ Official Answer Key: Option ({pyq.correctOptionIdentifier})
                     </div>
                     <div className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                      <strong>Official Explanation:</strong> {pyq.explanationEn}
+                      <strong>Official Explanation:</strong> {parseInlineFormatting(pyq.explanationEn)}
                     </div>
                   </div>
                 ))}
@@ -769,7 +1005,7 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[10px] font-bold text-blue-700 dark:bg-blue-900 dark:text-blue-300">
                   {i + 1}
                 </span>
-                <span>{pt}</span>
+                <span>{parseInlineFormatting(pt)}</span>
               </div>
             ))}
           </div>
@@ -801,7 +1037,7 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
               {tut.knowledgeCheck.map((kc, idx) => (
                 <div key={kc.id} className="rounded-xl border border-slate-100 bg-slate-50/50 p-4 dark:border-slate-800 dark:bg-slate-800/30 space-y-3">
                   <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">
-                    Q{idx + 1}. {kc.questionEn}
+                    Q{idx + 1}. {parseInlineFormatting(kc.questionEn)}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -826,7 +1062,7 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
                           className={`flex items-center gap-2 rounded-lg border p-2.5 text-left text-xs transition-all ${btnStyle}`}
                         >
                           <span className="font-bold">{opt.id}.</span>
-                          <span>{opt.textEn}</span>
+                          <span>{parseInlineFormatting(opt.textEn)}</span>
                         </button>
                       );
                     })}
@@ -834,7 +1070,7 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
 
                   {kcChecked && (
                     <div className="rounded-lg bg-blue-50/60 p-2.5 text-xs text-blue-900 dark:bg-blue-950/30 dark:text-blue-300">
-                      <strong>Explanation:</strong> {kc.explanationEn}
+                      <strong>Explanation:</strong> {parseInlineFormatting(kc.explanationEn)}
                     </div>
                   )}
                 </div>

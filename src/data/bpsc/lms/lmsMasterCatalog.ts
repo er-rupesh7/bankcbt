@@ -112,8 +112,12 @@ export function searchLMSTopics(query: string) {
       topic.descriptionEn.toLowerCase().includes(cleanQ) ||
       chapter.titleEn.toLowerCase().includes(cleanQ) ||
       chapter.titleHi.toLowerCase().includes(cleanQ) ||
+      chapter.descriptionEn.toLowerCase().includes(cleanQ) ||
+      (chapter.descriptionHi && chapter.descriptionHi.toLowerCase().includes(cleanQ)) ||
       subject.displayNameEn.toLowerCase().includes(cleanQ) ||
-      subject.displayNameHi.toLowerCase().includes(cleanQ)
+      subject.displayNameHi.toLowerCase().includes(cleanQ) ||
+      topic.tutorial.learningObjectives.some(obj => obj.toLowerCase().includes(cleanQ)) ||
+      (topic.tutorial.titleEn && topic.tutorial.titleEn.toLowerCase().includes(cleanQ))
     );
   });
 }
@@ -140,21 +144,18 @@ export function getRelatedTutorialForExamTopic(topicOrCategory: string): {
   );
   if (directMatch) return directMatch;
 
-  // 2. Keyword heuristic mapping
+  // 2. Keyword heuristic mapping (Ordered by specificity)
   if (lower.includes('noun') || lower.includes('pronoun') || lower.includes('grammar')) {
     return all.find(item => item.topic.id === 'eng-topic-nouns-pronouns');
   }
   if (lower.includes('tense') || lower.includes('conditional')) {
     return all.find(item => item.topic.id === 'eng-topic-tenses-conditionals');
   }
-  if (lower.includes('polity') || lower.includes('writ') || lower.includes('fundamental') || lower.includes('अधिकार') || lower.includes('संविधान')) {
-    return all.find(item => item.topic.id === 'pol-topic-fr-articles');
-  }
-  if ((lower.includes('article') && !lower.includes('fundamental')) || lower.includes('preposition')) {
-    return all.find(item => item.topic.id === 'eng-topic-articles-prepositions');
-  }
   if (lower.includes('agreement') || lower.includes('subject-verb') || lower.includes('concord')) {
     return all.find(item => item.topic.id === 'eng-topic-sva-mastery');
+  }
+  if ((lower.includes('article') && !lower.includes('fundamental') && !lower.includes('polity')) || lower.includes('preposition')) {
+    return all.find(item => item.topic.id === 'eng-topic-articles-prepositions');
   }
   if (lower.includes('वर्ण') || lower.includes('उच्चारण') || lower.includes('स्वर') || lower.includes('व्यंजन')) {
     return all.find(item => item.topic.id === 'hin-topic-varnamala');
@@ -165,44 +166,93 @@ export function getRelatedTutorialForExamTopic(topicOrCategory: string): {
   if (lower.includes('समास') || lower.includes('तत्पुरुष') || lower.includes('बहुव्रीहि') || lower.includes('द्विगु') || lower.includes('द्वंद्व')) {
     return all.find(item => item.topic.id === 'hin-topic-samass');
   }
+
+  // General Studies & History
   if (lower.includes('champaran') || lower.includes('1857') || lower.includes('kunwar') || lower.includes('bihar history') || lower.includes('चंपारण')) {
-    return all.find(item => item.topic.id === 'bih-topic-champaran-1857');
+    return all.find(item => item.topic.id === 'bih-topic-1857-champaran' || item.topic.id === 'bih-topic-champaran-1857');
   }
-  if (lower.includes('1942') || lower.includes('quit india') || lower.includes('azad dasta') || lower.includes('secretariat') || lower.includes('सचिवालय') || lower.includes('आजाद दस्ता')) {
-    return all.find(item => item.topic.id === 'bih-topic-quit-india-azad-dasta');
+  if (lower.includes('kisan') || lower.includes('sahajanand') || lower.includes('bakasht') || lower.includes('सोनपुर') || lower.includes('सहजानंद')) {
+    return all.find(item => item.topic.id === 'bih-topic-kisan-sabha-sahajanand');
   }
-  if (lower.includes('river') || lower.includes('ganga') || lower.includes('kosi') || lower.includes('son') || lower.includes('नदी')) {
-    return all.find(item => item.topic.id === 'bih-topic-rivers-soils');
+  if (lower.includes('1942') || lower.includes('quit india') || lower.includes('azad dasta') || lower.includes('secretariat') || lower.includes('सचिवालय') || lower.includes('आजाद दस्ता') || lower.includes('hazaribagh')) {
+    return all.find(item => item.topic.id === 'bih-topic-patna-secretariat-firing' || item.topic.id === 'bih-topic-azad-dasta-jp-jailbreak' || item.topic.id === 'bih-topic-quit-india-azad-dasta');
   }
-  if (lower.includes('history') || lower.includes('inm') || lower.includes('movement') || lower.includes('swaraj') || lower.includes('आंदोलन')) {
-    return all.find(item => item.topic.id === 'hist-topic-inm-landmarks');
-  }
-  if (lower.includes('polity') || lower.includes('article') || lower.includes('writ') || lower.includes('fundamental') || lower.includes('अधिकार')) {
-    return all.find(item => item.topic.id === 'pol-topic-fr-articles');
-  }
-  if (lower.includes('geography') || lower.includes('regur') || lower.includes('monsoon') || lower.includes('soil') || lower.includes('भूगोल')) {
+  if (lower.includes('black soil') || lower.includes('regur') || lower.includes('peninsular') || (lower.includes('indian river') && !lower.includes('bihar'))) {
     return all.find(item => item.topic.id === 'geo-topic-soils-rivers');
   }
-  if (lower.includes('science') || lower.includes('vitamin') || lower.includes('optics') || lower.includes('blood') || lower.includes('विज्ञान')) {
+  if (lower.includes('river') || lower.includes('ganga') || lower.includes('kosi') || lower.includes('son') || lower.includes('punpun') || lower.includes('बिहार नदी')) {
+    return all.find(item => item.topic.id === 'bih-topic-rivers-drainage' || item.topic.id === 'bih-topic-rivers-soils');
+  }
+  if (lower.includes('agro') || lower.includes('climate zone') || lower.includes('kishanganj') || lower.includes('purnea') || lower.includes('कृषि')) {
+    return all.find(item => item.topic.id === 'bih-topic-agro-climatic-zones-soils');
+  }
+  if (lower.includes('karachi') || lower.includes('lahore') || lower.includes('congress') || lower.includes('अधिवेशन')) {
+    return all.find(item => item.topic.id === 'hist-topic-congress-sessions-swaraj');
+  }
+  if (lower.includes('national movement') || lower.includes('inm') || lower.includes('gandhian') || lower.includes('dandi') || lower.includes('swaraj') || lower.includes('आंदोलन')) {
+    return all.find(item => item.topic.id === 'hist-topic-gandhian-movements' || item.topic.id === 'hist-topic-inm-landmarks');
+  }
+  if (lower.includes('dpsp') || lower.includes('duty') || lower.includes('duties') || lower.includes('निदेशक') || lower.includes('कर्तव्य')) {
+    return all.find(item => item.topic.id === 'pol-topic-dpsp-fundamental-duties');
+  }
+  if (lower.includes('polity') || lower.includes('writ') || lower.includes('fundamental') || lower.includes('अधिकार')) {
+    return all.find(item => item.topic.id === 'pol-topic-fr-articles');
+  }
+  if (lower.includes('geography') || lower.includes('monsoon') || lower.includes('soil') || lower.includes('narmada') || lower.includes('tapi') || lower.includes('भूगोल')) {
+    return all.find(item => item.topic.id === 'geo-topic-soils-rivers');
+  }
+  if (lower.includes('science') || lower.includes('vitamin') || lower.includes('optics') || lower.includes('blood') || lower.includes('tir') || lower.includes('fiber') || lower.includes('विज्ञान')) {
     return all.find(item => item.topic.id === 'sci-topic-vitamins-optics');
   }
-  if (lower.includes('binary') || lower.includes('complement') || lower.includes('hex') || lower.includes('logic') || lower.includes('number system')) {
+
+  // Computer Science Topics
+  if (lower.includes('dbms') || lower.includes('normalization') || lower.includes('having') || lower.includes('database') || lower.includes('primary key') || lower.includes('foreign key')) {
+    return all.find(item => item.topic.id === 'cs-topic-normalization-acid');
+  }
+  if (lower.includes('join') || lower.includes('transaction') || lower.includes('acid') || lower.includes('aggregate')) {
+    return all.find(item => item.topic.id === 'cs-topic-sql-joins-transactions');
+  }
+  if (lower.includes('nand') || lower.includes('nor gate') || lower.includes('universal gate') || lower.includes('logic gate')) {
+    return all.find(item => item.topic.id === 'cs-topic-logic-gates-universal');
+  }
+  if (lower.includes('boolean') || lower.includes('karnaugh') || lower.includes('k-map') || lower.includes('kmap') || lower.includes('de morgan')) {
+    return all.find(item => item.topic.id === 'cs-topic-boolean-algebra-kmaps');
+  }
+  if (lower.includes('binary') || lower.includes('complement') || lower.includes('hex') || lower.includes('number system')) {
     return all.find(item => item.topic.id === 'cs-topic-number-systems-twos-comp');
   }
-  if (lower.includes('scheduling') || lower.includes('deadlock') || lower.includes('operating') || lower.includes('process') || lower.includes('sjf')) {
+  if (lower.includes('semaphore') || lower.includes('critical section') || lower.includes('synchronization') || lower.includes('mutex')) {
+    return all.find(item => item.topic.id === 'cs-topic-process-sync-semaphores');
+  }
+  if (lower.includes('paging') || lower.includes('virtual memory') || lower.includes('tlb') || lower.includes('belady') || lower.includes('page replacement')) {
+    return all.find(item => item.topic.id === 'cs-topic-paging-virtual-memory');
+  }
+  if (lower.includes('scheduling') || lower.includes('deadlock') || lower.includes('operating') || lower.includes('process') || lower.includes('sjf') || lower.includes('round robin')) {
     return all.find(item => item.topic.id === 'cs-topic-cpu-scheduling-deadlocks');
+  }
+  if (lower.includes('stack') || lower.includes('queue') || lower.includes('postfix') || lower.includes('infix') || lower.includes('lifo') || lower.includes('fifo')) {
+    return all.find(item => item.topic.id === 'cs-topic-stacks-queues-linkedlists');
+  }
+  if (lower.includes('graph') || lower.includes('bfs') || lower.includes('dfs') || lower.includes('mst') || lower.includes('kruskal') || lower.includes('prim')) {
+    return all.find(item => item.topic.id === 'cs-topic-graph-traversals-mst');
   }
   if (lower.includes('tree') || lower.includes('traversal') || lower.includes('bst') || lower.includes('inorder') || lower.includes('dsa') || lower.includes('sort')) {
     return all.find(item => item.topic.id === 'cs-topic-trees-traversals');
   }
-  if (lower.includes('cpp') || lower.includes('c++') || lower.includes('constructor') || lower.includes('oop') || lower.includes('polymorphism')) {
+  if (lower.includes('inheritance') || lower.includes('diamond') || lower.includes('friend') || lower.includes('access specifier')) {
+    return all.find(item => item.topic.id === 'cs-topic-cpp-inheritance-access');
+  }
+  if (lower.includes('cpp') || lower.includes('c++') || lower.includes('constructor') || lower.includes('destructor') || lower.includes('oop') || lower.includes('polymorphism') || lower.includes('virtual function')) {
     return all.find(item => item.topic.id === 'cs-topic-cpp-constructors-polymorphism');
   }
-  if (lower.includes('dbms') || lower.includes('normalization') || lower.includes('acid') || lower.includes('sql') || lower.includes('having') || lower.includes('database')) {
-    return all.find(item => item.topic.id === 'cs-topic-normalization-acid');
+  if (lower.includes('tcp') || lower.includes('udp') || lower.includes('port') || lower.includes('subnet') || lower.includes('socket')) {
+    return all.find(item => item.topic.id === 'cs-topic-tcp-udp-app-protocols');
   }
   if (lower.includes('network') || lower.includes('osi') || lower.includes('ipv4') || lower.includes('ip address') || lower.includes('multicast')) {
     return all.find(item => item.topic.id === 'cs-topic-osi-ip-addressing');
+  }
+  if (lower.includes('python function') || lower.includes('legb') || lower.includes('scope') || lower.includes('module') || lower.includes('random')) {
+    return all.find(item => item.topic.id === 'cs-topic-python-functions-modules');
   }
   if (lower.includes('python') || lower.includes('slice') || lower.includes('mutable') || lower.includes('tuple')) {
     return all.find(item => item.topic.id === 'cs-topic-python-datastructures');

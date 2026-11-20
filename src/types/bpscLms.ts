@@ -140,6 +140,8 @@ export interface LMSPracticeQuestion {
   verificationStatus: BPSCVerificationStatus;
 }
 
+export type LMSExamImportance = 'CRITICAL_HIGH_YIELD' | 'HIGH_YIELD' | 'MODERATE' | 'FOUNDATIONAL';
+
 export interface LMSTopic {
   id: string;
   chapterId: string;
@@ -152,6 +154,11 @@ export interface LMSTopic {
   estimatedMinutes: number;
   isPrescribedInOfficialSyllabus: boolean;
   pyqCount: number;
+  hasAppearedInPyq?: boolean;
+  examImportance?: LMSExamImportance;
+  pyqAppearanceSummary?: string;
+  isStoryFormat?: boolean;
+  storyEra?: string;
   tutorial: LMSTutorial;
   practiceQuestions: LMSPracticeQuestion[];
 }
