@@ -78,6 +78,7 @@ for (const { topic, chapter, subject, section } of allTopics) {
 console.log('\n--- 3. Testing Practice Questions Uniqueness & Format ---');
 const seenQuestionTexts = new Set<string>();
 let duplicatePracticeCount = 0;
+let authenticPyqCount = 0;
 
 for (const { topic } of allTopics) {
   for (const pq of topic.practiceQuestions) {
@@ -96,9 +97,35 @@ for (const { topic } of allTopics) {
       ['A', 'B', 'C', 'D', 'E'].includes(pq.correctOptionIdentifier),
       `Question ${pq.id} has valid correct option letter`
     );
+
+    // Check authentic PYQ metadata
+    if (pq.isAuthenticPyq) {
+      authenticPyqCount++;
+      assert(
+        Boolean(pq.treVersion && ['TRE_1_0', 'TRE_2_0', 'TRE_3_0'].includes(pq.treVersion)),
+        `PYQ ${pq.id} has valid TRE Version: ${pq.treVersion}`
+      );
+      assert(
+        Boolean(pq.examDate && pq.examDate.length > 5),
+        `PYQ ${pq.id} has valid official Exam Date: ${pq.examDate}`
+      );
+      assert(
+        Boolean(pq.shift && pq.shift.includes('Shift')),
+        `PYQ ${pq.id} has valid official Shift: ${pq.shift}`
+      );
+      assert(
+        Boolean(pq.officialQuestionNumber && pq.officialQuestionNumber > 0),
+        `PYQ ${pq.id} has valid Official Question Number: Q.${pq.officialQuestionNumber}`
+      );
+      assert(
+        Boolean(pq.sourceDocumentRef && pq.sourceDocumentRef.length > 10),
+        `PYQ ${pq.id} has official Source Booklet reference: ${pq.sourceDocumentRef}`
+      );
+    }
   }
 }
 assert(duplicatePracticeCount === 0, 'Zero duplicate practice questions across topics');
+assert(authenticPyqCount >= 10, `At least 10 authentic PYQs with dates and shifts verified (found ${authenticPyqCount})`);
 
 // 4. Verify Catalog Search & Diagnostic Mapping
 console.log('\n--- 4. Testing Search & Diagnostic Link Resolution ---');
@@ -108,19 +135,30 @@ assert(searchChamparan.length > 0, 'Search for "Champaran" returns valid topic')
 const searchTwosComp = searchLMSTopics('complement');
 assert(searchTwosComp.length > 0, 'Search for "complement" returns Digital Logic topic');
 
+const searchKosi = searchLMSTopics('Kosi');
+assert(searchKosi.length > 0, 'Search for "Kosi" returns Bihar River topic');
+
+const searchVitamin = searchLMSTopics('Vitamin');
+assert(searchVitamin.length > 0, 'Search for "Vitamin" returns General Science topic');
+
 // Test CBT Diagnostic Transition Mapping
 const testCases = [
   'English Grammar & Vocabulary',
   'Tenses and Conditionals',
   'Subject-Verb Agreement',
   'वर्ण विचार एवं उच्चारण',
-  'स्वर संधि',
   '1857 Revolt & Champaran Satyagraha',
+  'River Systems of Bihar',
+  'Indian National Movement',
   'Fundamental Rights & Articles',
+  'Black Soil & Indian Rivers',
+  'General Science & Vitamins',
   '2\'s Complement Arithmetic',
   'CPU Scheduling Algorithms',
   'Binary Search Trees',
-  'DBMS Normalization'
+  'C++ Constructors & Polymorphism',
+  'DBMS Normalization',
+  'OSI Layers & IP Addressing'
 ];
 
 for (const query of testCases) {

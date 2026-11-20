@@ -171,10 +171,33 @@ export default function LmsPracticeDrillModal({
             <>
               {/* Question Box */}
               <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-5 dark:border-slate-800 dark:bg-slate-800/40">
-                <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
-                  <span className="font-semibold text-blue-600 dark:text-blue-400">
-                    BPSC TRE Standard Question
-                  </span>
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs mb-3">
+                  {currentQ.isAuthenticPyq ? (
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-xs font-black text-amber-800 dark:text-amber-300 flex items-center gap-1">
+                        🏛️ OFFICIAL BPSC PYQ: {currentQ.treVersion === 'TRE_1_0' ? 'BPSC TRE 1.0' : currentQ.treVersion === 'TRE_2_0' ? 'BPSC TRE 2.0' : 'BPSC TRE 3.0'}
+                      </span>
+                      {currentQ.examDate && (
+                        <span className="rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                          📅 {currentQ.examDate}
+                        </span>
+                      )}
+                      {currentQ.shift && (
+                        <span className="rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-semibold text-blue-700 dark:text-blue-300">
+                          ⏱️ {currentQ.shift}
+                        </span>
+                      )}
+                      {currentQ.officialQuestionNumber && (
+                        <span className="rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold text-slate-800 dark:text-slate-200">
+                          {currentQ.bookletSeries ? `${currentQ.bookletSeries} ` : ''}Q.{currentQ.officialQuestionNumber}
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="font-semibold text-blue-600 dark:text-blue-400">
+                      BPSC TRE Standard Question
+                    </span>
+                  )}
                   <span className="rounded bg-slate-200 px-2 py-0.5 font-medium dark:bg-slate-700">
                     {currentQ.difficulty}
                   </span>

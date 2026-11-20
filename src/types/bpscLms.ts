@@ -132,6 +132,11 @@ export interface LMSPracticeQuestion {
   examTrapNote?: string;
   isAuthenticPyq?: boolean;
   treVersion?: BPSCTREVersion;
+  examDate?: string;
+  shift?: string;
+  bookletSeries?: string;
+  officialQuestionNumber?: number;
+  sourceDocumentRef?: string;
   verificationStatus: BPSCVerificationStatus;
 }
 

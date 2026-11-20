@@ -147,6 +147,12 @@ export function getRelatedTutorialForExamTopic(topicOrCategory: string): {
   if (lower.includes('tense') || lower.includes('conditional')) {
     return all.find(item => item.topic.id === 'eng-topic-tenses-conditionals');
   }
+  if (lower.includes('polity') || lower.includes('writ') || lower.includes('fundamental') || lower.includes('अधिकार') || lower.includes('संविधान')) {
+    return all.find(item => item.topic.id === 'pol-topic-fr-articles');
+  }
+  if ((lower.includes('article') && !lower.includes('fundamental')) || lower.includes('preposition')) {
+    return all.find(item => item.topic.id === 'eng-topic-articles-prepositions');
+  }
   if (lower.includes('agreement') || lower.includes('subject-verb') || lower.includes('concord')) {
     return all.find(item => item.topic.id === 'eng-topic-sva-mastery');
   }
@@ -156,11 +162,29 @@ export function getRelatedTutorialForExamTopic(topicOrCategory: string): {
   if (lower.includes('संधि') || lower.includes('विच्छेद')) {
     return all.find(item => item.topic.id === 'hin-topic-swar-sandhi');
   }
+  if (lower.includes('समास') || lower.includes('तत्पुरुष') || lower.includes('बहुव्रीहि') || lower.includes('द्विगु') || lower.includes('द्वंद्व')) {
+    return all.find(item => item.topic.id === 'hin-topic-samass');
+  }
   if (lower.includes('champaran') || lower.includes('1857') || lower.includes('kunwar') || lower.includes('bihar history') || lower.includes('चंपारण')) {
     return all.find(item => item.topic.id === 'bih-topic-champaran-1857');
   }
+  if (lower.includes('1942') || lower.includes('quit india') || lower.includes('azad dasta') || lower.includes('secretariat') || lower.includes('सचिवालय') || lower.includes('आजाद दस्ता')) {
+    return all.find(item => item.topic.id === 'bih-topic-quit-india-azad-dasta');
+  }
+  if (lower.includes('river') || lower.includes('ganga') || lower.includes('kosi') || lower.includes('son') || lower.includes('नदी')) {
+    return all.find(item => item.topic.id === 'bih-topic-rivers-soils');
+  }
+  if (lower.includes('history') || lower.includes('inm') || lower.includes('movement') || lower.includes('swaraj') || lower.includes('आंदोलन')) {
+    return all.find(item => item.topic.id === 'hist-topic-inm-landmarks');
+  }
   if (lower.includes('polity') || lower.includes('article') || lower.includes('writ') || lower.includes('fundamental') || lower.includes('अधिकार')) {
     return all.find(item => item.topic.id === 'pol-topic-fr-articles');
+  }
+  if (lower.includes('geography') || lower.includes('regur') || lower.includes('monsoon') || lower.includes('soil') || lower.includes('भूगोल')) {
+    return all.find(item => item.topic.id === 'geo-topic-soils-rivers');
+  }
+  if (lower.includes('science') || lower.includes('vitamin') || lower.includes('optics') || lower.includes('blood') || lower.includes('विज्ञान')) {
+    return all.find(item => item.topic.id === 'sci-topic-vitamins-optics');
   }
   if (lower.includes('binary') || lower.includes('complement') || lower.includes('hex') || lower.includes('logic') || lower.includes('number system')) {
     return all.find(item => item.topic.id === 'cs-topic-number-systems-twos-comp');
@@ -168,11 +192,20 @@ export function getRelatedTutorialForExamTopic(topicOrCategory: string): {
   if (lower.includes('scheduling') || lower.includes('deadlock') || lower.includes('operating') || lower.includes('process') || lower.includes('sjf')) {
     return all.find(item => item.topic.id === 'cs-topic-cpu-scheduling-deadlocks');
   }
-  if (lower.includes('tree') || lower.includes('traversal') || lower.includes('bst') || lower.includes('inorder') || lower.includes('dsa')) {
+  if (lower.includes('tree') || lower.includes('traversal') || lower.includes('bst') || lower.includes('inorder') || lower.includes('dsa') || lower.includes('sort')) {
     return all.find(item => item.topic.id === 'cs-topic-trees-traversals');
   }
-  if (lower.includes('dbms') || lower.includes('normalization') || lower.includes('acid') || lower.includes('sql') || lower.includes('database')) {
+  if (lower.includes('cpp') || lower.includes('c++') || lower.includes('constructor') || lower.includes('oop') || lower.includes('polymorphism')) {
+    return all.find(item => item.topic.id === 'cs-topic-cpp-constructors-polymorphism');
+  }
+  if (lower.includes('dbms') || lower.includes('normalization') || lower.includes('acid') || lower.includes('sql') || lower.includes('having') || lower.includes('database')) {
     return all.find(item => item.topic.id === 'cs-topic-normalization-acid');
+  }
+  if (lower.includes('network') || lower.includes('osi') || lower.includes('ipv4') || lower.includes('ip address') || lower.includes('multicast')) {
+    return all.find(item => item.topic.id === 'cs-topic-osi-ip-addressing');
+  }
+  if (lower.includes('python') || lower.includes('slice') || lower.includes('mutable') || lower.includes('tuple')) {
+    return all.find(item => item.topic.id === 'cs-topic-python-datastructures');
   }
 
   // Fallback to the first available topic

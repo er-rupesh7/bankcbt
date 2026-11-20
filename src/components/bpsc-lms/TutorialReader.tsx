@@ -705,6 +705,55 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
               </span>
             </div>
           )}
+
+          {/* Authentic PYQ Spotlights with Exam & Shift Details */}
+          {currentTopic.practiceQuestions.filter(q => q.isAuthenticPyq).length > 0 && (
+            <div className="mt-5 pt-4 border-t border-amber-200 dark:border-amber-800 space-y-3">
+              <div className="text-xs font-bold uppercase tracking-wider text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                <span>🏛️ Official Past BPSC TRE Questions from Real Exam Papers:</span>
+              </div>
+              <div className="space-y-3">
+                {currentTopic.practiceQuestions.filter(q => q.isAuthenticPyq).map((pyq, pIdx) => (
+                  <div key={pyq.id || pIdx} className="rounded-xl bg-white p-4 shadow-sm border border-amber-200 dark:bg-slate-900 dark:border-slate-800 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded bg-amber-500/20 px-2 py-0.5 text-[11px] font-black text-amber-800 dark:text-amber-300">
+                        {pyq.treVersion === 'TRE_1_0' ? 'BPSC TRE 1.0' : pyq.treVersion === 'TRE_2_0' ? 'BPSC TRE 2.0' : 'BPSC TRE 3.0'}
+                      </span>
+                      {pyq.examDate && (
+                        <span className="rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-slate-700 dark:text-slate-300">
+                          📅 {pyq.examDate}
+                        </span>
+                      )}
+                      {pyq.shift && (
+                        <span className="rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-blue-700 dark:text-blue-300">
+                          ⏱️ {pyq.shift}
+                        </span>
+                      )}
+                      {pyq.officialQuestionNumber && (
+                        <span className="rounded bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-slate-800 dark:text-slate-200">
+                          {pyq.bookletSeries ? `${pyq.bookletSeries} ` : ''}Q.{pyq.officialQuestionNumber}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-xs font-semibold text-slate-900 dark:text-white leading-relaxed">
+                      {pyq.questionTextEn}
+                    </div>
+                    {pyq.questionTextHi && (
+                      <div className="text-xs text-slate-600 dark:text-slate-400 font-hindi">
+                        {pyq.questionTextHi}
+                      </div>
+                    )}
+                    <div className="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold pt-1">
+                      ✅ Official Answer Key: Option ({pyq.correctOptionIdentifier})
+                    </div>
+                    <div className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-lg border border-slate-100 dark:border-slate-800">
+                      <strong>Official Explanation:</strong> {pyq.explanationEn}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ======================================================== */}
