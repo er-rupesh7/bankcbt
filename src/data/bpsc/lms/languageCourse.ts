@@ -1302,6 +1302,297 @@ export const BPSC_LANGUAGE_SUBJECTS: LMSSubject[] = [
             ]
           }
         ]
+      },
+            // ----------------------------------------------------
+      // CHAPTER 4: SHUDDH VARTANI & SPELLING ACCURACY
+      // ----------------------------------------------------
+      {
+        id: "hin-ch-shuddh-vartani",
+        subjectKey: "HINDI_LANGUAGE",
+        chapterNumber: 4,
+        slug: "shuddh-vartani-spelling-accuracy",
+        titleEn: "Shuddh Vartani & Spelling Traps (शुद्ध वर्तनी)",
+        titleHi: "शुद्ध वर्तनी एवं अशुद्ध शब्द निवारण",
+        descriptionEn: "High-yield examination words tested in TRE 1.0, 2.0, and 3.0: उज्ज्वल, प्रामाणिक, कवयित्री, संन्यास, शुश्रूषा, बीभत्स, क्षत्रिय.",
+        descriptionHi: "BPSC में बार-बार पूछे जाने वाले शुद्ध वर्तनी शब्द: उज्ज्वल, प्रामाणिक, कवयित्री, संन्यास, आशीर्वाद, शुश्रूषा, वीभत्स आदि।",
+        totalPracticeQuestions: 25,
+        totalEstimatedMinutes: 45,
+        topics: [
+          {
+            id: "hin-topic-shuddh-vartani",
+            chapterId: "hin-ch-shuddh-vartani",
+            topicNumber: 1,
+            slug: "high-yield-spelling-traps-bpsc",
+            titleEn: "High-Yield BPSC Spelling Traps (उज्ज्वल, प्रामाणिक, कवयित्री)",
+            titleHi: "उच्च-अंकदायी वर्तनी नियम एवं परीक्षोपयोगी शब्द",
+            descriptionEn: "Mastering the golden orthographic rules for sandhi-based spellings, nasalization (अनुस्वार), and double consonants.",
+            descriptionHi: "संधि जनित वर्तनी, द्वित्व व्यंजन (उज्ज्वल), इक प्रत्यय के प्रभाव (प्रमाण -> प्रामाणिक), तथा मानक हिन्दी वर्तनी के नियम।",
+            estimatedMinutes: 20,
+            isPrescribedInOfficialSyllabus: true,
+            pyqCount: 7,
+            hasAppearedInPyq: true,
+            examImportance: "CRITICAL_HIGH_YIELD",
+            pyqAppearanceSummary: "TRE 2.0 (Q.14, Q.15, Q.23, Q.24), TRE 3.0 (Q.H-25)",
+            tutorial: {
+              id: "tut-hin-shuddh-vartani",
+              topicId: "hin-topic-shuddh-vartani",
+              titleEn: "Mastering High-Yield Hindi Spellings for BPSC TRE",
+              titleHi: "BPSC TRE हेतु शुद्ध वर्तनी का सटीक मार्गदर्शन",
+              readingTimeMinutes: 12,
+              difficulty: "BEGINNER",
+              learningObjectives: [
+                "Master the double half-ज rule in ==उज्ज्वल== (उत् + ज्वल).",
+                "Understand the vowel lengthening rule of इक प्रत्यय: ==प्रमाण -> प्रामाणिक==.",
+                "Distinguish classical tatsam forms: ==वीभत्स== (not बीभत्स), ==क्षत्रिय== (not क्षत्रीय)."
+              ],
+              introductionEn: "Spelling accuracy (शुद्ध वर्तनी) contributes 2 to 3 questions in every BPSC Language paper. BPSC tests predictable phonetic traps where everyday colloquial pronunciation differs from grammatical orthography.",
+              introductionHi: "BPSC भाषा अर्हक परीक्षा में शुद्ध वर्तनी से 2 से 3 प्रश्न निश्चित रूप से पूछे जाते हैं। BPSC उन शब्दों को चुनता है जहाँ सामान्य बोलचाल का अशुद्ध उच्चारण लिखित रूप को भ्रमित करता है।",
+              conceptSections: [
+                {
+                  title: "1. The Classic उज्ज्वल Rule",
+                  contentMarkdownEn: "* **Derivation:** उत् + ज्वल = ==उज्ज्वल==.\n* **Crucial Feature:** It contains **two successive half-ज** characters (ज्ज्).\n* **Examiner Trap:** Options frequently write उज्जवल (with one full ज). This is strictly **incorrect**.\n* **BPSC TRE 2.0 Q.24:** \"उसका भविष्य उज्ज्वल है।\" -> Official answer is ==उज्ज्वल==."
+                },
+                {
+                  title: "2. The इक प्रत्यय Vowel Lengthening Rule",
+                  contentMarkdownEn: "When the suffix **इक** is added to a word, the initial vowel gets lengthened (वृद्धि):\n* **अ -> आ:** प्रमाण + इक = ==प्रामाणिक== (NOT प्रमाणिक).\n* **इ/ई -> ऐ:** इतिहास + इक = ==ऐतिहासिक==; दिन + इक = ==दैनिक==.\n* **उ/ऊ -> औ:** भूगोल + इक = ==भौगोलिक==; उद्योग + इक = ==औद्योगिक==.\n* **BPSC TRE 3.0 Q.H-25:** Identify the pure word -> ==प्रामाणिक==."
+                }
+              ],
+              importantDefinitions: [
+                {
+                  term: "शुद्ध वर्तनी (Orthography)",
+                  definitionEn: "The conventional spelling system of a language adhering strictly to grammatical sandhi, suffixation, and phonetic rules.",
+                  definitionHi: "व्याकरण के नियमों (संधि, प्रत्यय, उपसर्ग) के अनुसार वर्णों का मानक एवं शुद्ध विन्यास वर्तनी कहलाता है।"
+                }
+              ],
+              rulesAndFormulas: [
+                {
+                  title: "Double-Consonant Sandhi Rule",
+                  formulaOrRule: "त् / द् + ज् / झ् -> ज्ज् (उद् + ज्वल = उज्ज्वल, विपद् + जाल = विपज्जाल)",
+                  explanationEn: "Whenever dental t/d merges with palatal j, it assimilates to double half-j (ज्ज्).",
+                  explanationHi: "त् या द् के बाद यदि ज् या झ् आए तो त्/द् के स्थान पर आधा ज् हो जाता है।"
+                }
+              ],
+              examples: [
+                {
+                  title: "BPSC TRE 2.0 Official Question Analysis",
+                  problemEn: "Which is the correctly spelled word? (A) क्षत्रिय (B) क्षत्रीय (C) उज्जल (D) More than one of the above (E) None of the above",
+                  stepByStepSolutionEn: "1. In standard Sanskrit tatsam orthography, क्षत्रिय uses short vowel इ on त्र.\n2. क्षत्रीय is incorrect colloquial elongation.\n3. उज्जल is dialectal tadbhav.\n4. Official BPSC Key: (A) क्षत्रिय.",
+                  shortcutTrick: "Standard warrior caste name has short इ: क्षत्रिय."
+                }
+              ],
+              practicalApplications: ["Official state correspondence, error-free language qualification, and drafting."],
+              commonMistakesAndMisconceptions: [
+                {
+                  mistakeEn: "Writing कवियत्री instead of कवयित्री.",
+                  whyWrongEn: "In Sanskrit, feminine of कवि is formed as कवयित्री with no इ on व.",
+                  correctWayEn: "Always write कवयित्री."
+                }
+              ],
+              bpscTrePerspective: {
+                frequentlyTestedAspects: [
+                  "उज्ज्वल with double half-ज (TRE 2.0 Q.24).",
+                  "प्रामाणिक with lengthened आ (TRE 3.0 Q.H-25).",
+                  "क्षत्रिय with short-इ (TRE 2.0 Q.15)."
+                ],
+                commonDistractorTraps: ["Writing उज्जवल with full-ज."],
+                relatedPyqReferences: ["BPSC TRE 2.0 (Q.15, Q.24)", "BPSC TRE 3.0 (Q.H-25)"]
+              },
+              quickRevisionPoints: [
+                "उज्ज्वल = ==उत् + ज्वल== (दो बार आधा ज).",
+                "प्रामाणिक = ==प्रमाण + इक== (प्र में आ की मात्रा).",
+                "कवयित्री = ==क + व + यि + त्री==.",
+                "आशीर्वाद = ==शी पर बड़ी ई, वा पर रेफ==."
+              ],
+              knowledgeCheck: [
+                {
+                  id: "kc-hin-var-1",
+                  questionEn: "Which of the following is the correct spelling of the feminine form of कवि in Hindi?",
+                  questionHi: "कवि का सही स्त्रीलिंग रूप निम्नलिखित में से कौन-सा है?",
+                  options: [
+                    { id: "A", textEn: "कवयित्री", isCorrect: true },
+                    { id: "B", textEn: "कवियत्री", isCorrect: false },
+                    { id: "C", textEn: "कवयत्री", isCorrect: false },
+                    { id: "D", textEn: "कवियित्री", isCorrect: false }
+                  ],
+                  explanationEn: "The pure grammatical feminine form is कवयित्री. The व retains no vowel mark.",
+                  conceptTested: "Hindi Feminine Noun Orthography"
+                }
+              ]
+            },
+            practiceQuestions: [
+              {
+                id: "pq-hin-var-1",
+                topicId: "hin-topic-shuddh-vartani",
+                chapterId: "hin-ch-shuddh-vartani",
+                subjectKey: "HINDI_LANGUAGE",
+                sectionKey: "PART_1_LANGUAGE",
+                questionTextEn: "निम्नलिखित में से शुद्ध वर्तनी वाला शब्द कौन-सा है?",
+                questionTextHi: "निम्नलिखित में से शुद्ध वर्तनी वाला शब्द कौन-सा है?",
+                options: [
+                  { id: "o1", identifier: "A", textEn: "उज्ज्वल", isCorrect: true },
+                  { id: "o2", identifier: "B", textEn: "उज्जवल", isCorrect: false },
+                  { id: "o3", identifier: "C", textEn: "उज्वल", isCorrect: false },
+                  { id: "o4", identifier: "D", textEn: "उपर्युक्त में से एक से अधिक", isCorrect: false },
+                  { id: "o5", identifier: "E", textEn: "उपर्युक्त में से कोई नहीं", isCorrect: false }
+                ],
+                correctOptionIdentifier: "A",
+                difficulty: "EASY",
+                practiceMode: "PYQ",
+                explanationEn: "उज्ज्वल में दो बार आधा ज आता है। अतः विकल्प (A) शुद्ध है।",
+                isAuthenticPyq: true,
+                treVersion: "TRE_2_0",
+                examDate: "2023-12-15",
+                shift: "Shift 1 (Language)",
+                officialQuestionNumber: 24,
+                verificationStatus: "OFFICIALLY_VERIFIED"
+              }
+            ]
+          }
+        ]
+      },
+
+      // ----------------------------------------------------
+      // CHAPTER 5: WORD ORIGINS (तत्सम, तद्भव, देशज, विदेशज)
+      // ----------------------------------------------------
+      {
+        id: "hin-ch-shabd-bhed",
+        subjectKey: "HINDI_LANGUAGE",
+        chapterNumber: 5,
+        slug: "shabd-bhed-tatsam-tadbhav-deshaj-videshaj",
+        titleEn: "Word Origins & Lexicography (शब्द भेद)",
+        titleHi: "शब्द भेद: तत्सम, तद्भव, देशज एवं विदेशज",
+        descriptionEn: "Core vocabulary classification tested in TRE 2.0 (Q.16, 17, 18, 20, 22) and TRE 3.0 (Q.H-24): पुष्प, स्नेह, परवल, चाय, खारिज.",
+        descriptionHi: "उत्पत्ति के आधार पर शब्द भेद: तत्सम (संस्कृत मूल), तद्भव, देशज (क्षेत्रीय बोली), विदेशज (अरबी, फारसी, चीनी) तथा रचना के आधार पर रूढ़/यौगिक।",
+        totalPracticeQuestions: 25,
+        totalEstimatedMinutes: 45,
+        topics: [
+          {
+            id: "hin-topic-shabd-origins",
+            chapterId: "hin-ch-shabd-bhed",
+            topicNumber: 1,
+            slug: "tatsam-tadbhav-deshaj-videshaj-classification",
+            titleEn: "Tatsam, Tadbhav, Deshaj & Videshaj Words",
+            titleHi: "तत्सम, तद्भव, देशज एवं विदेशज शब्दों की पहचान",
+            descriptionEn: "Recognizing Sanskrit roots vs derived regional expressions and Arabic/Persian/Portuguese loanwords.",
+            descriptionHi: "पुष्प (तत्सम) -> फूल (तद्भव), परवल/लोटा (देशज), चाय (चीनी विदेशज), तथा खारिज (अरबी विदेशज)।",
+            estimatedMinutes: 20,
+            isPrescribedInOfficialSyllabus: true,
+            pyqCount: 8,
+            hasAppearedInPyq: true,
+            examImportance: "CRITICAL_HIGH_YIELD",
+            pyqAppearanceSummary: "TRE 2.0 (Q.16, 17, 20, 22), TRE 3.0 (Q.H-24)",
+            tutorial: {
+              id: "tut-hin-origins",
+              topicId: "hin-topic-shabd-origins",
+              titleEn: "Word Etymology & Origins for BPSC TRE",
+              titleHi: "BPSC TRE हेतु शब्द व्युत्पत्ति एवं स्रोत का संपूर्ण अध्ययन",
+              readingTimeMinutes: 12,
+              difficulty: "INTERMEDIATE",
+              learningObjectives: [
+                "Distinguish between ==तत्सम== (pure Sanskrit) and ==तद्भव== (evolved Prakrit/Hindi) words.",
+                "Identify native ==देशज== words like परवल, लोटा, पगड़ी.",
+                "Recognize loan ==विदेशज== origins: चाय (Chinese), खारिज (Arabic)."
+              ],
+              introductionEn: "Word origins constitute the backbone of Hindi vocabulary in BPSC examinations. TRE 2.0 alone featured 5 questions on Tatsam, Deshaj, Videshaj, and Roodh words.",
+              introductionHi: "शब्दों की उत्पत्ति (व्युत्पत्ति) हिन्दी भाषा खंड का सर्वाधिक अंकदायी भाग है। TRE 2.0 में इस अकेले अध्याय से 5 प्रश्न पूछे गए थे।",
+              conceptSections: [
+                {
+                  title: "1. Four Classes of Word Origins",
+                  contentMarkdownEn: "* **तत्सम (Tatsam):** Words borrowed directly from Sanskrit without phonetic alteration:\n  * Examples: ==पुष्प==, ==स्नेह==, अग्नि, सूर्य, गृह, दुग्ध, परीक्षा.\n* **तद्भव (Tadbhav):** Words originating in Sanskrit but modified over centuries:\n  * Examples: ==फूल== (from पुष्प), ==नेह== (from स्नेह), आग (अग्नि), घर (गृह), दूध (दुग्ध).\n* **देशज (Deshaj):** Indigenous regional words with no Sanskrit or foreign roots:\n  * Examples: ==परवल==, ==लोटा==, ==पगड़ी==, खिड़की, डिबिया, तेंदुआ.\n* **विदेशज (Videshaj):** Loan words from foreign languages:\n  * **अरबी (Arabic):** ==खारिज==, अदालत, कानून, तारीख, मुहावरा.\n  * **फारसी (Persian):** आवारा, चश्मा, आमदनी, सरकार, दीवार.\n  * **चीनी (Chinese):** ==चाय==, लीची, तूफान.\n  * **पुर्तगाली (Portuguese):** आलमारी, साबुन, बाल्टी, गमला."
+                }
+              ],
+              importantDefinitions: [
+                {
+                  term: "तत्सम शब्द",
+                  definitionEn: "Words from Sanskrit that have entered Hindi in their original, unmodified phonetic form (तद् + सम = उसके समान).",
+                  definitionHi: "संस्कृत भाषा के वे शब्द जो बिना किसी परिवर्तन के हिन्दी में ज्यों के त्यों प्रयुक्त होते हैं, तत्सम कहलाते हैं।"
+                }
+              ],
+              rulesAndFormulas: [
+                {
+                  title: "Tatsam Recognition Shortcuts",
+                  formulaOrRule: "Words containing संयुक्त वर्ण (क्ष, त्र, ज्ञ, श्र), ऋ की मात्रा, या रेफ (र्) are 99% तत्सम",
+                  explanationEn: "E.g. क्षत्रिय, नक्षत्र, कृपा, स्नेह, सूर्य, परीक्षा are all तत्सम.",
+                  explanationHi: "क्ष, त्र, ज्ञ, श्र, ष तथा ऋ वर्ण वाले शब्द लगभग हमेशा तत्सम होते हैं।"
+                }
+              ],
+              examples: [
+                {
+                  title: "BPSC TRE 2.0 Question Analysis",
+                  problemEn: "Which of the following is a foreign word (विदेशज शब्द)? (A) बाघ (B) परीक्षा (C) चाय (D) More than one of the above (E) None of the above",
+                  stepByStepSolutionEn: "1. बाघ is tadbhav (from Sanskrit व्याघ्र).\n2. परीक्षा is pure tatsam Sanskrit.\n3. चाय is borrowed from Chinese (चाइनीज).\n4. Official Answer: (C) चाय.",
+                  shortcutTrick: "चाय and लीची originate from Chinese."
+                }
+              ],
+              practicalApplications: ["Vocabulary enrichment, comprehension, and etymological reasoning."],
+              commonMistakesAndMisconceptions: [
+                {
+                  mistakeEn: "Classifying परवल as Tatsam.",
+                  whyWrongEn: "परवल is an indigenous regional dialect word with no classical Sanskrit root.",
+                  correctWayEn: "परवल is an authentic Deshaj word."
+                }
+              ],
+              bpscTrePerspective: {
+                frequentlyTestedAspects: [
+                  "Tatsam word: पुष्प (TRE 3.0 Q.H-24), स्नेह (TRE 2.0 Q.16).",
+                  "Foreign word: चाय (TRE 2.0 Q.17), खारिज (TRE 2.0 Q.22).",
+                  "Deshaj word: परवल (TRE 2.0 Q.20)."
+                ],
+                commonDistractorTraps: ["Confusing Persian and Arabic loan words."],
+                relatedPyqReferences: ["BPSC TRE 2.0 (Q.16, 17, 20, 22)", "BPSC TRE 3.0 (Q.H-24)"]
+              },
+              quickRevisionPoints: [
+                "तत्सम = ==पुष्प, स्नेह, गृह==.",
+                "तद्भव = ==फूल, नेह, घर==.",
+                "देशज = ==परवल, लोटा, पगड़ी==.",
+                "विदेशज = ==चाय (चीनी), खारिज (अरबी)==."
+              ],
+              knowledgeCheck: [
+                {
+                  id: "kc-hin-ori-1",
+                  questionEn: "Which of the following is an authentic तत्सम word in Hindi?",
+                  questionHi: "निम्नलिखित में से तत्सम शब्द कौन-सा है?",
+                  options: [
+                    { id: "A", textEn: "पुष्प", isCorrect: true },
+                    { id: "B", textEn: "फूल", isCorrect: false },
+                    { id: "C", textEn: "आग", isCorrect: false },
+                    { id: "D", textEn: "घर", isCorrect: false }
+                  ],
+                  explanationEn: "पुष्प is pure Sanskrit tatsam; फूल, आग, and घर are tadbhav.",
+                  conceptTested: "Tatsam Identification"
+                }
+              ]
+            },
+            practiceQuestions: [
+              {
+                id: "pq-hin-ori-1",
+                topicId: "hin-topic-shabd-origins",
+                chapterId: "hin-ch-shabd-bhed",
+                subjectKey: "HINDI_LANGUAGE",
+                sectionKey: "PART_1_LANGUAGE",
+                questionTextEn: "निम्नलिखित में से कौन-सा विदेशज शब्द है?",
+                questionTextHi: "निम्नलिखित में से कौन-सा विदेशज शब्द है?",
+                options: [
+                  { id: "o1", identifier: "A", textEn: "चाय", isCorrect: true },
+                  { id: "o2", identifier: "B", textEn: "बाघ", isCorrect: false },
+                  { id: "o3", identifier: "C", textEn: "परीक्षा", isCorrect: false },
+                  { id: "o4", identifier: "D", textEn: "उपर्युक्त में से एक से अधिक", isCorrect: false },
+                  { id: "o5", identifier: "E", textEn: "उपर्युक्त में से कोई नहीं", isCorrect: false }
+                ],
+                correctOptionIdentifier: "A",
+                difficulty: "EASY",
+                practiceMode: "PYQ",
+                explanationEn: "चाय चीनी भाषा से हिन्दी में आया हुआ विदेशज शब्द है।",
+                isAuthenticPyq: true,
+                treVersion: "TRE_2_0",
+                examDate: "2023-12-15",
+                shift: "Shift 1 (Language)",
+                officialQuestionNumber: 17,
+                verificationStatus: "OFFICIALLY_VERIFIED"
+              }
+            ]
+          }
+        ]
       }
     ]
   }

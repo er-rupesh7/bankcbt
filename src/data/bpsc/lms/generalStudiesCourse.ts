@@ -2055,5 +2055,341 @@ export const BPSC_GENERAL_STUDIES_SUBJECTS: LMSSubject[] = [
         ]
       }
     ]
+  },
+  // =========================================================================
+  // SUBJECT 6: ELEMENTARY MATHEMATICS & QUANTITATIVE APTITUDE
+  // =========================================================================
+  {
+    key: 'ELEMENTARY_MATHEMATICS',
+    sectionKey: 'PART_2_GENERAL_STUDIES',
+    displayNameEn: 'Elementary Mathematics & Mental Ability',
+    displayNameHi: 'प्रारंभिक गणित एवं मानसिक क्षमता परीक्षण',
+    iconName: 'Calculator',
+    descriptionEn: 'Official 8-mark General Studies math pillar: Algebraic identities, quadratic roots, commercial profit/loss, mensuration, and time & work.',
+    descriptionHi: 'सामान्य अध्ययन का अनिवार्य 8 अंकों वाला गणितीय खंड: बीजगणितीय सर्वसमिकाएं, द्विघात समीकरण, लाभ-हानि एवं छूट, क्षेत्रमिति तथा समय एवं कार्य।',
+    chapters: [
+      {
+        id: 'math-ch-algebra-arithmetic',
+        subjectKey: 'ELEMENTARY_MATHEMATICS',
+        chapterNumber: 1,
+        slug: 'elementary-algebra-commercial-arithmetic',
+        titleEn: 'Algebraic Identities & Commercial Arithmetic',
+        titleHi: 'बीजगणितीय सर्वसमिकाएं एवं व्यावसायिक अंकगणित',
+        descriptionEn: 'Core scoring topics tested across TRE 1.0, 2.0, and 3.0: (x + 1/x)² expansions, discriminant nature of roots, and markup/discount combinations.',
+        descriptionHi: 'TRE 1.0, 2.0 तथा 3.0 में पूछे गए प्रश्न: (x + 1/x)² का प्रसार, विविक्तकर (D > 0) द्वारा मूलों की प्रकृति, तथा 10% छूट एवं लाभ-हानि के सूत्र।',
+        totalPracticeQuestions: 25,
+        totalEstimatedMinutes: 60,
+        topics: [
+          {
+            id: 'math-topic-algebra-identities',
+            chapterId: 'math-ch-algebra-arithmetic',
+            topicNumber: 1,
+            slug: 'algebraic-identities-quadratic-roots',
+            titleEn: 'Algebraic Identities & Quadratic Roots',
+            titleHi: 'बीजगणितीय सर्वसमिकाएं एवं द्विघात मूल',
+            descriptionEn: 'Mastering (x + 1/x)² expansions, quadratic discriminant conditions (b² - 4ac > 0), and telescoping fractions.',
+            descriptionHi: '(x + 1/x)² = x² + 1/x² + 2 सर्वसमिका, b² - 4ac > 0 द्वारा वास्तविक व भिन्न मूल, तथा भिन्नों का मान।',
+            estimatedMinutes: 20,
+            isPrescribedInOfficialSyllabus: true,
+            pyqCount: 5,
+            hasAppearedInPyq: true,
+            examImportance: 'CRITICAL_HIGH_YIELD',
+            pyqAppearanceSummary: 'TRE 3.0 (Q.31), TRE 2.0 (Q.34, Q.36), TRE 1.0 (Q.2)',
+            tutorial: {
+              id: 'tut-math-algebra',
+              topicId: 'math-topic-algebra-identities',
+              titleEn: 'Algebraic Identities & Quadratic Equations for BPSC TRE',
+              titleHi: 'BPSC TRE हेतु बीजगणित एवं द्विघात समीकरण का संपूर्ण अध्ययन',
+              readingTimeMinutes: 12,
+              difficulty: 'INTERMEDIATE',
+              learningObjectives: [
+                'Expand symmetric reciprocal algebraic forms like ==(x + 1/x)² = x² + 1/x² + 2==.',
+                'Determine root nature using the quadratic discriminant: ==D = b² - 4ac==.',
+                'Quickly simplify telescoping fraction series: (1 + 1/2)(1 + 1/3)...(1 + 1/n).'
+              ],
+              introductionEn: 'In every BPSC TRE paper, questions on elementary algebraic identities and quadratic roots are asked in General Studies (Q.31 to Q.38). These are direct formula-based questions carrying guaranteed marks.',
+              introductionHi: 'BPSC TRE के प्रत्येक सामान्य अध्ययन पत्र में (प्र. 31 से 38) बीजगणित की मानक सर्वसमिकाओं और द्विघात समीकरण के विविक्तकर (Discriminant) से सीधे प्रश्न पूछे जाते हैं।',
+              conceptSections: [
+                {
+                  title: '1. Reciprocal Identity: (x + 1/x)²',
+                  contentMarkdownEn: `From the standard binomial identity $(a + b)² = a² + b² + 2ab$:
+* Let $a = x$ and $b = 1/x$:
+  * ==$(x + 1/x)² = x² + 1/x² + 2$==
+* Similarly for difference:
+  * ==$(x - 1/x)² = x² + 1/x² - 2$==
+* **BPSC TRE 3.0 Trap:** Many candidates mistakenly select $x² + 1/x²$ forgetting the middle cross-product term $2(x)(1/x) = 2$.`
+                },
+                {
+                  title: '2. Quadratic Discriminant & Nature of Roots',
+                  contentMarkdownEn: `For the standard quadratic equation $ax² + bx + c = 0$ ($a ≠ 0$), the discriminant is:
+* ==$D = b² - 4ac$==
+* **Rule 1 (Real & Distinct Roots):** If ==$b² - 4ac > 0$==, roots are real and unequal.
+* **Rule 2 (Real & Equal Roots):** If ==$b² - 4ac = 0$==, roots are real and equal ($x = -b/2a$).
+* **Rule 3 (Imaginary Roots):** If ==$b² - 4ac < 0$==, roots are complex conjugate numbers.`
+                }
+              ],
+              importantDefinitions: [
+                {
+                  term: 'Discriminant (विविक्तकर)',
+                  definitionEn: 'The algebraic quantity D = b² - 4ac that discriminates between real and non-real roots of a quadratic equation.',
+                  definitionHi: 'द्विघात समीकरण ax² + bx + c = 0 में D = b² - 4ac को विविक्तकर कहते हैं जो मूलों के वास्तविक या काल्पनिक होने का निर्धारण करता है।'
+                }
+              ],
+              rulesAndFormulas: [
+                {
+                  title: 'Core Algebraic Formulas',
+                  formulaOrRule: '(x + 1/x)² = x² + 1/x² + 2 | D = b² - 4ac > 0 for distinct real roots',
+                  explanationEn: 'Essential identities tested in TRE 2.0 Q.34 and TRE 3.0 Q.31.',
+                  explanationHi: 'द्विघात समीकरण में भिन्न वास्तविक मूल हेतु b² - 4ac > 0 अनिवार्य है।'
+                }
+              ],
+              examples: [
+                {
+                  title: 'BPSC TRE 3.0 Official Problem Analysis',
+                  problemEn: 'Which of the following is the value of (x + 1/x)²? (A) x² + 1/x² (B) x² + 1/x² + 2 (C) x² + 1/x² - 2 (D) More than one of the above (E) None of the above',
+                  stepByStepSolutionEn: `1. Apply identity (a + b)² = a² + b² + 2ab.
+2. Here a = x, b = 1/x.
+3. Product 2ab = 2 × x × (1/x) = 2.
+4. Expansion is x² + 1/x² + 2.
+5. Official BPSC Key: Option (B).`,
+                  shortcutTrick: 'Middle term 2(x)(1/x) cancels to constant 2.'
+                }
+              ],
+              practicalApplications: ['Algebraic modeling, polynomial solving, and physical projectile trajectories.'],
+              commonMistakesAndMisconceptions: [
+                {
+                  mistakeEn: 'Forgetting the constant +2 in (x + 1/x)²',
+                  whyWrongEn: 'Thinking (a+b)² = a² + b² without the 2ab cross product.',
+                  correctWayEn: 'Always include +2: (x + 1/x)² = x² + 1/x² + 2.'
+                }
+              ],
+              bpscTrePerspective: {
+                frequentlyTestedAspects: [
+                  'Value of (x + 1/x)² (TRE 3.0 Q.31).',
+                  'Condition for two distinct real roots: b² - 4ac > 0 (TRE 2.0 Q.34).',
+                  'Difference of squares: X = a² - b² = (a+b)(a-b) (TRE 2.0 Q.36).'
+                ],
+                commonDistractorTraps: ['Omitting +2 in expansion, confusing D > 0 with D ≥ 0.'],
+                relatedPyqReferences: ['BPSC TRE 3.0 (Q.31)', 'BPSC TRE 2.0 (Q.34, Q.36)']
+              },
+              quickRevisionPoints: [
+                '(x + 1/x)² = ==x² + 1/x² + 2==.',
+                '(x - 1/x)² = ==x² + 1/x² - 2==.',
+                'Distinct real roots: ==b² - 4ac > 0==.',
+                'Equal real roots: ==b² - 4ac = 0==.'
+              ],
+              knowledgeCheck: [
+                {
+                  id: 'kc-math-alg-1',
+                  questionEn: 'If a quadratic equation has real and equal roots, what must be the value of its discriminant D = b² - 4ac?',
+                  questionHi: 'यदि किसी द्विघात समीकरण के मूल वास्तविक और समान हों, तो उसके विविक्तकर D = b² - 4ac का मान क्या होना चाहिए?',
+                  options: [
+                    { id: 'A', textEn: 'D = 0', isCorrect: true },
+                    { id: 'B', textEn: 'D > 0', isCorrect: false },
+                    { id: 'C', textEn: 'D < 0', isCorrect: false },
+                    { id: 'D', textEn: 'D ≥ 1', isCorrect: false }
+                  ],
+                  explanationEn: 'When D = 0, the quadratic formula x = (-b ± √0)/2a gives two identical real roots x = -b/2a.',
+                  conceptTested: 'Quadratic Discriminant Nature of Roots'
+                }
+              ]
+            },
+            practiceQuestions: [
+              {
+                id: 'pq-math-alg-1',
+                topicId: 'math-topic-algebra-identities',
+                chapterId: 'math-ch-algebra-arithmetic',
+                subjectKey: 'ELEMENTARY_MATHEMATICS',
+                sectionKey: 'PART_2_GENERAL_STUDIES',
+                questionTextEn: 'The equation ax² + bx + c = 0 has two distinct real roots if:',
+                questionTextHi: 'समीकरण ax² + bx + c = 0 के दो भिन्न वास्तविक मूल होंगे यदि:',
+                options: [
+                  { id: 'o1', identifier: 'A', textEn: 'b² - 4ac > 0', isCorrect: true },
+                  { id: 'o2', identifier: 'B', textEn: 'b² - 4ac = 0', isCorrect: false },
+                  { id: 'o3', identifier: 'C', textEn: 'b² - 4ac < 0', isCorrect: false },
+                  { id: 'o4', identifier: 'D', textEn: 'More than one of the above', isCorrect: false },
+                  { id: 'o5', identifier: 'E', textEn: 'None of the above', isCorrect: false }
+                ],
+                correctOptionIdentifier: 'A',
+                difficulty: 'EASY',
+                practiceMode: 'PYQ',
+                explanationEn: 'For distinct real roots, discriminant D = b² - 4ac must strictly exceed zero.',
+                isAuthenticPyq: true,
+                treVersion: 'TRE_2_0',
+                examDate: '2023-12-15',
+                shift: 'Shift 1 (General Studies)',
+                officialQuestionNumber: 34,
+                verificationStatus: 'OFFICIALLY_VERIFIED'
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+
+  // =========================================================================
+  // SUBJECT 7: CURRENT AFFAIRS, SPACE & TECH MISSIONS
+  // =========================================================================
+  {
+    key: 'CURRENT_AFFAIRS',
+    sectionKey: 'PART_2_GENERAL_STUDIES',
+    displayNameEn: 'Current Affairs & Science Missions',
+    displayNameHi: 'समसामयिकी एवं विज्ञान-प्रौद्योगिकी मिशन',
+    iconName: 'Globe',
+    descriptionEn: 'Flagship national science and global integration topics: ISRO Gaganyaan, Chandrayaan-3, Green Hydrogen Mission, G20 African Union induction, G7, and international UPI.',
+    descriptionHi: 'इसरो का गगनयान मिशन, चंद्रयान-3, राष्ट्रीय हरित हाइड्रोजन मिशन, G20 में अफ्रीकी संघ का स्थायी प्रवेश, G7 सम्मेलन तथा अंतरराष्ट्रीय UPI विस्तार।',
+    chapters: [
+      {
+        id: 'ca-ch-space-summits',
+        subjectKey: 'CURRENT_AFFAIRS',
+        chapterNumber: 1,
+        slug: 'isro-space-missions-green-hydrogen-summits',
+        titleEn: 'ISRO Space Missions, Green Hydrogen & Summits',
+        titleHi: 'इसरो अंतरिक्ष मिशन, हरित हाइड्रोजन एवं वैश्विक शिखर सम्मेलन',
+        descriptionEn: 'Comprehensive guide to high-yield science and geopolitical developments tested in TRE 1.0, 2.0, and 3.0.',
+        descriptionHi: 'गगनयान, हरित हाइड्रोजन निर्माण प्रक्रिया (इलेक्ट्रोलिसिस), G20 नई दिल्ली शिखर सम्मेलन तथा CAA पर आधारित संपूर्ण अध्ययन।',
+        totalPracticeQuestions: 25,
+        totalEstimatedMinutes: 50,
+        topics: [
+          {
+            id: 'ca-topic-isro-green-energy',
+            chapterId: 'ca-ch-space-summits',
+            topicNumber: 1,
+            slug: 'isro-gaganyaan-chandrayaan-green-hydrogen',
+            titleEn: 'ISRO Space Missions & Green Hydrogen Technology',
+            titleHi: 'इसरो अंतरिक्ष मिशन एवं ग्रीन हाइड्रोजन तकनीक',
+            descriptionEn: 'Gaganyaan crewed orbital mission, Chandrayaan-2/3 communications, and green hydrogen water electrolysis.',
+            descriptionHi: 'गगनयान मानवयुक्त अंतरिक्ष यान, चंद्रयान-3 और चंद्रयान-2 का संपर्क संदेश, तथा जल के विद्युत-अपघटन द्वारा हरित हाइड्रोजन।',
+            estimatedMinutes: 20,
+            isPrescribedInOfficialSyllabus: true,
+            pyqCount: 6,
+            hasAppearedInPyq: true,
+            examImportance: 'CRITICAL_HIGH_YIELD',
+            pyqAppearanceSummary: 'TRE 3.0 (Q.49, Q.51), TRE 2.0 (Q.51), TRE 1.0 (Q.19, Q.20)',
+            tutorial: {
+              id: 'tut-ca-space',
+              topicId: 'ca-topic-isro-green-energy',
+              titleEn: 'ISRO Missions & Green Energy for BPSC TRE',
+              titleHi: 'BPSC TRE हेतु इसरो मिशन एवं हरित ऊर्जा का अध्ययन',
+              readingTimeMinutes: 10,
+              difficulty: 'INTERMEDIATE',
+              learningObjectives: [
+                'Understand the mission profile of ==Gaganyaan== (ISRO\'s human spaceflight).',
+                'Know the official message sent by Chandrayaan-2 to Chandrayaan-3: ==\"Welcome buddy!\"==.',
+                'Explain how ==Green Hydrogen== is generated through water electrolysis powered by renewable energy.'
+              ],
+              introductionEn: 'Science & technology and space achievements constitute the most consistent segment of Current Affairs in BPSC TRE General Studies. BPSC questions focus on mission names, technological processes, and specific historic milestones.',
+              introductionHi: 'BPSC TRE में समसामयिकी खंड के तहत इसरो के प्रमुख अंतरिक्ष मिशन (गगनयान, चंद्रयान-3) तथा हरित हाइड्रोजन जैसे राष्ट्रीय अभियानों से सीधे प्रश्न पूछे जाते हैं।',
+              conceptSections: [
+                {
+                  title: '1. ISRO Gaganyaan: India\'s Crewed Spaceflight',
+                  contentMarkdownEn: `* **Mission Goal:** Send a crew of **3 Indian astronauts** to Low Earth Orbit (400 km) for a 3-day mission and return safely to Earth.
+* **Launch Vehicle:** ==LVM3 (Launch Vehicle Mark-3)==.
+* **Crew Module:** Equipped with environmental control and life support system (ECLSS) and crew escape system (CES).
+* **Astronaut Designation:** Astronaut designates trained at Yuri Gagarin Cosmonaut Training Center and ISRO.`
+                },
+                {
+                  title: '2. Green Hydrogen Generation Process',
+                  contentMarkdownEn: `* **Green Hydrogen** is produced by splitting water ($H_2O$) into hydrogen and oxygen via ==electrolysis==.
+* **Crucial Criterion:** The electrical energy driving the electrolyzer MUST come from ==100% renewable sources== (solar, wind, hydro).
+* **National Target:** 5 Million Metric Tonnes (MMT) annual production by 2030 under National Green Hydrogen Mission.
+* **First Pilot Plant in India:** Commissioned by Oil India Limited at ==Jorhat, Assam== (99.999% pure).`
+                }
+              ],
+              importantDefinitions: [
+                {
+                  term: 'Green Hydrogen',
+                  definitionEn: 'Hydrogen produced through water electrolysis powered entirely by renewable solar, wind, or hydro electricity with zero carbon emissions.',
+                  definitionHi: 'नवीकरणीय ऊर्जा (सौर/पवन) की सहायता से जल के विद्युत-अपघटन (Electrolysis) द्वारा उत्पादित हाइड्रोजन जिसमें शून्य कार्बन उत्सर्जन होता है।'
+                }
+              ],
+              rulesAndFormulas: [
+                {
+                  title: 'Hydrogen Color Classifications',
+                  formulaOrRule: 'Green = Water Electrolysis + Renewable | Grey = Methane Steam Reforming (High CO2) | Blue = Methane + Carbon Capture',
+                  explanationEn: 'Only Green Hydrogen utilizes renewable electricity-driven water electrolysis.',
+                  explanationHi: 'केवल ग्रीन हाइड्रोजन में नवीकरणीय ऊर्जा द्वारा जल का इलेक्ट्रोलिसिस होता है।'
+                }
+              ],
+              examples: [
+                {
+                  title: 'BPSC TRE 3.0 Question Analysis',
+                  problemEn: 'What is the name of spacecraft to be launched by ISRO in 2024 to carry astronauts? (A) Gaganyaan (B) Chandrayaan-3 (C) Aditya-L1 (D) More than one of the above (E) None of the above',
+                  stepByStepSolutionEn: '1. ISRO\'s crewed mission to carry Indian astronauts is Gaganyaan. 2. Aditya-L1 is a solar observatory, Chandrayaan-3 was a lunar lander/rover. 3. Official Answer: (A) Gaganyaan.',
+                  shortcutTrick: "'Gagan' = Sky/Space; 'Yaan' = Vehicle => Gaganyaan for human spaceflight."
+                }
+              ],
+              practicalApplications: ['Zero-emission transport, heavy industry decarbonization, and space propulsion.'],
+              commonMistakesAndMisconceptions: [
+                {
+                  mistakeEn: 'Thinking Green Hydrogen is produced from natural gas.',
+                  whyWrongEn: 'Natural gas reforming produces Grey Hydrogen, releasing carbon dioxide.',
+                  correctWayEn: 'Green Hydrogen is produced exclusively from water electrolysis using renewable energy.'
+                }
+              ],
+              bpscTrePerspective: {
+                frequentlyTestedAspects: [
+                  'ISRO crewed spacecraft name: Gaganyaan (TRE 3.0 Q.49).',
+                  'Process for green hydrogen: water electrolysis (TRE 3.0 Q.51, TRE 1.0 Q.20).',
+                  'Chandrayaan-2 message to Chandrayaan-3: "Welcome buddy!" (TRE 2.0 Q.51).'
+                ],
+                commonDistractorTraps: ['Confusing Gaganyaan with Chandrayaan or Aditya-L1.'],
+                relatedPyqReferences: ['BPSC TRE 3.0 (Q.49, Q.51)', 'BPSC TRE 2.0 (Q.51)']
+              },
+              quickRevisionPoints: [
+                'Human spaceflight mission: ==Gaganyaan==.',
+                'Green hydrogen production: ==Electrolysis of water powered by renewables==.',
+                'First pure green hydrogen plant: ==Jorhat, Assam==.',
+                'Chandrayaan-2 greeting: ==\"Welcome buddy!\"==.'
+              ],
+              knowledgeCheck: [
+                {
+                  id: 'kc-ca-gh-1',
+                  questionEn: 'Which chemical process is utilized to extract Green Hydrogen without generating greenhouse carbon emissions?',
+                  questionHi: 'ग्रीन हाइड्रोजन प्राप्त करने के लिए बिना ग्रीनहाउस गैस उत्सर्जन के किस रासायनिक प्रक्रिया का उपयोग किया जाता है?',
+                  options: [
+                    { id: 'A', textEn: 'Water electrolysis powered by renewable electricity', isCorrect: true },
+                    { id: 'B', textEn: 'Coal gasification', isCorrect: false },
+                    { id: 'C', textEn: 'Natural gas steam reforming', isCorrect: false },
+                    { id: 'D', textEn: 'Nuclear fission', isCorrect: false }
+                  ],
+                  explanationEn: 'Electrolysis splits water into hydrogen and oxygen using clean renewable power, creating zero greenhouse emissions.',
+                  conceptTested: 'Green Hydrogen Process'
+                }
+              ]
+            },
+            practiceQuestions: [
+              {
+                id: 'pq-ca-space-1',
+                topicId: 'ca-topic-isro-green-energy',
+                chapterId: 'ca-ch-space-summits',
+                subjectKey: 'CURRENT_AFFAIRS',
+                sectionKey: 'PART_2_GENERAL_STUDIES',
+                questionTextEn: 'What is the name of spacecraft to be launched by ISRO to carry astronauts into space?',
+                questionTextHi: 'भारतीय अंतरिक्ष यात्रियों को अंतरिक्ष में ले जाने हेतु इसरो द्वारा विकसित अंतरिक्ष यान का नाम क्या है?',
+                options: [
+                  { id: 'o1', identifier: 'A', textEn: 'Gaganyaan', isCorrect: true },
+                  { id: 'o2', identifier: 'B', textEn: 'Aditya-L1', isCorrect: false },
+                  { id: 'o3', identifier: 'C', textEn: 'Chandrayaan-3', isCorrect: false },
+                  { id: 'o4', identifier: 'D', textEn: 'More than one of the above', isCorrect: false },
+                  { id: 'o5', identifier: 'E', textEn: 'None of the above', isCorrect: false }
+                ],
+                correctOptionIdentifier: 'A',
+                difficulty: 'EASY',
+                practiceMode: 'PYQ',
+                explanationEn: "Gaganyaan is ISRO's indigenous crewed spacecraft project.",
+                isAuthenticPyq: true,
+                treVersion: 'TRE_3_0',
+                examDate: '2024-07-22',
+                shift: 'Shift 1 (General Studies)',
+                officialQuestionNumber: 49,
+                verificationStatus: 'OFFICIALLY_VERIFIED'
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];

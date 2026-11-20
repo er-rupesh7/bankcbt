@@ -17,6 +17,8 @@ export type LMSSubjectKey =
   | 'INDIAN_GEOGRAPHY'
   | 'INDIAN_ECONOMY'
   | 'GENERAL_SCIENCE'
+  | 'ELEMENTARY_MATHEMATICS'
+  | 'CURRENT_AFFAIRS'
   | 'CURRENT_AFAIRS'
   // Part 3: Core Subjects
   | 'COMPUTER_SCIENCE_11_12'

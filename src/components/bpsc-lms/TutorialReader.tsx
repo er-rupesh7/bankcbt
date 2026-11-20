@@ -46,8 +46,99 @@ import Link from 'next/link';
 // ============================================================================
 // RICH MARKDOWN & HIGHLIGHTER FORMATTER
 // Turns raw asterisks, bullets, formulas, and story blocks into human-readable,
-// beautifully styled, multi-colored typography with yellow highlighters.
+// beautifully styled, multi-colored typography with yellow highlighters,
+// clean mathematical symbols, and native HTML superscripts/subscripts.
 // ============================================================================
+
+// Clean LaTeX escape sequences and replace with standard Unicode math & symbols
+function cleanLaTeXSymbols(s: string): string {
+  if (!s) return '';
+  return s
+    .replace(/\\\\oplus/g, '⊕')
+    .replace(/\\oplus/g, '⊕')
+    .replace(/\\\\odot/g, '⊙')
+    .replace(/\\odot/g, '⊙')
+    .replace(/\\\\otimes/g, '⊗')
+    .replace(/\\otimes/g, '⊗')
+    .replace(/\\\\bar\{([A-Za-z0-9])\}/g, '$1\u0305')
+    .replace(/\\bar\{([A-Za-z0-9])\}/g, '$1\u0305')
+    .replace(/\\\\bar([A-Za-z0-9])/g, '$1\u0305')
+    .replace(/\\bar([A-Za-z0-9])/g, '$1\u0305')
+    .replace(/\\\\overline\{([A-Za-z0-9]+)\}/g, '$1\u0305')
+    .replace(/\\overline\{([A-Za-z0-9]+)\}/g, '$1\u0305')
+    .replace(/\\\\times/g, ' × ')
+    .replace(/\\times/g, ' × ')
+    .replace(/\\\\cdot/g, ' · ')
+    .replace(/\\cdot/g, ' · ')
+    .replace(/\\\\pm/g, '±')
+    .replace(/\\pm/g, '±')
+    .replace(/\\\\leq?/g, ' ≤ ')
+    .replace(/\\leq?/g, ' ≤ ')
+    .replace(/\\\\geq?/g, ' ≥ ')
+    .replace(/\\geq?/g, ' ≥ ')
+    .replace(/\\\\neq/g, ' ≠ ')
+    .replace(/\\neq/g, ' ≠ ')
+    .replace(/\\\\approx/g, ' ≈ ')
+    .replace(/\\approx/g, ' ≈ ')
+    .replace(/\\\\rightarrow/g, ' → ')
+    .replace(/\\rightarrow/g, ' → ')
+    .replace(/\\\\theta/g, 'θ')
+    .replace(/\\theta/g, 'θ')
+    .replace(/\\\\pi/g, 'π')
+    .replace(/\\pi/g, 'π')
+    .replace(/\\\\Omega/g, 'Ω')
+    .replace(/\\Omega/g, 'Ω')
+    .replace(/\\\\mu/g, 'µ')
+    .replace(/\\mu/g, 'µ');
+}
+
+// Convert ^(superscripts) and _(subscripts) into clean HTML <sup> and <sub> tags
+function renderScriptsAndMath(text: string): React.ReactNode {
+  if (!text) return null;
+  const cleaned = cleanLaTeXSymbols(text);
+
+  // Split on ^{...}, ^token, _{...}, _token
+  const scriptRegex = /(\^\{[^}]+\}|\^[0-9a-zA-Z+-]+|_\{[^}]+\}|_[0-9a-zA-Z+-]+)/g;
+  const parts = cleaned.split(scriptRegex);
+
+  if (parts.length === 1) {
+    return cleaned;
+  }
+
+  return parts.map((seg, sIdx) => {
+    if (!seg) return null;
+    if (seg.startsWith('^{') && seg.endsWith('}')) {
+      return (
+        <sup key={sIdx} className="font-semibold text-[0.8em] text-blue-600 dark:text-blue-300">
+          {seg.slice(2, -1)}
+        </sup>
+      );
+    }
+    if (seg.startsWith('^')) {
+      return (
+        <sup key={sIdx} className="font-semibold text-[0.8em] text-blue-600 dark:text-blue-300">
+          {seg.slice(1)}
+        </sup>
+      );
+    }
+    if (seg.startsWith('_{') && seg.endsWith('}')) {
+      return (
+        <sub key={sIdx} className="font-semibold text-[0.8em] text-indigo-600 dark:text-indigo-300">
+          {seg.slice(2, -1)}
+        </sub>
+      );
+    }
+    if (seg.startsWith('_')) {
+      return (
+        <sub key={sIdx} className="font-semibold text-[0.8em] text-indigo-600 dark:text-indigo-300">
+          {seg.slice(1)}
+        </sub>
+      );
+    }
+    return <React.Fragment key={sIdx}>{seg}</React.Fragment>;
+  });
+}
+
 function parseInlineFormatting(text: string): React.ReactNode[] {
   if (!text) return [];
 
@@ -68,15 +159,15 @@ function parseInlineFormatting(text: string): React.ReactNode[] {
       );
     }
 
-    // 2. Yellow Highlighter: ==text==
+    // 2. Yellow Highlighter: ==text== (recursively format inner content)
     if (part.startsWith('==') && part.endsWith('==') && part.length >= 4) {
       const inner = part.slice(2, -2);
       return (
         <mark
           key={idx}
-          className="bg-yellow-200/90 text-amber-950 dark:bg-yellow-400/25 dark:text-yellow-200 px-1.5 py-0.5 rounded font-bold border-b-2 border-yellow-400 dark:border-yellow-500 shadow-sm mx-0.5"
+          className="bg-yellow-200/90 text-amber-950 dark:bg-yellow-400/25 dark:text-yellow-200 px-1.5 py-0.5 rounded font-bold border-b-2 border-yellow-400 dark:border-yellow-500 shadow-xs mx-0.5"
         >
-          {inner}
+          {parseInlineFormatting(inner)}
         </mark>
       );
     }
@@ -89,43 +180,38 @@ function parseInlineFormatting(text: string): React.ReactNode[] {
           key={idx}
           className="rounded bg-indigo-50 dark:bg-slate-800 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-slate-700 px-1.5 py-0.5 font-mono text-xs font-semibold"
         >
-          {inner}
+          {renderScriptsAndMath(inner)}
         </code>
       );
     }
 
-    // 4. Math formula: $formula$
+    // 4. Math formula: $formula$ (clean delimiters, symbols & render superscripts)
     if (part.startsWith('$') && part.endsWith('$') && part.length >= 2) {
-      const inner = part.slice(1, -1)
-        .replace(/\\rightarrow/g, ' → ')
-        .replace(/\\times/g, ' × ')
-        .replace(/\\le/g, ' ≤ ')
-        .replace(/\\ge/g, ' ≥ ')
-        .replace(/\\theta/g, 'θ')
-        .replace(/\\approx/g, ' ≈ ');
+      const inner = part.slice(1, -1);
       return (
         <span
           key={idx}
           className="font-mono font-bold text-blue-700 dark:text-blue-300 bg-blue-50/80 dark:bg-blue-950/40 px-1.5 py-0.5 rounded text-xs mx-0.5 border border-blue-200/60 dark:border-blue-900/40"
         >
-          {inner}
+          {renderScriptsAndMath(inner)}
         </span>
       );
     }
 
-    // Regular text (substitute escaped LaTeX arrows if any)
-    const cleanText = part
-      .replace(/\\rightarrow/g, ' → ')
-      .replace(/\\times/g, ' × ');
-
-    return <React.Fragment key={idx}>{cleanText}</React.Fragment>;
+    // Regular text: render superscripts, subscripts & standard math symbols
+    return <React.Fragment key={idx}>{renderScriptsAndMath(part)}</React.Fragment>;
   });
 }
 
 function renderRichLmsText(rawText: string, isHindi = false): React.ReactNode {
   if (!rawText) return null;
 
-  const lines = rawText.split('\n');
+  // Unescape literal newlines \n, \r\n that might be present in string literals
+  const normalizedText = rawText
+    .replace(/\\r\\n/g, '\n')
+    .replace(/\\n/g, '\n');
+
+  const lines = normalizedText.split('\n');
 
   return (
     <div className={`space-y-3 ${isHindi ? 'font-hindi' : ''}`}>

@@ -114,3 +114,59 @@ export interface BPSCExamProfile {
     isQualifyingOnly: boolean;
   }[];
 }
+
+export interface BPSCGeneralStudiesPillars {
+  mathematicsCount: 8;
+  generalScienceCount: 8;
+  currentAffairsCount: 8;
+  geographyCount: 8;
+  historyInmCount: 8;
+}
+
+export interface BPSCLanguageDistribution {
+  englishCompulsoryCount: 8;
+  hindiCoreCount: 22;
+}
+
+export const OFFICIAL_BPSC_TRE4_PROFILE: BPSCExamProfile = {
+  title: 'BPSC TRE 4.0 - Computer Science (Class 11-12) Official Standard Profile',
+  treVersion: 'TRE_4_0',
+  subject: 'COMPUTER_SCIENCE_11_12',
+  mode: 'FULL_LENGTH_TRE4',
+  totalQuestions: 150,
+  totalDurationSeconds: 9000,
+  totalMarks: 150.0,
+  negativeMarkRatio: 1 / 3,
+  penaltyForBlank: 1 / 3,
+  isTRE4MarkingScheme: true,
+  isOptionENotAnswered: true,
+  qualifyingMarksPart1: 9.0,
+  meritMarksTotal: 120.0,
+  sections: [
+    {
+      partNumber: 1,
+      displayName: 'Part 1: Language (Qualifying - 30 Marks)',
+      sectionType: 'BPSC_LANGUAGE',
+      questionCount: 30,
+      maxMarks: 30.0,
+      isQualifyingOnly: true,
+    },
+    {
+      partNumber: 2,
+      displayName: 'Part 2: General Studies (40 Marks)',
+      sectionType: 'BPSC_GENERAL_STUDIES',
+      questionCount: 40,
+      maxMarks: 40.0,
+      isQualifyingOnly: false,
+    },
+    {
+      partNumber: 3,
+      displayName: 'Part 3: Computer Science (80 Marks)',
+      sectionType: 'BPSC_COMPUTER_SCIENCE',
+      questionCount: 80,
+      maxMarks: 80.0,
+      isQualifyingOnly: false,
+    },
+  ],
+};
+

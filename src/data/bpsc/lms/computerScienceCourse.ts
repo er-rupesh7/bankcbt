@@ -64,7 +64,7 @@ export const BPSC_COMPUTER_SCIENCE_SUBJECTS: LMSSubject[] = [
               conceptSections: [
                 {
                   title: '1. Why Modern Computers Use 2\'s Complement',
-                  contentMarkdownEn: 'Modern computer ALUs utilize ==2\'s complement== for representing signed integers because:\\n* It provides a **single unique representation for zero** (unlike 1\'s complement which has +0 and -0).\\n* Addition and subtraction use the exact same hardware circuit.\\n\\n**Representation Range for n Bits:**\\n* **Unsigned Integer Range:** $0$ to $2^n - 1$\\n* **1\'s Complement Range:** $-(2^{n-1} - 1)$ to $+(2^{n-1} - 1)$\\n* **2\'s Complement Range:** ==$-2^{n-1}$ to $+2^{n-1} - 1$==\\n\\nFor an 8-bit byte ($n=8$):\\n* Smallest negative number: $-2^7 = ==-128==$ (`10000000`)\\n* Largest positive number: $+2^7 - 1 = ==+127==$ (`01111111`)',
+                  contentMarkdownEn: 'Modern computer ALUs utilize ==2\'s complement== for representing signed integers because:\n* It provides a **single unique representation for zero** (unlike 1\'s complement which has +0 and -0).\n* Addition and subtraction use the exact same hardware circuit.\n\n**Representation Range for n Bits:**\n* **Unsigned Integer Range:** 0 to 2^n - 1\n* **1\'s Complement Range:** -(2^(n-1) - 1) to +(2^(n-1) - 1)\n* **2\'s Complement Range:** ==-2^(n-1) to +2^(n-1) - 1==\n\nFor an 8-bit byte (n = 8):\n* Smallest negative number: -2^7 = ==-128== (`10000000`)\n* Largest positive number: +2^7 - 1 = ==+127== (`01111111`)',
                   tableData: {
                     headers: ['Bit Width (n)', 'Unsigned Range', '1\'s Complement Range', '2\'s Complement Range (BPSC Focus)'],
                     rows: [
@@ -224,7 +224,7 @@ export const BPSC_COMPUTER_SCIENCE_SUBJECTS: LMSSubject[] = [
                 },
                 {
                   title: '2. XOR Gate: The Odd-1s Detector',
-                  contentMarkdownEn: '* **XOR (Exclusive-OR):** Output is HIGH ($1$) when inputs are **different** (odd parity):\\n  * $Y = A \\\\oplus B = A\\\\bar{B} + \\\\bar{A}B$\\n* **XNOR (Equivalence / Coincidence Gate):** Output is HIGH ($1$) when inputs are **identical**:\\n  * $Y = A \\\\odot B = AB + \\\\bar{A}\\\\bar{B}$'
+                  contentMarkdownEn: '* **XOR (Exclusive-OR):** Output is HIGH (1) when inputs are **different** (odd parity):\n  * Y = A ⊕ B = AB̅ + A̅B\n* **XNOR (Equivalence / Coincidence Gate):** Output is HIGH (1) when inputs are **identical**:\n  * Y = A ⊙ B = AB + A̅B̅'
                 }
               ],
               importantDefinitions: [
@@ -355,11 +355,11 @@ export const BPSC_COMPUTER_SCIENCE_SUBJECTS: LMSSubject[] = [
               conceptSections: [
                 {
                   title: '1. De Morgan\'s Theorems',
-                  contentMarkdownEn: '* **First Theorem:** The complement of a product equals the sum of complements:\\n  * ==$\\\\overline{A \\\\cdot B} = \\\\bar{A} + \\\\bar{B}$==\\n* **Second Theorem:** The complement of a sum equals the product of complements:\\n  * ==$\\\\overline{A + B} = \\\\bar{A} \\\\cdot \\\\bar{B}$==\\n* **Mnemonic:** "Break the line, change the sign."'
+                  contentMarkdownEn: '* **First Theorem:** The complement of a product equals the sum of complements:\n  * ==(A · B)̅ = A̅ + B̅==\n* **Second Theorem:** The complement of a sum equals the product of complements:\n  * ==(A + B)̅ = A̅ · B̅==\n* **Mnemonic:** "Break the line, change the sign."'
                 },
                 {
                   title: '2. Karnaugh Map (K-Map) Gray Code Adjacency',
-                  contentMarkdownEn: 'In a K-Map, rows and columns are arranged in **Gray Code** order: ==`00, 01, 11, 10`== (NOT binary `00, 01, 10, 11`).\\n* **Crucial Property:** Between any two adjacent cells, ==ONLY ONE BIT CHANGES==.\\n* This allows the minimization $(A + \\\\bar{A} = 1)$ to eliminate a literal when two adjacent cells are grouped together.\\n* Groups must always be powers of 2: **1, 2, 4, 8, 16** cells.'
+                  contentMarkdownEn: 'In a K-Map, rows and columns are arranged in **Gray Code** order: ==`00, 01, 11, 10`== (NOT binary `00, 01, 10, 11`).\n* **Crucial Property:** Between any two adjacent cells, ==ONLY ONE BIT CHANGES==.\n* This allows the minimization (A + A̅ = 1) to eliminate a literal when two adjacent cells are grouped together.\n* Groups must always be powers of 2: **1, 2, 4, 8, 16** cells.'
                 }
               ],
               importantDefinitions: [
