@@ -1,4 +1,7 @@
 import { LMSSubject } from '@/types/bpscLms';
+import { BPSC_ENGLISH_SUBJECTS } from './englishCourse';
+import { BPSC_HINDI_SUBJECTS } from './hindiCourse';
+
 
 export const BPSC_LANGUAGE_SUBJECTS: LMSSubject[] = [
   // =========================================================================
@@ -727,7 +730,8 @@ export const BPSC_LANGUAGE_SUBJECTS: LMSSubject[] = [
             ]
           }
         ]
-      }
+      },
+      ...BPSC_ENGLISH_SUBJECTS[0].chapters
     ]
   },
 
@@ -1593,7 +1597,8 @@ export const BPSC_LANGUAGE_SUBJECTS: LMSSubject[] = [
             ]
           }
         ]
-      }
+      },
+      ...BPSC_HINDI_SUBJECTS[0].chapters
     ]
   }
 ];
