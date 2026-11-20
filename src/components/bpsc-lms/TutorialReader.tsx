@@ -41,6 +41,9 @@ import {
   History as HistoryIcon,
   ShieldAlert
 } from 'lucide-react';
+import { LMSPracticeQuestion } from '@/types/bpscLms';
+import { generateEnglishQuestions } from '@/lib/generator/englishQuestionGenerator';
+import { EnglishDifficulty, EnglishPracticeMode } from '@/types/englishEngine';
 import Link from 'next/link';
 
 // ============================================================================
@@ -321,6 +324,12 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
   const [kcAnswers, setKcAnswers] = useState<Record<string, string>>({});
   const [kcChecked, setKcChecked] = useState(false);
 
+  // Unlimited English generator state
+  const [customDrillQuestions, setCustomDrillQuestions] = useState<LMSPracticeQuestion[] | null>(null);
+  const [generatorCount, setGeneratorCount] = useState<number>(10);
+  const [generatorDifficulty, setGeneratorDifficulty] = useState<EnglishDifficulty>('BPSC_EXAM');
+  const [generatorMode, setGeneratorMode] = useState<EnglishPracticeMode>('PRACTICE');
+
   // Locate the active topic metadata
   let currentTopic: LMSTopic | null = null;
   let currentChapter: LMSChapter | null = null;
@@ -394,6 +403,44 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
   const handleSaveNote = () => {
     if (!currentTopic) return;
     savePersonalNote(currentTopic.id, currentTopic.titleEn, noteContent);
+  };
+
+  const handleGenerateEnglishDrill = () => {
+    if (!currentChapter) return;
+    const res = generateEnglishQuestions({
+      chapterId: currentChapter.id,
+      count: generatorCount,
+      difficulty: generatorDifficulty,
+      mode: generatorMode,
+    });
+
+    const mapped: LMSPracticeQuestion[] = res.questions.map((g) => ({
+      id: g.questionId,
+      topicId: currentTopic?.id || 'eng-topic',
+      chapterId: currentChapter?.id || 'eng-chapter',
+      subjectKey: 'ENGLISH_LANGUAGE',
+      sectionKey: 'PART_1_LANGUAGE',
+      questionTextEn: g.questionText,
+      options: g.options.map((opt, oIdx) => ({
+        id: `opt-${oIdx}`,
+        identifier: opt.identifier,
+        textEn: opt.textEn,
+        isCorrect: opt.isCorrect,
+      })),
+      correctOptionIdentifier: g.correctOption,
+      difficulty: g.difficulty === 'BASIC' || g.difficulty === 'BEGINNER' ? 'EASY' : g.difficulty === 'ADVANCED_CHALLENGE' ? 'HARD' : 'MODERATE',
+      practiceMode: 'BPSC_EXAM',
+      explanationEn: g.explanationEn,
+      examTrapNote: g.examTrapNote,
+      isAuthenticPyq: g.provenance === 'OFFICIAL_PYQ',
+      treVersion: g.pyqSource?.exam?.includes('3.0') ? 'TRE_3_0' : g.pyqSource?.exam?.includes('2.0') ? 'TRE_2_0' : 'TRE_1_0',
+      shift: g.pyqSource?.shift,
+      officialQuestionNumber: g.pyqSource?.questionNumber,
+      verificationStatus: 'OFFICIALLY_VERIFIED'
+    }));
+
+    setCustomDrillQuestions(mapped);
+    setIsDrillOpen(true);
   };
 
   const handleCheckKnowledge = () => {
@@ -1166,6 +1213,103 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
         )}
 
         {/* ======================================================== */}
+        {/* UNLIMITED ENGLISH QUESTION GENERATOR CARD (If English)    */}
+        {/* ======================================================== */}
+        {currentSubject.key === 'ENGLISH_LANGUAGE' && (
+          <div className="mb-8 rounded-2xl border-2 border-indigo-300/80 bg-gradient-to-r from-indigo-50 via-purple-50/60 to-blue-50/50 p-6 shadow-sm dark:border-indigo-800/70 dark:from-indigo-950/30 dark:via-slate-900 dark:to-slate-900">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-indigo-200/80 dark:border-indigo-800/50 pb-3">
+              <div className="flex items-center gap-2.5">
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white font-black text-sm shadow-md">
+                  ⚡
+                </span>
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-wider text-indigo-950 dark:text-indigo-200 flex items-center gap-2">
+                    Unlimited Chapter Practice Engine
+                    <span className="rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 dark:text-emerald-400">
+                      BPSC 5-Option Format
+                    </span>
+                  </h3>
+                  <p className="text-xs text-indigo-800 dark:text-indigo-300">
+                    Generate unlimited customized practice drills on {currentChapter.titleEn} with verified PYQs, traps, and detailed explanations.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-1.5">
+                  Question Count
+                </label>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {[5, 10, 20, 30].map(cnt => (
+                    <button
+                      key={cnt}
+                      type="button"
+                      onClick={() => setGeneratorCount(cnt)}
+                      className={`rounded-lg py-1.5 text-xs font-bold transition-all ${
+                        generatorCount === cnt
+                          ? 'bg-indigo-600 text-white shadow-xs'
+                          : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300'
+                      }`}
+                    >
+                      {cnt} Qs
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-1.5">
+                  Difficulty Level
+                </label>
+                <select
+                  value={generatorDifficulty}
+                  onChange={(e) => setGeneratorDifficulty(e.target.value as any)}
+                  className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs font-semibold text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  <option value="BASIC">Basic / Beginner</option>
+                  <option value="INTERMEDIATE">Intermediate Level</option>
+                  <option value="BPSC_EXAM">Official BPSC Exam Level</option>
+                  <option value="ADVANCED_CHALLENGE">Advanced Challenge Level</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block mb-1.5">
+                  Practice Mode
+                </label>
+                <select
+                  value={generatorMode}
+                  onChange={(e) => setGeneratorMode(e.target.value as any)}
+                  className="w-full rounded-lg border border-slate-300 bg-white p-2 text-xs font-semibold text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  <option value="PRACTICE">Practice Mode (Standard)</option>
+                  <option value="LEARNING">Learning Mode (Instant Feedback)</option>
+                  <option value="TIMED_DRILL">Timed Speed Drill (Countdown)</option>
+                  <option value="WEAK_TOPIC">Weak-Topic & Trap Focus</option>
+                  <option value="REVISION_DRILL">Revision Drill (High-Yield PYQ)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                All questions feature Options A, B, C, D (More than one of the above), and E (None of the above).
+              </span>
+              <button
+                type="button"
+                onClick={handleGenerateEnglishDrill}
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 px-5 py-2.5 text-xs font-bold text-white shadow-md hover:from-indigo-700 hover:to-purple-700 transition-all cursor-pointer"
+              >
+                <Sparkles className="h-4 w-4" />
+                Generate & Start Drill ({generatorCount} Questions)
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ======================================================== */}
         {/* BOTTOM ACTION BAR: COMPLETION & DRILL LAUNCH             */}
         {/* ======================================================== */}
         <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 dark:border-slate-800 dark:bg-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -1225,8 +1369,11 @@ export default function TutorialReader({ course, initialTopicId }: TutorialReade
           topicId={currentTopic.id}
           chapterId={currentChapter.id}
           subjectKey={currentSubject.key}
-          questions={currentTopic.practiceQuestions}
-          onClose={() => setIsDrillOpen(false)}
+          questions={customDrillQuestions || currentTopic.practiceQuestions}
+          onClose={() => {
+            setIsDrillOpen(false);
+            setCustomDrillQuestions(null);
+          }}
         />
       )}
 
