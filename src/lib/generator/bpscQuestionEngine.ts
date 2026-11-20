@@ -5,6 +5,7 @@
 import { BPSCQuestionMetadata, BPSCComputerScienceUnit, BPSCOption } from '@/types/bpsc';
 import { getDistinctBPSCLanguageQuestion } from '@/data/bpsc/bpscLanguageBank';
 import { getDistinctBPSCGSQuestion } from '@/data/bpsc/bpscGSBank';
+import { getDistinctBPSCCSQuestion } from '@/data/bpsc/bpscCSBank';
 
 // ---------------------------------------------------------------------------
 // Layer 5: Duplicate Detection & Question Fingerprinting
@@ -410,4 +411,8 @@ export function generateBPSCLanguageQuestion(qNum: number, seed: number): BPSCQu
 
 export function generateBPSCGSQuestion(qNum: number, seed: number): BPSCQuestionMetadata {
   return getDistinctBPSCGSQuestion(qNum, seed);
+}
+
+export function generateBPSCCSQuestion(slotNum: number, seed: number, mockNumber?: number): BPSCQuestionMetadata {
+  return getDistinctBPSCCSQuestion(slotNum, seed, mockNumber);
 }

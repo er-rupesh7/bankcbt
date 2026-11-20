@@ -266,7 +266,7 @@ export function buildOfficialBPSCExam(options: BPSCBuildExamOptions): Exam {
     if (pyqCS[i - 1] && mode === 'PYQ_MOCK') {
       qMeta = pyqCS[i - 1];
     } else {
-      qMeta = getDistinctBPSCCSQuestion(i, seed + mockNumber * 101);
+      qMeta = getDistinctBPSCCSQuestion(i, seed + mockNumber * 101, mockNumber);
     }
 
     csQuestions.push(convertToCBTQuestion(qMeta, globalIndex, csOrder, csSecId));
