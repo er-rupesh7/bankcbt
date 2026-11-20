@@ -501,6 +501,11 @@ export const useExamStore = create<ExamStoreState>()(
         let totalCorrect = 0;
         let totalIncorrect = 0;
         let totalUnattempted = 0;
+        let totalOptionESelected = 0;
+        let totalBlankWithPenalty = 0;
+        let totalNegativePenaltyDeducted = 0;
+
+        const isTRE4 = !!(exam.isTRE4MarkingScheme || exam.stage === 'TRE_4_0');
 
         const sectionalResults = exam.sections.map((sec) => {
           let secScore = 0;
@@ -513,18 +518,54 @@ export const useExamStore = create<ExamStoreState>()(
             const qState = questionStates[q.id];
             secTimeSpent += qState?.timeSpentSeconds || 0;
 
-            // Evaluated if ANSWERED or ANSWERED_AND_MARKED_FOR_REVIEW
-            if (qState && qState.isEvaluated && qState.selectedOptionId) {
-              const correctOption = q.options.find((opt) => opt.isCorrect);
-              if (correctOption && correctOption.id === qState.selectedOptionId) {
-                secScore += q.marks;
-                secCorrect += 1;
+            const isEvaluated = !!(qState?.isEvaluated && qState?.selectedOptionId);
+            const selectedOptId = qState?.selectedOptionId;
+            const isOptionESelected =
+              (q.isOptionENotAnswered || isTRE4) &&
+              (selectedOptId === 'E' || q.options.find((o) => o.id === selectedOptId)?.identifier === 'E');
+
+            if (isTRE4) {
+              if (isOptionESelected) {
+                // Rule 3: Option E (Not Answered) -> 0 marks (safe skip without blank penalty)
+                totalOptionESelected += 1;
+                secUnattempted += 1;
+              } else if (isEvaluated && selectedOptId) {
+                // Candidate chose Option A, B, C, or D
+                const correctOption = q.options.find((opt) => opt.isCorrect);
+                if (correctOption && correctOption.id === selectedOptId) {
+                  // Rule 1: Correct option A/B/C/D -> +1 mark
+                  secScore += q.marks;
+                  secCorrect += 1;
+                } else {
+                  // Rule 2: Incorrect option A/B/C/D -> -1/3 mark
+                  const incorrectPenalty = q.negativeMarks || (1 / 3);
+                  secScore -= incorrectPenalty;
+                  secIncorrect += 1;
+                  totalNegativePenaltyDeducted += incorrectPenalty;
+                }
               } else {
-                secScore -= q.negativeMarks; // -0.25 penalty
-                secIncorrect += 1;
+                // Rule 4: Completely unselected / blank question -> -1/3 mark penalty!
+                const blankPenalty = q.penaltyForBlank || (1 / 3);
+                secScore -= blankPenalty;
+                secUnattempted += 1;
+                totalBlankWithPenalty += 1;
+                totalNegativePenaltyDeducted += blankPenalty;
               }
             } else {
-              secUnattempted += 1;
+              // Banking exams and historical papers (TRE 1.0, 2.0, 3.0)
+              if (isEvaluated && selectedOptId) {
+                const correctOption = q.options.find((opt) => opt.isCorrect);
+                if (correctOption && correctOption.id === selectedOptId) {
+                  secScore += q.marks;
+                  secCorrect += 1;
+                } else {
+                  secScore -= q.negativeMarks; // -0.25 in Banking, 0.0 in historical TRE
+                  secIncorrect += 1;
+                  totalNegativePenaltyDeducted += q.negativeMarks;
+                }
+              } else {
+                secUnattempted += 1;
+              }
             }
           });
 
@@ -569,39 +610,82 @@ export const useExamStore = create<ExamStoreState>()(
             };
 
             const correctOption = q.options.find((opt) => opt.isCorrect);
-            const isAnswered = qState.isEvaluated && qState.selectedOptionId !== null;
-            const isCorrect = isAnswered && correctOption?.id === qState.selectedOptionId;
+            const selectedOptId = qState.selectedOptionId;
+            const isOptionESelected =
+              (q.isOptionENotAnswered || isTRE4) &&
+              (selectedOptId === 'E' || q.options.find((o) => o.id === selectedOptId)?.identifier === 'E');
+
+            const isAnswered = qState.isEvaluated && selectedOptId !== null;
+            const isCorrect = isAnswered && !isOptionESelected && correctOption?.id === selectedOptId;
             const timeSpent = qState.timeSpentSeconds;
             const idealTime = q.avgIdealTimeSeconds || 45;
 
             let quadrant: 'FAST_CORRECT' | 'SLOW_CORRECT' | 'FAST_WRONG' | 'SLOW_WRONG_OR_SKIPPED';
             let marksAwarded = 0;
+            let isBlankPenaltyApplied = false;
 
-            if (isCorrect) {
-              marksAwarded = q.marks;
-              if (timeSpent <= idealTime) {
-                quadrant = 'FAST_CORRECT';
-                fastCorrectCount++;
+            if (isTRE4) {
+              if (isOptionESelected) {
+                marksAwarded = 0.0;
+                quadrant = timeSpent > 90 ? 'SLOW_WRONG_OR_SKIPPED' : 'FAST_WRONG';
+              } else if (isCorrect) {
+                marksAwarded = q.marks;
+                if (timeSpent <= idealTime) {
+                  quadrant = 'FAST_CORRECT';
+                  fastCorrectCount++;
+                } else {
+                  quadrant = 'SLOW_CORRECT';
+                  slowCorrectCount++;
+                }
+              } else if (isAnswered) {
+                marksAwarded = -(q.negativeMarks || (1 / 3));
+                if (timeSpent > 90) {
+                  quadrant = 'SLOW_WRONG_OR_SKIPPED';
+                  fatalTimeTrapsCount++;
+                } else {
+                  quadrant = 'FAST_WRONG';
+                  fastWrongCount++;
+                }
               } else {
-                quadrant = 'SLOW_CORRECT';
-                slowCorrectCount++;
-              }
-            } else if (isAnswered && !isCorrect) {
-              marksAwarded = -q.negativeMarks;
-              if (timeSpent > 90) {
-                quadrant = 'SLOW_WRONG_OR_SKIPPED'; // Fatal Time-Trap!
-                fatalTimeTrapsCount++;
-              } else {
-                quadrant = 'FAST_WRONG';
-                fastWrongCount++;
+                // Completely blank / unselected question in TRE 4.0
+                marksAwarded = -(q.penaltyForBlank || (1 / 3));
+                isBlankPenaltyApplied = true;
+                if (timeSpent > 90) {
+                  quadrant = 'SLOW_WRONG_OR_SKIPPED';
+                  fatalTimeTrapsCount++;
+                } else {
+                  quadrant = 'FAST_WRONG';
+                }
               }
             } else {
-              // Unattempted
-              if (timeSpent > 90) {
-                quadrant = 'SLOW_WRONG_OR_SKIPPED'; // Fatal Time-Trap: Spent >90s and abandoned!
-                fatalTimeTrapsCount++;
+              // Banking exams and historical papers
+              if (isCorrect) {
+                marksAwarded = q.marks;
+                if (timeSpent <= idealTime) {
+                  quadrant = 'FAST_CORRECT';
+                  fastCorrectCount++;
+                } else {
+                  quadrant = 'SLOW_CORRECT';
+                  slowCorrectCount++;
+                }
+              } else if (isAnswered && !isCorrect) {
+                marksAwarded = -q.negativeMarks;
+                if (timeSpent > 90) {
+                  quadrant = 'SLOW_WRONG_OR_SKIPPED';
+                  fatalTimeTrapsCount++;
+                } else {
+                  quadrant = 'FAST_WRONG';
+                  fastWrongCount++;
+                }
               } else {
-                quadrant = 'FAST_WRONG'; // Minimal impact skip
+                // Unattempted
+                marksAwarded = 0;
+                if (timeSpent > 90) {
+                  quadrant = 'SLOW_WRONG_OR_SKIPPED';
+                  fatalTimeTrapsCount++;
+                } else {
+                  quadrant = 'FAST_WRONG';
+                }
               }
             }
 
@@ -617,7 +701,9 @@ export const useExamStore = create<ExamStoreState>()(
               userSelectedOptionId: qState.selectedOptionId,
               correctOptionId: correctOption?.id || '',
               isCorrect,
-              marksAwarded,
+              marksAwarded: Math.round(marksAwarded * 1000) / 1000,
+              isOptionESelected,
+              isBlankPenaltyApplied,
               quadrant,
               conventionalSolution: q.conventionalSolutionEn,
               shortcutTrick: q.shortcutTrickEn,
@@ -633,9 +719,65 @@ export const useExamStore = create<ExamStoreState>()(
         const totalAttempts = totalCorrect + totalIncorrect;
         const overallAccuracy = totalAttempts > 0 ? (totalCorrect / totalAttempts) * 100 : 0;
         
-        // Percentile estimation based on normalized bank exam bell curve
+        // Percentile estimation based on normalized bell curve
         const scorePercentage = (totalScore / exam.totalMarks) * 100;
         const percentilePredictor = Math.min(99.9, Math.max(1.0, 50 + (scorePercentage - 55) * 1.8));
+
+        // BPSC TRE specific merit calculation & topic intelligence
+        const isBpscExam = exam.examBody === 'BPSC';
+        let bpscMeritScore = 0;
+        let isLanguageQualified = true;
+        let languageScore = 0;
+        const bpscTopicBreakdown: Record<
+          string,
+          {
+            unitName: string;
+            total: number;
+            correct: number;
+            incorrect: number;
+            unattempted: number;
+            accuracy: number;
+          }
+        > = {};
+
+        if (isBpscExam) {
+          sectionalResults.forEach((sec) => {
+            if (sec.sectionType === 'BPSC_LANGUAGE') {
+              languageScore = sec.score;
+              isLanguageQualified = sec.score >= (sec.cutoff || 9.0);
+            } else {
+              bpscMeritScore += sec.score;
+            }
+          });
+
+          questionsAnalysis.forEach((qa) => {
+            const topicKey = qa.topic || 'General';
+            if (!bpscTopicBreakdown[topicKey]) {
+              bpscTopicBreakdown[topicKey] = {
+                unitName: topicKey,
+                total: 0,
+                correct: 0,
+                incorrect: 0,
+                unattempted: 0,
+                accuracy: 0,
+              };
+            }
+            bpscTopicBreakdown[topicKey].total += 1;
+            if (qa.isCorrect) {
+              bpscTopicBreakdown[topicKey].correct += 1;
+            } else if (qa.userSelectedOptionId && !qa.isOptionESelected) {
+              bpscTopicBreakdown[topicKey].incorrect += 1;
+            } else {
+              bpscTopicBreakdown[topicKey].unattempted += 1;
+            }
+          });
+
+          Object.keys(bpscTopicBreakdown).forEach((k) => {
+            const item = bpscTopicBreakdown[k];
+            const attempted = item.correct + item.incorrect;
+            item.accuracy = attempted > 0 ? Math.round((item.correct / attempted) * 100) : 0;
+          });
+        }
 
         const submissionResult: ExamSubmissionResult = {
           attemptId: `att_${Date.now()}`,
@@ -656,6 +798,18 @@ export const useExamStore = create<ExamStoreState>()(
             fatalTimeTrapsCount,
             fatalTimeTrapQuestions,
           },
+          // BPSC Fields
+          isBpscExam,
+          isTRE4MarkingScheme: isTRE4,
+          totalOptionESelected,
+          totalBlankWithPenalty,
+          totalNegativePenaltyDeducted: Math.round(totalNegativePenaltyDeducted * 100) / 100,
+          bpscSubject: 'Computer Science (Class 11-12)',
+          isLanguageQualified,
+          languageScore,
+          bpscMeritScore: Math.round(bpscMeritScore * 100) / 100,
+          bpscMaxMeritMarks: 120,
+          bpscTopicBreakdown,
           questionsAnalysis,
         };
 

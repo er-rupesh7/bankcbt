@@ -1,8 +1,8 @@
 // TypeScript type definitions for TCS iON Indian Banking Exam Simulation Engine
 
-export type ExamBody = 'SBI' | 'IBPS' | 'RRB' | 'RBI';
-export type ExamPost = 'PO' | 'CLERK' | 'SO' | 'GRADE_B';
-export type ExamStage = 'PRELIMS' | 'MAINS';
+export type ExamBody = 'SBI' | 'IBPS' | 'RRB' | 'RBI' | 'BPSC';
+export type ExamPost = 'PO' | 'CLERK' | 'SO' | 'GRADE_B' | 'PGT_11_12' | 'TGT_9_10' | 'PRT_1_5';
+export type ExamStage = 'PRELIMS' | 'MAINS' | 'TRE_1_0' | 'TRE_2_0' | 'TRE_3_0' | 'TRE_4_0';
 export type TimingType = 'SECTIONAL_LOCKED' | 'COMPOSITE';
 
 export type SectionType = 
@@ -10,7 +10,13 @@ export type SectionType =
   | 'QUANTITATIVE_APTITUDE'
   | 'ENGLISH_LANGUAGE'
   | 'GENERAL_FINANCIAL_AWARENESS'
-  | 'COMPUTER_KNOWLEDGE';
+  | 'COMPUTER_KNOWLEDGE'
+  // BPSC TRE Universal & Subject Sections
+  | 'BPSC_LANGUAGE'
+  | 'BPSC_GENERAL_STUDIES'
+  | 'BPSC_COMPUTER_SCIENCE'
+  | 'BPSC_MATHEMATICS'
+  | 'BPSC_SCIENCE';
 
 export type GroupType =
   | 'SEATING_ARRANGEMENT_CIRCULAR'
@@ -99,6 +105,11 @@ export interface Question {
   shortcutTrickHi?: string;
   diagramSpec?: DiagramSpec;
 
+  // BPSC TRE 4.0 Response Evaluation Rules
+  isTRE4Evaluation?: boolean;
+  penaltyForBlank?: number; // 1/3 (0.333...) for TRE 4.0 blank response penalty
+  isOptionENotAnswered?: boolean; // true when Option E represents 'Not Answered' (0 marks)
+
   options: Option[];
 }
 
@@ -152,6 +163,8 @@ export interface Exam {
   totalMarks: number;
   totalQuestions: number;
   negativeMarkRatio: number;
+  isTRE4MarkingScheme?: boolean;
+  penaltyForBlank?: number;
   sections: Section[];
 }
 
@@ -203,6 +216,8 @@ export interface QuestionAnalysis {
   correctOptionId: string;
   isCorrect: boolean;
   marksAwarded: number;
+  isOptionESelected?: boolean;
+  isBlankPenaltyApplied?: boolean;
   quadrant: TimeTrapQuadrant;
   conventionalSolution: string;
   shortcutTrick?: string;
@@ -228,5 +243,27 @@ export interface ExamSubmissionResult {
     fatalTimeTrapsCount: number; // Slow wrong or skipped
     fatalTimeTrapQuestions: QuestionAnalysis[];
   };
+  // BPSC TRE Specific Evaluation Metrics
+  isBpscExam?: boolean;
+  isTRE4MarkingScheme?: boolean;
+  totalOptionESelected?: number;
+  totalBlankWithPenalty?: number;
+  totalNegativePenaltyDeducted?: number;
+  bpscSubject?: string;
+  isLanguageQualified?: boolean;
+  languageScore?: number;
+  bpscMeritScore?: number; // Score from Part 2 (GS) + Part 3 (Subject) out of 120
+  bpscMaxMeritMarks?: number; // 120
+  bpscTopicBreakdown?: Record<
+    string,
+    {
+      unitName: string;
+      total: number;
+      correct: number;
+      incorrect: number;
+      unattempted: number;
+      accuracy: number;
+    }
+  >;
   questionsAnalysis: QuestionAnalysis[];
 }

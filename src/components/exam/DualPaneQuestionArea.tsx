@@ -65,11 +65,21 @@ export const DualPaneQuestionArea: React.FC = () => {
           </span>
           <span className="text-slate-300">|</span>
           <span className="bg-emerald-50 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded font-mono font-medium text-[11px] sm:text-xs">
-            Correct: +{Number(currentQuestion.marks.toFixed(3))}
+            Correct: +{Number(currentQuestion.marks.toFixed(2))}
           </span>
           <span className="bg-red-50 text-red-800 border border-red-300 px-2 py-0.5 rounded font-mono font-medium text-[11px] sm:text-xs">
-            Negative: -{Number(currentQuestion.negativeMarks.toFixed(3))}
+            Incorrect: -{Number(currentQuestion.negativeMarks.toFixed(2))}
           </span>
+          {currentQuestion.isTRE4Evaluation && (
+            <>
+              <span className="bg-rose-50 text-rose-800 border border-rose-300 px-2 py-0.5 rounded font-mono font-medium text-[11px] sm:text-xs">
+                Blank: -{Number((currentQuestion.penaltyForBlank || 1 / 3).toFixed(2))}
+              </span>
+              <span className="bg-amber-50 text-amber-800 border border-amber-300 px-2 py-0.5 rounded font-mono font-medium text-[11px] sm:text-xs">
+                Option E: 0.00
+              </span>
+            </>
+          )}
         </div>
 
         {/* Font Zoom Controls (Classic TCS iON) */}
@@ -289,7 +299,7 @@ export const DualPaneQuestionArea: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-baseline space-x-2">
+                    <div className="flex items-baseline space-x-2 flex-wrap gap-y-1">
                       <span className="font-bold text-[#0B4F8A] text-xs sm:text-sm font-mono shrink-0">
                         ({option.identifier})
                       </span>
@@ -298,6 +308,11 @@ export const DualPaneQuestionArea: React.FC = () => {
                         className={`text-slate-800 ${fontClasses}`}
                         text={language === 'hi' && option.optionTextHi ? option.optionTextHi : option.optionTextEn}
                       />
+                      {currentQuestion.isOptionENotAnswered && option.identifier === 'E' && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-100 text-amber-900 border border-amber-300 ml-1 sm:ml-2">
+                          🛡️ Safe Skip (0 Marks — Avoids -1/3 Blank Penalty)
+                        </span>
+                      )}
                     </div>
                   </label>
                 );

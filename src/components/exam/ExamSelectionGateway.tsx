@@ -22,11 +22,14 @@ import {
   Layers,
   BookOpen,
   Sparkles,
+  GraduationCap,
 } from 'lucide-react';
+import { BPSCSelectionView } from './BPSCSelectionView';
 
 export const ExamSelectionGateway: React.FC = () => {
   const { initializeExam, setLanguage, language } = useExamStore();
 
+  const [activePlatform, setActivePlatform] = useState<'BANKING' | 'BPSC_TRE'>('BANKING');
   const [selectedCategoryKey, setSelectedCategoryKey] = useState<ExamCategoryKey>('SBI_PO_PRELIMS');
   const [filterBody, setFilterBody] = useState<'ALL' | 'SBI' | 'IBPS' | 'RRB'>('ALL');
   const [isDrillMode, setIsDrillMode] = useState<boolean>(false);
@@ -69,21 +72,34 @@ export const ExamSelectionGateway: React.FC = () => {
             </div>
             <div>
               <h1 className="text-base sm:text-xl font-black tracking-tight text-white flex items-center space-x-2">
-                <span>Indian Banking Examination Portal</span>
+                <span>
+                  {activePlatform === 'BPSC_TRE'
+                    ? 'BPSC Examination Portal'
+                    : 'Indian Banking Examination Portal'}
+                </span>
                 <span
                   className="text-[10px] sm:text-xs bg-[#F59E0B] text-[#0A2F5C] font-black px-2 py-0.5 rounded uppercase"
                   style={{ backgroundColor: '#F59E0B', color: '#0A2F5C' }}
                 >
-                  TCS iON CBT
+                  {activePlatform === 'BPSC_TRE' ? 'BPSC TRE 4.0' : 'TCS iON CBT'}
                 </span>
               </h1>
               <p className="text-[11px] sm:text-xs text-blue-200">
-                Official Mock Test &amp; Practice Arena • SBI PO/Clerk, IBPS PO/Clerk &amp; RRB PO/Clerk
+                {activePlatform === 'BPSC_TRE'
+                  ? 'Official Mock Test & PYQ Archive • Class 11–12 Computer Science, Math TGT & Science TGT'
+                  : 'Official Mock Test & Practice Arena • SBI PO/Clerk, IBPS PO/Clerk & RRB PO/Clerk'}
               </p>
             </div>
           </div>
 
           <div className="flex items-center space-x-3 text-xs font-medium text-blue-100">
+            <Link
+              href="/bpsc/learn"
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-xs transition-all"
+            >
+              <GraduationCap className="w-3.5 h-3.5" />
+              <span>🎓 BPSC LMS Hub</span>
+            </Link>
             <Link
               href="/practice"
               className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#F59E0B] hover:bg-amber-400 text-[#0A2F5C] font-black text-xs shadow-xs transition-all transform hover:-translate-y-0.5"
@@ -101,10 +117,53 @@ export const ExamSelectionGateway: React.FC = () => {
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 w-full flex-1">
-        {!showInstructions ? (
-          /* STEP 1: EXAM SELECTION SCREEN */
-          <div className="space-y-6">
+      <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 w-full flex-1 space-y-6">
+        {/* Master Examination Category Switcher */}
+        <div className="bg-white p-2 rounded-2xl shadow-xs border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 w-full sm:w-auto">
+            <button
+              onClick={() => {
+                setActivePlatform('BANKING');
+                setShowInstructions(false);
+              }}
+              className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+                activePlatform === 'BANKING'
+                  ? 'bg-[#0A2F5C] text-white shadow-md'
+                  : 'bg-transparent text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <span>🏛️ Indian Banking Portal (SBI • IBPS • RRB)</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActivePlatform('BPSC_TRE');
+                setShowInstructions(false);
+              }}
+              className={`flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+                activePlatform === 'BPSC_TRE'
+                  ? 'bg-[#0A2F5C] text-white shadow-md ring-2 ring-[#F59E0B]'
+                  : 'bg-transparent text-slate-600 hover:bg-slate-100'
+              }`}
+            >
+              <span>🎓 BPSC TRE 4.0 (Computer Science 11–12)</span>
+              <span className="text-[10px] bg-[#F59E0B] text-[#0A2F5C] px-1.5 py-0.5 rounded font-black">
+                NEW
+              </span>
+            </button>
+          </div>
+
+          <div className="text-xs font-semibold text-slate-500 hidden md:flex items-center space-x-1 px-3">
+            <span>Universal Competitive Exam Platform</span>
+          </div>
+        </div>
+
+        {activePlatform === 'BPSC_TRE' ? (
+          <BPSCSelectionView />
+        ) : (
+          !showInstructions ? (
+            /* STEP 1: EXAM SELECTION SCREEN */
+            <div className="space-y-6">
             {/* Topic-Wise Concept & Practice Feature Banner */}
             <div className="bg-gradient-to-r from-[#0A2F5C] via-[#0E3D73] to-[#0A2F5C] text-white p-5 rounded-2xl shadow-md border border-blue-400/30 flex flex-col md:flex-row items-center justify-between gap-4">
               <div className="flex items-center space-x-4">
@@ -552,7 +611,7 @@ export const ExamSelectionGateway: React.FC = () => {
               </button>
             </div>
           </div>
-        )}
+        ))}
       </main>
 
       {/* Footer */}
