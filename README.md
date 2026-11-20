@@ -1,29 +1,32 @@
-# 🏦 TCS iON Indian Banking Exam Simulation Engine & CBT Mock Test Platform
+# 🏛️ Universal Competitive & Government Examination Platform (Banking & BPSC TRE 4.0)
 
-> **Production-Grade EdTech CBT Platform and Syllabus-Strict Question Paper Setter for SBI, IBPS, and RRB (Prelims & Mains).**  
-> Replicating the **exact pixel-accurate TCS iON examination interface** used in real Indian banking recruitment exams, coupled with reverse-constructed reasoning puzzles, arithmetic speed engines, SVG diagram rendering, and 4-quadrant fatal time-trap diagnostics.
+> **Enterprise-Grade Computer-Based Test (CBT) Examination Engine & Digital Learning Management System (LMS)**  
+> Engineered for Indian Public Service Commission & Banking Recruitment Examinations:  
+> 1. **BPSC TRE 4.0 (Bihar Public Service Commission - Teacher Recruitment Examination)** — PGT Class 11–12 Computer Science, TGT Mathematics, Science, Universal Qualifying Language, and General Studies.  
+> 2. **TCS iON Banking Examination Engine** — SBI PO/Clerk, IBPS PO/Clerk, and IBPS RRB Officer/Assistant (Prelims & Mains).  
+> Featuring pixel-accurate CBT terminals, authentic BPSC 5-option response evaluation, a dynamic 800-question syllabus generator with zero mock collisions, and a full-scale digital learning course platform.
 
 ---
 
 ## 📌 Table of Contents
+
 - [Executive Overview](#-executive-overview)
-- [Core Value Proposition](#-core-value-proposition)
-- [Official Exam Matrix & Syllabus Calibration (12 Exams)](#-official-exam-matrix--syllabus-calibration-12-exams)
-- [Authentic TCS iON Exam Engine Features](#-authentic-tcs-ion-exam-engine-features)
-  - [Candidate Profile & Environment](#candidate-profile--environment)
-  - [The 5-State Question Palette](#the-5-state-question-palette)
-  - [Sectional Timing & Navigation Locks](#sectional-timing--navigation-locks)
-  - [Dual-Pane Context & Question Workspace](#dual-pane-context--question-workspace)
-- [AI Question Generation & Paper Setter Architecture](#-ai-question-generation--paper-setter-architecture)
-  - [Quantitative Aptitude & Data Interpretation](#1-quantitative-aptitude--data-interpretation)
-  - [Reasoning Ability & Puzzle Reverse-Construction](#2-reasoning-ability--puzzle-reverse-construction)
-  - [English Language & Rajbhasha Hindi](#3-english-language--rajbhasha-hindi)
-  - [General, Banking & Computer Awareness](#4-general-banking--computer-awareness)
-- [Technical Diagram & SVG Graphics Engine](#-technical-diagram--svg-graphics-engine)
-- [Post-Exam Diagnostics & The 4-Quadrant Time-Trap Matrix](#-post-exam-diagnostics--the-4-quadrant-time-trap-matrix)
+- [Supported Government & Public Recruitment Examinations](#-supported-government--public-recruitment-examinations)
+- [BPSC TRE 4.0 Examination Architecture & Blueprint](#-bpsc-tre-40-examination-architecture--blueprint)
+  - [Part 1: Universal Qualifying Language (30 Questions, 30 Marks)](#part-1-universal-qualifying-language-30-questions-30-marks)
+  - [Part 2: Universal General Studies (40 Questions, 40 Marks)](#part-2-universal-general-studies-40-questions-40-marks)
+  - [Part 3: Computer Science Core Class 11–12 (80 Questions, 80 Marks)](#part-3-computer-science-core-class-1112-80-questions-80-marks)
+- [Official BPSC TRE 4.0 Response Evaluation & Negative Marking Rules](#-official-bpsc-tre-40-response-evaluation--negative-marking-rules)
+  - [The 5-Option Structure (A, B, C, D, E)](#the-5-option-structure-a-b-c-d-e)
+  - [Crucial Marking Matrix: Explicit Option E vs Blank Penalty](#crucial-marking-matrix-explicit-option-e-vs-blank-penalty)
+- [Dynamic Question Generator Engine (800 Verified Questions)](#-dynamic-question-generator-engine-800-verified-questions)
+  - [10-Mock Zero Overlap Guarantee](#10-mock-zero-overlap-guarantee)
+  - [The 12 Official Syllabus Units for Computer Science](#the-12-official-syllabus-units-for-computer-science)
+- [BPSC TRE 4.0 Digital Learning Management System (LMS)](#-bpsc-tre-40-digital-learning-management-system-lms)
+  - [Pedagogical Model: Learn → Practice → Test → Analyze → Revise](#pedagogical-model-learn--practice--test--analyze--revise)
+  - [PYQ Integration (TRE 1.0, TRE 2.0, TRE 3.0)](#pyq-integration-tre-10-tre-20-tre-30)
+- [TCS iON Banking Examination Simulation Module](#-tcs-ion-banking-examination-simulation-module)
 - [Technical Architecture & Technology Stack](#-technical-architecture--technology-stack)
-- [SEO Architecture & Brand Identity](#-seo-architecture--brand-identity)
-- [Database Schema (Prisma)](#-database-schema-prisma)
 - [Getting Started & Local Development](#-getting-started--local-development)
 - [Directory Structure](#-directory-structure)
 
@@ -31,291 +34,224 @@
 
 ## 🎯 Executive Overview
 
-Every year, over **3.5 million Indian aspirants** compete for high-stakes banking recruitment exams conducted by:
-1. **State Bank of India (SBI)**: SBI PO (Probationary Officer) & SBI Clerk (Junior Associates)
-2. **Institute of Banking Personnel Selection (IBPS)**: IBPS PO & IBPS Clerk
-3. **Regional Rural Banks (IBPS RRB)**: RRB Officer Scale-I (PO) & RRB Office Assistant (Clerk)
+Every year, millions of candidates in India sit for premier government recruitment examinations conducted by state public service commissions and national banking bodies:
+1. **Bihar Public Service Commission (BPSC)**: The **Teacher Recruitment Examination (TRE)** for Class 1–5 (Primary), 6–8 (Middle), 9–10 (Secondary / TGT), and 11–12 (Higher Secondary / PGT).
+2. **State Bank of India (SBI) & IBPS**: Premier national bank probationary officer and clerical exams.
 
-In real exam halls, all of these exams are delivered exclusively via the **Tata Consultancy Services (TCS) iON Assessment Platform**. Most existing EdTech platforms provide generic, rounded quiz interfaces that fail to build **subconscious muscle memory** for the actual test day. Aspirants frequently lose critical minutes struggling with:
-- Strict sectional timing countdowns and irreversible auto-advance locks.
-- Complex question palette state rules (specifically the critical rule regarding *Answered & Marked for Review*).
-- Left-right split screen scrolling between lengthy reading comprehension passages or tabular DI and the options.
-- Fatal time-traps (spending $>90$ seconds on a deceptive question and abandoning or guessing it).
+Preparing candidates face critical shortcomings with generic quiz applications:
+- **Flawed Option Structure**: Most apps use 4 options, completely failing to prepare aspirants for BPSC's notorious 5th option trap (*Option D: More than one of the above* and *Option E: None of the above / Not Answered*).
+- **Inaccurate Negative Marking**: BPSC TRE 4.0 introduced strict response evaluation where leaving a question blank incurs a penalty, whereas marking Option E serves as a safe skip.
+- **Repeated Mock Questions**: Static question banks reuse identical questions across mocks, inflating scores and giving candidates a false sense of readiness.
+- **Lack of Deep Learning Content**: Students are forced to juggle fragmented YouTube videos, low-quality PDFs, and disjointed test series without an integrated syllabus pathway.
 
-**This platform is an exact, high-fidelity reproduction of the real TCS iON examination terminal**, combined with an authentic, syllabus-calibrated Question Paper Setter that generates unique, uniquely solvable test sets with realistic calculation traps and visual diagrams.
-
----
-
-## ⚡ Core Value Proposition
-
-| Dimension | Generic Quiz Apps | This Platform (TCS iON Standard) |
-|---|---|---|
-| **Interface Fidelity** | Modern pastel dashboards | **100% Authentic TCS iON Terminal Layout** (Navy `#0E3B64` header, exact border radii, font zoom controls) |
-| **Candidate Identity** | Generic profile | **Candidate "Karna"** with System Node `C042` and Roll Number `2408199201` |
-| **Question Palette** | 2–3 simple states | **Official 5-State Palette** with exact evaluation semantics (Purple + Green Dot strictly scored) |
-| **Timing Constraints** | Loose free timers | **Hard Sectional Locking** (auto-advance upon expiry) or **Composite 45-min Timing** (RRB) |
-| **Marking Penalties** | Flat -0.25 | **Exact Dynamic Penalties** ($0.25 \times \text{Marks}$, e.g. $+1.143 \to -0.286$; $+2.00 \to -0.50$) |
-| **Puzzle Generation** | Random ambiguous clues | **Reverse-Constructed Master Grids** with verified unique solvability |
-| **Diagram Support** | Static stock images or none | **Vector SVG Engine** for Seating circles, Syllogism Venn diagrams, Direction paths, and Family trees |
-| **Analytics Engine** | Simple score breakdown | **4-Quadrant Speed-Accuracy Matrix** identifying fatal $>90\text{s}$ time-traps |
+**This platform is a unified, production-grade examination preparation ecosystem** providing high-fidelity CBT simulation, rigorous syllabus coverage, official negative marking enforcement, and an in-depth interactive LMS.
 
 ---
 
-## 📊 Official Exam Matrix & Syllabus Calibration (12 Exams)
+## 🏛️ Supported Government & Public Recruitment Examinations
 
-The platform provides a pre-exam gateway where candidates select their exact target exam and stage. The engine configures the exact question counts, marks, penalties, and timers according to the official examination notification:
+### 1. Bihar Public Service Commission (BPSC)
+- **BPSC TRE 4.0 — PGT Computer Science (Class 11–12)** (Full 150 Qs / 150 Mins)
+- **BPSC TRE 4.0 — TGT Mathematics (Class 9–10)** *(Universal Lang + GS + Math)*
+- **BPSC TRE 4.0 — TGT Science (Class 9–10)** *(Universal Lang + GS + Science)*
+- **BPSC TRE 4.0 — General Studies & Language Qualifying Module**
 
-| Exam Key | Post | Stage | Total Qs | Total Marks | Timing Mode | Sectional Breakdown |
-|---|---|---|---|---|---|---|
-| `SBI_PO_PRELIMS` | PO | Prelims | 100 | 100 | Sectional Lock (60m) | Eng (40 Qs, 40m), Quant (30 Qs, 20m), Reas (30 Qs, 20m) |
-| `SBI_PO_MAINS` | PO | Mains | 155 | 200 | Sectional Lock (180m) | Reas & Comp (45 Qs, 60m), Data Analysis (35 Qs, 45m), GA (50 Qs, 45m), Eng (35 Qs, 40m) |
-| `SBI_CLERK_PRELIMS` | Clerk | Prelims | 100 | 100 | Sectional Lock (60m) | Eng (30 Qs, 20m), Quant (35 Qs, 20m), Reas (35 Qs, 20m) |
-| `SBI_CLERK_MAINS` | Clerk | Mains | 190 | 200 | Sectional Lock (160m) | GA (50 Qs, 35m), Eng (40 Qs, 35m), Quant (50 Qs, 45m), Reas & Comp (50 Qs, 45m) |
-| `IBPS_PO_PRELIMS` | PO | Prelims | 100 | 100 | Sectional Lock (60m) | Eng (30 Qs, 20m [1.0M]), Quant (35 Qs, 20m [0.857M]), Reas (35 Qs, 20m [1.143M]) |
-| `IBPS_PO_MAINS` | PO | Mains | 155 | 200 | Sectional Lock (180m) | Reas & Comp (45 Qs, 60m), Data Analysis (35 Qs, 45m), GA (40 Qs, 35m), Eng (35 Qs, 40m) |
-| `IBPS_CLERK_PRELIMS`| Clerk | Prelims | 100 | 100 | Sectional Lock (60m) | Eng (30 Qs, 20m), Quant (35 Qs, 20m), Reas (35 Qs, 20m) |
-| `IBPS_CLERK_MAINS` | Clerk | Mains | 190 | 200 | Sectional Lock (160m) | GA (50 Qs, 35m), Eng (40 Qs, 35m), Quant (50 Qs, 45m), Reas & Comp (50 Qs, 45m) |
-| `IBPS_RRB_PO_PRELIMS` | PO | Prelims | 80 | 80 | Composite (45m) | Reasoning (40 Qs), Quantitative Aptitude (40 Qs) |
-| `IBPS_RRB_PO_MAINS` | PO | Mains | 200 | 200 | Composite (120m) | Reas (40 Qs), Quant (40 Qs), GA (40 Qs), Eng/Hindi (40 Qs), Comp (40 Qs) |
-| `IBPS_RRB_CLERK_PRELIMS` | Clerk | Prelims | 80 | 80 | Composite (45m) | Reasoning (40 Qs), Numerical Ability (40 Qs) |
-| `IBPS_RRB_CLERK_MAINS` | Clerk | Mains | 200 | 200 | Composite (120m) | Reas (40 Qs), Numerical (40 Qs), GA (40 Qs), Eng/Hindi (40 Qs), Comp (40 Qs) |
+### 2. Indian National Banking (TCS iON Standard)
+- **SBI PO & SBI Clerk** (Prelims & Mains)
+- **IBPS PO & IBPS Clerk** (Prelims & Mains)
+- **IBPS RRB Officer Scale-I & Office Assistant** (Prelims & Mains)
 
 ---
 
-## 🖥️ Authentic TCS iON Exam Engine Features
+## 📋 BPSC TRE 4.0 Examination Architecture & Blueprint
 
-### Candidate Profile & Environment
-- **Candidate Name**: **Karna (Candidate)**
-- **System Node**: `C042`
-- **Roll Number**: `2408199201`
-- **Live Countdown Timer**: Located at top-right. Displays remaining time with minute-second precision. Automatically transitions to alert-red with pulse when remaining time is less than 5 minutes.
-- **Bilingual Medium Switcher**: Dropdown in top header allowing instant toggling between English (`en`) and authentic exam-standard Hindi (`hi`) for Quantitative Aptitude, Reasoning, and General Awareness sections.
-
-### The 5-State Question Palette
-TCS iON employs a 5-state coloring system that dictates how candidate answers are evaluated:
+The official BPSC Teacher Recruitment Examination (Class 11–12) consists of **150 questions**, **150 marks**, and a **composite duration of 150 minutes (2.5 hours)** with free cross-sectional navigation.
 
 ```
-[ 01 ] Gray    -> NOT VISITED (Candidate has not yet navigated to this question)
-[ 02 ] Red     -> NOT ANSWERED (Candidate visited but did not save an option)
-[ 03 ] Green   -> ANSWERED (Candidate selected an option and saved)
-[ 04 ] Purple  -> MARKED FOR REVIEW (Marked for review without answering - NOT EVALUATED)
-[ 05 ] Purple* -> ANSWERED & MARKED FOR REVIEW (Option chosen + marked - EVALUATED IN FINAL MARKS)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       BPSC TRE 4.0 CBT EXAMINATION                          │
+│                150 Questions | 150 Marks | 150 Minutes Composite            │
+├─────────────────────────┬─────────────────────────┬─────────────────────────┤
+│         PART 1          │         PART 2          │         PART 3          │
+│   Qualifying Language   │     General Studies     │     Computer Science    │
+│   30 Qs (Q1 - Q30)      │   40 Qs (Q31 - Q70)     │   80 Qs (Q71 - Q150)    │
+│   30 Marks (Qualifying) │   40 Marks (Merit)      │   80 Marks (Merit)      │
+└─────────────────────────┴─────────────────────────┴─────────────────────────┘
 ```
 
-> ⚠️ **Official Evaluation Rule**: As enforced in real IBPS and SBI exams, questions in state `ANSWERED_AND_MARKED_FOR_REVIEW` (Purple with a Green indicator dot) **ARE EVALUATED** for final positive score and negative penalties upon test submission.
+### Part 1: Universal Qualifying Language (30 Questions, 30 Marks)
+Designed as a modular, universal section applicable across all teaching subjects (Computer Science, Mathematics, Science, Social Science, Hindi, English):
+- **English Language (8 Questions)**: Articles, Prepositions, Tenses, Sentence Correction, Vocabulary, Synonyms & Antonyms, Reading Comprehension.
+- **Hindi Language (22 Questions)**: वर्णमाला एवं वर्तनी, संधि एवं समास, उपसर्ग एवं प्रत्यय, मुहावरे एवं लोकोक्तियाँ, पर्यायवाची एवं विलोम शब्द, वाक्य शुद्धि, गद्यांश।
+- **Qualifying Standard**: Minimum qualifying threshold (30% / 9 marks) mandated by BPSC regulations.
 
-### Sectional Timing & Navigation Locks
-- **`SECTIONAL_LOCKED` Mode (SBI & IBPS PO/Clerk)**:
-  - Candidates are locked into their current section for the exact statutory duration (e.g., 20 minutes for Prelims sections).
-  - Manual section switching is hard-disabled.
-  - When the countdown reaches `00:00`, the active section locks permanently, responses are autosaved, and the engine automatically advances to the next section.
-- **`COMPOSITE` Mode (IBPS RRB PO & Clerk)**:
-  - Candidates receive an undivided 45-minute or 120-minute timer and can freely switch between Reasoning and Quantitative sections.
+### Part 2: Universal General Studies (40 Questions, 40 Marks)
+Calibrated directly from official TRE 1.0, TRE 2.0, and TRE 3.0 question papers:
+- **Bihar Special History & Geography (8 Qs)**: 1857 Revolt in Bihar (Veer Kunwar Singh), Champaran Satyagraha (1917), Quit India Movement in Bihar, Bihar physical divisions, river systems (Ganga tributaries), climate, and soil.
+- **Indian National Movement 1885–1947 (8 Qs)**: Early Nationalist Phase, Swadeshi Movement, Non-Cooperation Movement, Civil Disobedience, Cabinet Mission, Partition & Independence.
+- **Indian Polity & Constitution (6 Qs)**: Preamble, Fundamental Rights (Articles 14–32), DPSP, President & Parliament, Judicial Review, Panchayati Raj (73rd Amendment).
+- **General Science (6 Qs)**: Physics (Optics, Mechanics, Electricity), Chemistry (Acids & Bases, Chemical bonding, Organic compounds), Biology (Human Physiology, Nutrition, Genetics).
+- **Indian Geography & Environment (6 Qs)**: Himalayan & Peninsular drainage, monsoons, natural vegetation, ecology, wildlife sanctuaries, national parks.
+- **Elementary Mathematics & Mental Ability (6 Qs)**: Percentages, Profit & Loss, Ratio & Proportion, Time & Work, Number Series, Syllogisms, Coding-Decoding.
 
-### Dual-Pane Context & Question Workspace
-- **Left Pane (Context Workspace)**:
-  - Displays Reading Comprehension passages, Data Interpretation tables, or Puzzle clues.
-  - Features structured HTML table rendering for tabular DI.
-  - Features embedded vector SVG graphics for seating arrangements, input-output machines, and pattern grids.
-- **Right Pane (Question Workspace)**:
-  - Strictly consecutive numbering (`Question No. 1` to `N` per section, avoiding arbitrary global numbering jumps).
-  - Exact mark and negative mark indicators (e.g., `+1.143 | -0.286`).
-  - **TCS iON Font Zoom**: `A-` (compact), `A` (standard), and `A+` (large) dynamic font scaler.
-  - Standalone SVG diagrams (Syllogism Venn, Direction Sense, Family Tree) when relevant.
-  - 5 authentic circular radio buttons (`A`, `B`, `C`, `D`, `E`).
+### Part 3: Computer Science Core Class 11–12 (80 Questions, 80 Marks)
+Spans all **12 official syllabus units** defined by BPSC and SCERT/NCERT for Higher Secondary Computer Teachers.
 
 ---
 
-## 🧠 AI Question Generation & Paper Setter Architecture
+## ⚖️ Official BPSC TRE 4.0 Response Evaluation & Negative Marking Rules
 
-### 1. Quantitative Aptitude & Data Interpretation
-- **Clerk Prelims Calibration**:
-  - **Simplification (10–15 Qs)**: Pure BODMAS, percentage fraction conversions ($12.5\% = 1/8, 37.5\% = 3/8$), square roots, and cube roots.
-  - **Missing Number Series (5 Qs)**: Prime differences, alternating additive/subtractive series, and $\times 0.5 + 0.5$ series.
-  - **Tabular DI (5 Qs)**: Direct ratio, percentage increase/decrease, and averages.
-  - **Arithmetic Word Problems (10 Qs)**: Single-step Profit & Loss, LCM efficiency Time & Work, Boats & Streams.
-- **PO Prelims Calibration**:
-  - **Approximation (5 Qs)**: Decimal rounding ($\approx$) with realistic distractor traps.
-  - **Wrong Number Series (5 Qs)**: Patterns like $\times 2 + n$ with subtle calculation errors inserted.
-  - **Quadratic Equations (5 Qs)**: $ax^2 + bx + c = 0$ solved via sign methods ($+ - \implies - +$; $+ + \implies - -$) and roots comparison ($x > y, x \ge y, x < y, x \le y, x=y \text{ or CND}$).
-- **Mains Calibration**:
-  - **Quantity I vs Quantity II Comparison**: Determining whether $Q_1 > Q_2$, $Q_1 < Q_2$, $Q_1 \ge Q_2$, $Q_1 \le Q_2$, or $Q_1 = Q_2 / \text{CND}$.
-  - **Data Sufficiency (2 Statements)**: Determining sufficiency of Statement I, Statement II, Either, Neither, or Both together.
-- **Realistic Traps**: Distractors reflect actual cognitive slips (e.g., forgetting to subtract, applying markup to Selling Price instead of Cost Price).
+BPSC TRE examinations are defined by a distinctive 5-option structure and response evaluation scheme. The platform implements this exact rulebook.
 
-### 2. Reasoning Ability & Puzzle Reverse-Construction
-- **Reverse-Construction Methodology**:
-  1. The engine first defines the solved master table/matrix in memory (`masterArrangementGrid`).
-  2. 6 to 10 logical constraints (direct, relative position, and negative clues) are reverse-engineered.
-  3. Clues ensure exactly 1 or 2 initial possibilities, where the secondary branch is eliminated by the final constraint, guaranteeing a **100% uniquely solvable puzzle**.
-- **Topic Coverage**:
-  - **Circular Seating**: 8 persons facing inward/outward with attached radial SVG diagram.
-  - **Floor & Flat Puzzles**: 7-floor or 4-floor $\times$ 2-flat building arrangements.
-  - **Syllogisms**: "Only a few", "Only", "Some... are not", and "Possibility" deductions with attached Venn diagram.
-  - **Direction & Distance**: Point-to-point Cartesian vectors with shortest distance (Pythagorean theorem) calculations.
-  - **Blood Relations**: 3-generation family tree problems with gender symbols.
-  - **Inequalities**: Coded & direct Open Gate deductive techniques.
+### The 5-Option Structure (A, B, C, D, E)
 
-### 3. English Language & Rajbhasha Hindi
-- **High-Density RC Passages**: 450+ word economic/banking texts modeled on *The Hindu BusinessLine*, *The Economist*, and RBI reports (e.g., Central Bank Digital Currency e-Rupee, Cross-Border Remittances).
-- **RC Question Types**: Central theme, tone of the author, inference-based deductions, bold vocabulary synonyms/antonyms, and factual statements.
-- **Error Spotting with Grammatical Citations**:
-  - Every solution cites the exact grammatical rule (e.g., *Subject-Verb Agreement with "along with"*, *Rule of Proximity with "neither... nor"*, *Dangling Participles*).
-- **RRB Mains Hindi Section**: Authentic Hindi language questions featuring idiom usage (*हाथ-पांव फूलना*), वाक्य त्रुटि सुधार, and पर्यायवाची/विलोम शब्द.
+Every question is presented with five options:
+- **Option (A)**: Content Choice 1
+- **Option (B)**: Content Choice 2
+- **Option (C)**: Content Choice 3
+- **Option (D)**: **More than one of the above** (*उपर्युक्त में से एक से अधिक*)
+- **Option (E)**: **None of the above** (*उपर्युक्त में से कोई नहीं*) / **Not Answered** in TRE 4.0 CBT mode
 
-### 4. General, Banking & Computer Awareness
-- **40% RBI Circulars & Banking**: Priority Sector Lending targets (40% ANBC), NI Act Section 138 (cheque bouncing), DICGC insurance limits (₹5 Lakh), Basel-III CRAR (9.0%).
-- **20% Multi-Statement Questions**: *"Consider the following statements regarding the Monetary Policy Committee (MPC): (I)... (II)... (III)... Which of the above statements is/are correct?"*
-- **Complete Revision Capsules**: Detailed solutions contain comprehensive bullet summaries (founding year, committee recommendations, quorum rules, statutory mandates).
-- **Computer Aptitude (RRB Mains)**: OSI 7-layer model (Transport Layer flow control), SQL DDL vs DML commands, IPv4 vs IPv6 bit sizing, and MS Office keyboard shortcuts.
+### Crucial Marking Matrix: Explicit Option E vs Blank Penalty
+
+The CBT platform strictly differentiates between an **explicitly selected Option E** and an **unattempted / blank question**:
+
+| Candidate Action in CBT | Score Awarded | Explanation |
+|---|:---:|---|
+| **Selects Correct Option (A, B, C, or D)** | **+1.00 Mark** | Full credit for correct answer |
+| **Selects Incorrect Option (A, B, C, or D)** | **-0.333 Mark (-1/3)** | Negative marking penalty for wrong attempt |
+| **Explicitly Selects Option E ("Not Answered")** | **0.00 Marks** | Safe skip. Candidate officially registers intention to pass without penalty |
+| **Completely Blank / Unvisited / Unselected** | **-0.333 Mark (-1/3)** | **Penalty for unattempted question** under TRE 4.0 evaluation rules |
+
+> [!IMPORTANT]
+> The CBT engine actively warns candidates: **Never leave questions completely blank**. Candidates must actively select Option E if they choose not to answer a question to avoid the -1/3 unselected penalty.
 
 ---
 
-## 🎨 Technical Diagram & SVG Graphics Engine
+## ⚙️ Dynamic Question Generator Engine (800 Verified Questions)
 
-The platform includes a dedicated vector graphics engine located at `src/lib/graphics/svgDiagrams.ts`. It generates responsive inline SVGs with crisp labels, direction vectors, and legend tags:
+To eliminate the problem of identical questions repeating across mocks, the platform includes a dynamic Question Generator Engine.
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        DIAGRAM SPECIFICATION                           │
-├─────────────────────────┬──────────────────────────────────────────────┤
-│ Diagram Type            │ Visual Features                              │
-├─────────────────────────┼──────────────────────────────────────────────┤
-│ 1. SEATING_DIAGRAM      │ Circular table (#2563EB), radial arrows for  │
-│                         │ Inward (Green) and Outward (Red), person cards│
-├─────────────────────────┼──────────────────────────────────────────────┤
-│ 2. SYLLOGISM_VENN       │ Overlapping semi-transparent circles, shaded  │
-│                         │ common zone, red cross (×) for 'Some not'     │
-├─────────────────────────┼──────────────────────────────────────────────┤
-│ 3. DIRECTION_PATH       │ Cartesian coordinate grid, labeled points,   │
-│                         │ compass rose, red dashed hypotenuse vector   │
-├─────────────────────────┼──────────────────────────────────────────────┤
-│ 4. FAMILY_TREE          │ Horizontal tiers (Gen I, II, III), squares   │
-│                         │ for males, circles for females, = for married│
-├─────────────────────────┼──────────────────────────────────────────────┤
-│ 5. INPUT_OUTPUT_BOX     │ Numbered transformation boxes in rows with   │
-│                         │ downward connecting process arrows           │
-└─────────────────────────┴──────────────────────────────────────────────┘
-```
+### 10-Mock Zero Overlap Guarantee
 
----
+- **80 Slots × 10 Verified Variants = 800 Unique Questions**: Every slot (from Slot 1 to Slot 80) contains 10 distinct, syllabus-calibrated variants.
+- **Direct Deterministic Mapping**:
+  - `Full Official Mock #1` $\to$ Variant Index 0 across all 80 slots
+  - `Full Official Mock #2` $\to$ Variant Index 1 across all 80 slots
+  - `Full Official Mock #3` $\to$ Variant Index 2 across all 80 slots
+  - ...
+  - `Full Official Mock #10` $\to$ Variant Index 9 across all 80 slots
+- **Zero Collision**: Verified via automated test suite with **0% question overlap** between any pair of Mocks 1 through 10.
 
-## 📈 Post-Exam Diagnostics & The 4-Quadrant Time-Trap Matrix
+### The 12 Official Syllabus Units for Computer Science
 
-Upon submitting an exam, the platform presents the candidate with the **Analytics & Performance Dashboard** ([AnalyticsDashboard.tsx](file:///Users/rupeshkumar/Desktop/bankexam/src/components/exam/AnalyticsDashboard.tsx)):
-
-### 1. Sectional Cutoff Evaluation
-- Displays score, accuracy percentage, time spent, and marks scored vs. sectional cutoff (Pass/Fail indicator).
-- Computes estimated **All-India Percentile** calibrated to historical SBI and IBPS cutoff curves.
-
-### 2. The 4-Quadrant Speed-Accuracy Matrix
-In banking exams, speed without accuracy is fatal, and time spent on unattempted questions is wasted. The engine classifies every question attempt into one of four diagnostic quadrants:
-
-```
-                    ACCURACY
-                       ▲
-                       │
-       QUADRANT 2      │       QUADRANT 1
-     SLOW & CORRECT    │     FAST & CORRECT
-   (Needs shortcuts)   │     (Core Strengths)
-                       │
- ──────────────────────┼──────────────────────► SPEED
-                       │
-       QUADRANT 4      │       QUADRANT 3
-   FATAL TIME-TRAPS    │      FAST & WRONG
-   (>90s spent & wrong │    (Silly mistakes /
-       or skipped)     │       guesswork)
-                       ▼
-```
-
-- **Quadrant 1 (Fast & Correct)**: Solved within ideal benchmark time. Maintain muscle memory.
-- **Quadrant 2 (Slow & Correct)**: Right answer, but exceeded ideal benchmark by $>40\%$. Candidate should learn ratio/Vedic math shortcuts.
-- **Quadrant 3 (Fast & Wrong)**: Quick negative penalty. Indicates haste, misreading "more than" vs "of", or blind guessing.
-- **Quadrant 4 (Fatal Time-Traps)**: **Spent $>90$ seconds and ended up wrong or skipped.** This is the primary reason aspirants fail to clear cutoffs.
-
-### 3. Dual-Solution Drawer
-For every question, candidates can toggle between:
-1. 📖 **Textbook Solution**: Step-by-step rigorous conventional method.
-2. ⚡ **Vedic / Ratio Shortcut**: 10-to-20 second mental calculation or elimination trick.
-3. 📐 **Visual Solution Diagram**: Inline SVG diagram showing the exact puzzle arrangement or Venn intersection.
+| Unit | Title | Slot Range | Key Tested Concepts |
+|---|---|:---:|---|
+| **Unit 1** | Computer Fundamentals & Architecture | Slots 1–6 | Von Neumann architecture, memory hierarchy, cache hit/miss, RAM/ROM, system buses, secondary storage |
+| **Unit 2** | Digital Logic & Boolean Algebra | Slots 7–13 | De Morgan's laws, Universal gates (NAND/NOR counts), Half/Full Adders, MUX, K-Maps, Flip-Flops, Counters |
+| **Unit 3** | Computer Organization & Assembly | Slots 14–19 | Addressing modes, RISC vs CISC, instruction pipelining, pipeline hazards, DMA, interrupts |
+| **Unit 4** | Operating Systems | Slots 20–27 | CPU Scheduling (FCFS, SJF, RR), Deadlocks (Coffman conditions, Banker's algorithm), Paging, TLB, Page replacement (FIFO, LRU, Optimal) |
+| **Unit 5** | Data Structures & Algorithms | Slots 28–37 | Stacks, Queues, Linked Lists, Binary Search Trees, Heaps, Sorting algorithms (Quick, Merge, Heap), Graph BFS/DFS, Big-O asymptotics |
+| **Unit 6** | Programming in C++ & Python | Slots 38–47 | OOP concepts, virtual functions, inheritance, Python slicing, mutability, list comprehensions, exception handling, code output tracking |
+| **Unit 7** | Database Management Systems & SQL | Slots 48–56 | Relational model, Candidate keys, Normalization (1NF to BCNF), SQL DDL/DML, GROUP BY/HAVING, Joins, ACID, 2PL Concurrency |
+| **Unit 8** | Computer Networks | Slots 57–64 | OSI 7 Layers, TCP/IP, Ethernet framing, CRC, IPv4/IPv6, Subnetting & CIDR, TCP vs UDP, Ports, Transmission media |
+| **Unit 9** | Software Engineering | Slots 65–69 | SDLC models (Waterfall, Spiral, Agile/Scrum), Coupling & Cohesion, Testing (White-box, Black-box, Cyclomatic complexity), CMMI, COCOMO |
+| **Unit 10** | Web Technologies | Slots 70–73 | HTML5 semantic tags, CSS Box Model, Flexbox/Grid, JavaScript closures, hoisting, event loop, Cookies vs LocalStorage |
+| **Unit 11** | Theory of Computation & Systems | Slots 74–76 | Chomsky hierarchy, DFA/NFA, Turing machines, Compiler phases, Lexical analysis, Two-pass assemblers, Linkers & Loaders |
+| **Unit 12** | Cyber Security, Cloud & AI | Slots 77–80 | Symmetric (AES) vs Asymmetric (RSA), SHA-256, SQLi, XSS, CSRF, Cloud models (IaaS, PaaS, SaaS), Hypervisors, ML basics |
 
 ---
 
-## 🛠️ Technical Architecture & Technology Stack
+## 📚 BPSC TRE 4.0 Digital Learning Management System (LMS)
 
-- **Framework**: [Next.js 16.4.3](https://nextjs.org/) (App Router, Turbopack, React 19)
-- **Language**: TypeScript 5 (Strict type checking enabled)
-- **Styling**: Tailwind CSS v4 + Vanilla CSS tokens for pixel-accurate TCS iON replication
-- **State Management**: [Zustand](https://github.com/pmndrs/zustand) with local storage hydration and persistence
+The platform includes an integrated digital learning management system accessible under `/bpsc/learn`:
+
+```
+BPSC TRE 4.0 LMS
+  ├── Part 1: Language Learning (English & Hindi)
+  ├── Part 2: General Studies Learning (Bihar Special, Freedom Struggle, Polity, Science)
+  └── Part 3: Computer Science Class 11–12 (All 12 Units)
+       └── Chapter
+            └── Topic
+                 ├── Theoretical Tutorial & Conceptual Narrative
+                 ├── Yellow Highlighter Key Takeaways
+                 ├── Formatted Mathematical & Scientific Proofs
+                 ├── Authentic PYQ Badges (TRE 1.0, TRE 2.0, TRE 3.0 Shift Tags)
+                 └── Interactive Knowledge Check Drills
+```
+
+### Pedagogical Model: Learn → Practice → Test → Analyze → Revise
+- **Deep Conceptual Tutorials**: Comprehensive, readable articles structured with clean typographic hierarchy.
+- **Yellow Highlighter Style**: Key formulas, exam traps, and critical facts are highlighted using high-contrast yellow pill styling (`#FEF08A` background with `#713F12` text) for rapid revision.
+- **Bilingual Context**: Clear translations and bilingual explanations ensure students from both Hindi and English mediums excel.
+
+### PYQ Integration (TRE 1.0, TRE 2.0, TRE 3.0)
+Topics are directly annotated with official examination badges showing historical question frequency:
+- `TRE 1.0 (Aug 2023)`
+- `TRE 2.0 (Dec 2023)`
+- `TRE 3.0 (Mar 2024 / Jul 2024 Re-exam)`
+
+---
+
+## 🏦 TCS iON Banking Examination Simulation Module
+
+For banking aspirants (SBI, IBPS, RRB), the platform preserves the complete TCS iON CBT engine:
+- **Pixel-Accurate Interface**: Standard Navy `#0E3B64` header, Candidate Karna profile badge (Node `C042`, Roll `2408199201`), live countdown timer with red pulse alerts.
+- **Sectional Timing Locks**: 20-minute hard sectional locking with irreversible auto-advance (SBI/IBPS PO & Clerk Prelims).
+- **Composite Timers**: 45-minute and 120-minute composite free-navigation timers (IBPS RRB).
+- **Vector SVG Diagram Engine**: Dynamic generation of Seating Arrangement circles, Syllogism Venn diagrams, Direction paths, and Blood Relation family trees.
+- **Post-Exam 4-Quadrant Diagnostics**:
+  - Quadrant 1: Fast & Correct (Mastered questions)
+  - Quadrant 2: Slow & Correct (Needs speed refinement)
+  - Quadrant 3: Fast & Incorrect (Careless errors / traps)
+  - Quadrant 4: **Fatal Time-Traps** ($>90$ seconds spent on incorrect or abandoned questions)
+
+---
+
+## 💻 Technical Architecture & Technology Stack
+
+- **Framework**: [Next.js 16.4.6](https://nextjs.org/) (App Router, Turbopack, Partial Prerendering)
+- **UI Library**: [React 19](https://react.dev/)
+- **Language**: [TypeScript 5](https://www.typescriptlang.org/) (Strict type checking)
+- **Styling**: [Tailwind CSS 3.4](https://tailwindcss.com/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand) (Reactive state persistence)
+- **ORM & Database**: [Prisma 6.4](https://www.prisma.io/) with SQLite/PostgreSQL
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Database ORM**: [Prisma](https://www.prisma.io/) with PostgreSQL schema
-- **Mathematical Typography**: Standard LaTeX syntax (`$...$`)
-
----
-
-## 🌐 SEO Architecture & Brand Identity
-
-The platform is optimized for top organic search engine rankings for Indian banking exam queries:
-
-### 1. Keyword Intent Matrix
-- **Transactional**: `"attempt free sbi po cbt mock test online"`, `"ibps po live mock test series free"`, `"sbi clerk mock test tcs ion interface"`
-- **Informational**: `"ibps po revised exam pattern 2026"`, `"sbi po prelims syllabus and sectional cutoff"`, `"sbi po negative marking formula 0.25"`
-- **Navigational**: `"tcs ion real interface bank test series"`, `"karna banking mock test portal"`
-
-### 2. Next.js Metadata Specification
-- **Title**: `SBI PO & IBPS Mock Test 2026: Official TCS iON CBT Engine` (58 characters)
-- **Description**: `Exact TCS iON CBT interface, bilingual Hindi/English, sectional timers & instant All-India rank. Free live mocks for SBI PO, SBI Clerk, IBPS PO & RRB 2026.` (157 characters)
-- **Robots Directives**: `index, follow, max-image-preview:large`
-
-### 3. JSON-LD Structured Data (Rich Snippets)
-Embedded in `layout.tsx`:
-- **`Quiz` Schema**: Includes question count, duration (`PT60M`), free access flag, and educational level.
-- **`SoftwareApplication` Schema**: 4.9 aggregate rating, educational category, and zero-cost pricing.
-- **`FAQPage` Schema**: Expandable search snippets explaining TCS iON color palette rules, negative marking (-0.25), and bilingual support.
-
-### 4. Brand Favicon & PWA Manifest
-- [public/favicon.svg](file:///Users/rupeshkumar/Desktop/bankexam/public/favicon.svg): Royal blue shield (`#1D4ED8`) with high-contrast emerald checkmark and stopwatch dial.
-- [public/site.webmanifest](file:///Users/rupeshkumar/Desktop/bankexam/public/site.webmanifest): Progressive Web App configuration for standalone full-screen mobile/desktop installation.
-
----
-
-## 🗄️ Database Schema (Prisma)
-
-The project includes a production-grade relational database schema at [`prisma/schema.prisma`](file:///Users/rupeshkumar/Desktop/bankexam/prisma/schema.prisma):
-- `Exam`: Models the exam body (SBI, IBPS, RRB), post (PO, Clerk), stage (Prelims, Mains), year, duration, and timing mode.
-- `Section`: Configures section order, duration, question count, max marks, and cutoff.
-- `QuestionGroup`: Common passages, DI charts, puzzle clue sets, and SVG diagram specs.
-- `Question`: Bilingual text (`questionTextEn`, `questionTextHi`), marks, negative marks, ideal benchmark time, and conventional vs. shortcut solutions.
-- `Option`: Options A through E with bilingual text and correctness flags.
-- `ExamAttempt` & `QuestionAttempt`: Full telemetry tracking entered-at timestamps, duration spent, selected option, and 4-quadrant classification.
+- **Validation**: [Zod](https://zod.dev/)
 
 ---
 
 ## 🚀 Getting Started & Local Development
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) v18.18.0 or higher
-- `npm`, `pnpm`, or `yarn`
+- Node.js 18.18+ or 20+
+- npm or pnpm
 
 ### Installation
+
 ```bash
-# 1. Clone the repository
+# 1. Clone repository
 git clone https://github.com/er-rupesh7/bankcbt.git
 cd bankexam
 
 # 2. Install dependencies
 npm install
 
-# 3. Verify TypeScript type safety
+# 3. Generate Prisma client
+npx prisma generate
+
+# 4. Verify TypeScript type safety
 npx tsc --noEmit
 
-# 4. Start development server with Turbopack
+# 5. Start development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser to start the simulation.
+Visit [http://localhost:3000](http://localhost:3000) to access the examination gateway.  
+To access the BPSC Learning Course, navigate to [http://localhost:3000/bpsc/learn](http://localhost:3000/bpsc/learn).
 
-### Building for Production
+### Production Build
+
 ```bash
 npm run build
 npm run start
@@ -330,41 +266,52 @@ bankexam/
 ├── prisma/
 │   └── schema.prisma                # Relational Prisma schema for exams & telemetry
 ├── public/
-│   ├── favicon.svg                  # Brand SVG shield icon with stopwatch
+│   ├── favicon.svg                  # Brand SVG shield icon
 │   └── site.webmanifest             # PWA installation manifest
 ├── src/
 │   ├── app/
-│   │   ├── globals.css              # Design tokens & TCS iON skin styles
-│   │   ├── layout.tsx               # Root layout with SEO metadata & JSON-LD schemas
-│   │   └── page.tsx                 # Entry page hosting ExamInterface
+│   │   ├── bpsc/
+│   │   │   └── learn/               # Digital Learning Management System (LMS)
+│   │   │       ├── page.tsx         # LMS Course Catalog & Syllabus Navigator
+│   │   │       └── [...slug]/       # Dynamic Topic & Tutorial Reader
+│   │   ├── globals.css              # Design tokens & CBT terminal styles
+│   │   ├── layout.tsx               # Root layout with SEO metadata & JSON-LD
+│   │   └── page.tsx                 # Main entry hosting ExamInterface
 │   ├── components/
-│   │   └── exam/
-│   │       ├── ActionFooter.tsx         # Save & Next, Mark for Review, Submit buttons
-│   │       ├── AnalyticsDashboard.tsx   # 4-Quadrant matrix & dual-solution viewer
-│   │       ├── DualPaneQuestionArea.tsx # Split screen with passage, tables & SVGs
-│   │       ├── ExamHeader.tsx           # Karna candidate badge, timer & switcher
-│   │       ├── ExamInterface.tsx        # Top-level screen coordinator
-│   │       ├── ExamSelectionGateway.tsx # 12-Exam selection portal & instructions
-│   │       ├── QuestionPalette.tsx      # 5-State color legend and question buttons
-│   │       └── SubmitConfirmModal.tsx   # Sectional summary confirmation modal
+│   │   ├── bpsc/
+│   │   │   ├── BPSCSelectionView.tsx   # BPSC TRE 4.0 Mode & Mock Selector
+│   │   │   └── BPSCExamView.tsx        # BPSC 5-Option CBT Question Renderer
+│   │   ├── exam/
+│   │   │   ├── ActionFooter.tsx        # Save & Next, Mark for Review, Option E handler
+│   │   │   ├── AnalyticsDashboard.tsx  # 4-Quadrant matrix & solution analysis
+│   │   │   ├── DualPaneQuestionArea.tsx# Split screen with passage, tables & SVGs
+│   │   │   ├── ExamHeader.tsx          # Candidate badge, countdown timer & medium switcher
+│   │   │   ├── ExamInterface.tsx       # Dual-engine screen coordinator (Banking + BPSC)
+│   │   │   ├── ExamSelectionGateway.tsx# 12-Exam selection portal & instructions
+│   │   │   └── QuestionPalette.tsx     # 5-State color legend and question matrix
+│   ├── data/
+│   │   └── bpsc/
+│   │       ├── bpscTaxonomy.ts         # Official syllabus taxonomy & hierarchy
+│   │       ├── bpscLanguageBank.ts     # Part 1: Qualifying Language question bank
+│   │       ├── bpscGSBank.ts           # Part 2: General Studies question bank
+│   │       ├── bpscCSBank.ts           # Part 3: 800 CS questions (80 slots × 10 variants)
+│   │       └── lms/                    # Complete structured tutorials & syllabus notes
 │   ├── lib/
-│   │   ├── ai/
-│   │   │   └── generator.ts             # Zod validation schema for question sets
 │   │   ├── analytics/
-│   │   │   └── timeTrapEngine.ts        # Percentile predictor & 4-quadrant classifier
+│   │   │   └── timeTrapEngine.ts       # Percentile predictor & time-trap classifier
 │   │   ├── generator/
-│   │   │   ├── bankQuestionBank.ts      # Dynamic Quant, Reasoning, English, GA setters
-│   │   │   └── examBuilder.ts           # 12-Exam assembler & consecutive numbering
-│   │   ├── graphics/
-│   │   │   └── svgDiagrams.ts           # Technical SVG diagram generator engine
-│   │   └── seo/
-│   │       ├── metadata.ts              # Next.js Metadata factory & keyword matrices
-│   │       └── schemaOrg.ts             # JSON-LD Quiz & FAQ structured data
+│   │   │   ├── bpscExamBuilder.ts      # BPSC 150-Q exam assembler & negative marking config
+│   │   │   ├── bpscQuestionEngine.ts   # Dynamic question generator engine
+│   │   │   ├── bankQuestionBank.ts     # Banking Quant, Reasoning, English, GA setters
+│   │   │   └── examBuilder.ts          # Banking 12-Exam assembler
+│   │   └── graphics/
+│   │       └── svgDiagrams.ts          # Technical SVG diagram generator engine
 │   ├── store/
-│   │   └── useExamStore.ts              # Zustand store enforcing TCS iON state machine
+│   │   └── useExamStore.ts             # Zustand store enforcing CBT state & TRE 4.0 evaluation
 │   └── types/
-│       ├── exam.ts                      # Core TypeScript definitions (Exam, Question, DiagramSpec)
-│       └── examCatalog.ts               # Official blueprint matrix for all 12 exams
+│       ├── bpsc.ts                     # BPSC TypeScript definitions (Syllabus, Slots, Evaluation)
+│       ├── exam.ts                     # Core CBT TypeScript definitions
+│       └── examCatalog.ts              # Official blueprint matrix for all examinations
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -373,5 +320,6 @@ bankexam/
 ---
 
 ## ⚖️ License & Attribution
-- Designed and engineered for Indian Banking Aspirants (SBI, IBPS, RRB).
-- Modeled strictly on TCS iON Computer-Based Assessment standards.
+
+- Built and engineered for aspirants of **BPSC TRE (Bihar Public Service Commission)** and **Indian National Banking Exams (SBI, IBPS, RRB)**.
+- Modeled in strict compliance with official examination notifications, syllabi, and CBT assessment standards.
